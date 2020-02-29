@@ -29,8 +29,25 @@ class Plugin(indigo.PluginBase):
     def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
         indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
         self.debug = pluginPrefs.get("debugMode", False)
+
+        # {
+        #   devId: <Shelly object>,
+        #   anotherDevId: <Shelly object>
+        # }
         self.shellyDevices = {}
-        self.deviceSubscriptions = {}
+
+        # {
+        #   <brokerId>: {
+        #       'some/topic': [dev1, dev2, dev3],
+        #       'another/topic': [dev1, dev4, dev5]
+        #   }
+        #   <anotherBroker>: {
+        #       'some/topic': [dev6, dev7],
+        #       'another/unique/topic': [dev7, dev8, dev9]
+        #   }
+        # }
+        self.brokerDeviceSubscriptions = {}
+
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
 
@@ -82,23 +99,45 @@ class Plugin(indigo.PluginBase):
         else:
             self.logger.error(u"%s: Unknown device version: %s", device.name, instanceVers)
 
-        # Add the device id to our internal list of devices
         shelly = createDeviceObject(device)
+        # Ensure the device has a broker and address
+        if shelly.getBrokerId() is None or shelly.getAddress() is None:
+            self.logger.error("%s is not properly setup! Check the broker and topic root.", device.name)
+            return False
+
+        # Add the device id to our internal list of devices
         shelly.subscribe()
         self.addDeviceSubscriptions(shelly)
         self.shellyDevices[device.id] = shelly
 
     def deviceStopComm(self, device):
         self.logger.info(u"Stopping %s...", device.name)
-        # unsubscribe the device topics from the broker
-        if not self.shellyDevices.has_key(device.id):
+        if device.id not in self.shellyDevices:
             self.logger.debug(u"Unknown device...")
             return
 
-        shelly = self.shellyDevices[device.id]
-        shelly.unsubscribe()
-        self.removeDeviceSubscriptions(shelly)
+        shelly = self.shellyDevices[device.id]  # The shelly object for this device
+        self.removeDeviceSubscriptions(shelly)  # Remove the subscriptions for this device
+
+        # Attempt to unsubscribe from topics that are no longer being listened to
+        if self.mqttPlugin.isEnabled():
+            brokerSubscriptions = self.brokerDeviceSubscriptions[shelly.getBrokerId()]
+            topicsToRemove = []
+            for topic in brokerSubscriptions:
+                if not brokerSubscriptions[topic]:  # If no device is listening on this topic anymore
+                    props = {
+                        'topic': topic
+                    }
+                    # Unsubscribe the broker from this topic and remove the record of the topic
+                    self.mqttPlugin.executeAction("del_subscription", deviceId=shelly.getBrokerId(), props=props)
+                    topicsToRemove.append(topic)
+
+            # Actually remove the unneeded lists associated with the unsubscribed topics
+            for topic in topicsToRemove:
+                del brokerSubscriptions[topic]
+
         del self.shellyDevices[device.id]
+        self.logger.info(u"Stopped %s", device.name)
 
     def processMessages(self):
         """
@@ -117,12 +156,15 @@ class Plugin(indigo.PluginBase):
             brokerID = int(message['brokerID'])
             while True:
                 data = self.mqttPlugin.executeAction("fetchQueuedMessage", deviceId=brokerID, props=props, waitUntilDone=True)
-                if data == None:
+                if data is None:
                     break
+
                 self.logger.debug(u"Got message: %s", data)
-                topic = '/'.join(data['topic_parts'])
-                devices = self.deviceSubscriptions.get(topic, list())
+                topic = '/'.join(data['topic_parts'])  # transform the topic into a single string
+                deviceSubscriptions = self.brokerDeviceSubscriptions.get(brokerID, {})  # get device subscriptions for this broker
+                devices = deviceSubscriptions.get(topic, list())  # get devices listening on this broker for this topic
                 for device in devices:
+                    # Send this message data to the shelly object
                     shelly = self.shellyDevices.get(device, None)
                     if shelly is not None:
                         shelly.handleMessage(topic, data['payload'])
@@ -174,13 +216,19 @@ class Plugin(indigo.PluginBase):
         :param shelly: The Shelly device to add.
         :return: None
         """
+        # ensure that deviceSubscriptions has a dictionary of subscriptions for the broker
+        if shelly.getBrokerId() not in self.brokerDeviceSubscriptions:
+            self.brokerDeviceSubscriptions[shelly.getBrokerId()] = {}
+
+        brokerSubscriptions = self.brokerDeviceSubscriptions[shelly.getBrokerId()]
         subscriptions = shelly.getSubscriptions()
-        for subscription in subscriptions:
+        for topic in subscriptions:
             # See if there is a list of devices already listening to this subscription
-            if not self.deviceSubscriptions.has_key(subscription):
+            if topic not in brokerSubscriptions:
                 # initialize a new list of devices for this subscription
-                self.deviceSubscriptions[subscription] = []
-            self.deviceSubscriptions[subscription].append(shelly.device.id)
+                brokerSubscriptions[topic] = []
+            brokerSubscriptions[topic].append(shelly.device.id)
+            self.logger.debug(u"Added '%s' to '%s' on '%s'", shelly.device.name, topic, indigo.devices[shelly.getBrokerId()].name)
 
     def removeDeviceSubscriptions(self, shelly):
         """
@@ -188,7 +236,23 @@ class Plugin(indigo.PluginBase):
         :param shelly: The Shelly object to remove.
         :return: None
         """
-        subscriptions = shelly.getSubscriptions()
-        for subscription in subscriptions:
-            if self.deviceSubscriptions.has_key(subscription) and shelly.device.id in self.deviceSubscriptions[subscription]:
-                self.deviceSubscriptions[subscription].remove(shelly.device.id)
+        # make sure that the device's broker has subscriptions
+        if shelly.getBrokerId() in self.brokerDeviceSubscriptions:
+            brokerSubscriptions = self.brokerDeviceSubscriptions[shelly.getBrokerId()]
+            subscriptions = shelly.getSubscriptions()
+            for topic in subscriptions:
+                if topic in brokerSubscriptions and shelly.device.id in brokerSubscriptions[topic]:
+                    self.logger.debug(u"Removed '%s' from '%s' on '%s'", shelly.device.name, topic, indigo.devices[shelly.getBrokerId()].name)
+                    brokerSubscriptions[topic].remove(shelly.device.id)
+
+    def printBrokerDeviceSubscriptions(self):
+        """
+        Prints the data structure that contains brokers, topics, and devices
+        :return: None
+        """
+        self.logger.debug(u"Broker-Device Subscriptions:")
+        for broker in self.brokerDeviceSubscriptions:
+            self.logger.debug(u"    Broker %s:", broker)
+            deviceSubscriptions = self.brokerDeviceSubscriptions[broker]
+            for topic in deviceSubscriptions:
+                self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])

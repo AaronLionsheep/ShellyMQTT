@@ -10,12 +10,12 @@ class Shelly_1(Shelly):
         address = self.getAddress()
         if address is None:
             return []
-
-        return [
-            "{}/relay/{}".format(address, self.getChannel()),
-            "{}/input/{}".format(address, self.getChannel()),
-            "{}/longpush/{}".format(address, self.getChannel())
-        ]
+        else:
+            return [
+                "{}/relay/{}".format(address, self.getChannel()),
+                "{}/input/{}".format(address, self.getChannel()),
+                "{}/longpush/{}".format(address, self.getChannel())
+            ]
 
     def handleMessage(self, topic, payload):
         if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):

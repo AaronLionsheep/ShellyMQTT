@@ -43,7 +43,7 @@ class Shelly:
 
     def getAddress(self):
         address = self.device.pluginProps.get('address', None)
-        if not address:
+        if not address or address == '':
             return None
 
         address.strip()
@@ -60,8 +60,8 @@ class Shelly:
             return mqtt
 
     def getBrokerId(self):
-        id = self.device.pluginProps.get('brokerID', None)
-        if id is None:
+        brokerId = self.device.pluginProps.get('brokerID', None)
+        if brokerId is None or brokerId == '':
             return None
         else:
-            return int(id)
+            return int(brokerId)

@@ -11,12 +11,12 @@ class Shelly_Flood(Shelly):
         address = self.getAddress()
         if address is None:
             return []
-
-        return [
-            "{}/sensor/temperature".format(address),
-            "{}/sensor/flood".format(address),
-            "{}/sensor/battery".format(address)
-        ]
+        else:
+            return [
+                "{}/sensor/temperature".format(address),
+                "{}/sensor/flood".format(address),
+                "{}/sensor/battery".format(address)
+            ]
 
     def handleMessage(self, topic, payload):
         if topic == "{}/sensor/temperature".format(self.getAddress()):
