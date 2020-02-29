@@ -43,10 +43,9 @@ class Shelly_1PM(Shelly_1):
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('accumEnergyTotal', payload, uiValue='{} Wh'.format(payload))
         elif topic == "{}/temperature".format(self.getAddress()):
-            self.device.updateStateOnServer('temperature', payload, uiValue='{} °C'.format(payload))
+            self.setTemperature(float(payload))
         elif topic == "{}/overtemperature".format(self.getAddress()):
-            overtemp = (payload == '1')
-            self.device.updateStateOnServer('overtemperature', overtemp)
+            self.device.updateStateOnServer('overtemperature', (payload == '1'))
 
     def handleAction(self, action):
         if action == indigo.kUniversalAction.EnergyReset:

@@ -20,7 +20,7 @@ class Shelly_Flood(Shelly):
 
     def handleMessage(self, topic, payload):
         if topic == "{}/sensor/temperature".format(self.getAddress()):
-            self.device.updateStateOnServer(key="temperature", value=payload, uiValue='{}°F'.format(payload))
+            self.setTemperature(float(payload))
         elif topic == "{}/sensor/flood".format(self.getAddress()):
             if payload == 'true':
                 self.device.updateStateOnServer(key='onOffState', value=True, uiValue='Wet')

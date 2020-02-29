@@ -1,3 +1,4 @@
+# coding=utf-8
 import indigo
 import logging
 
@@ -65,3 +66,39 @@ class Shelly:
             return None
         else:
             return int(brokerId)
+
+    def setTemperature(self, temperature, state="temperature", unitsProps="temp-units"):
+        """
+        Helper function to set the temperature of a device.
+        :param temperature: The temperature to set.
+        :param state: The state key to update.
+        :param unitsProps: The props containing the units to use or to convert to.
+        :return: None
+        """
+        units = self.device.pluginProps.get(unitsProps, None)
+        if units == "F":
+            self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
+        elif units == "C->F":
+            temperature = self.convertCtoF(temperature)
+            self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
+        elif units == "C":
+            self.device.updateStateOnServer(state, temperature, uiValue='{} °C'.format(temperature))
+        elif units == "F->C":
+            temperature = self.convertFtoC(temperature)
+            self.device.updateStateOnServer(state, temperature, uiValue='{} °C'.format(temperature))
+
+    def convertCtoF(self, celsius):
+        """
+        Handles a conversion from Celsius to Fahrenheit.
+        :param celsius: The temperature in celsius.
+        :return: The temperature in Fahrenheit.
+        """
+        return (celsius * 9 / 5) + 32
+
+    def convertFtoC(self, fahrenheit):
+        """
+        Handles a conversion from Fahrenheit to Celsius.
+        :param fahrenheit: The temperature in fahrenheit.
+        :return: The temperature in Celsius.
+        """
+        return (fahrenheit - 32) * 5 / 9

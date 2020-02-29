@@ -20,13 +20,14 @@ class Shelly_HT(Shelly):
 
     def handleMessage(self, topic, payload):
         if topic == "{}/sensor/temperature".format(self.getAddress()):
-            self.device.updateStateOnServer(key="temperature", value=payload, uiValue='{}°F'.format(payload))
+            self.setTemperature(float(payload))
         elif topic == "{}/sensor/humidity".format(self.getAddress()):
             self.device.updateStateOnServer(key="humidity", value=payload, uiValue='{}%'.format(payload))
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
 
-        self.device.updateStateOnServer(key="status", value='{}°F / {}%'.format(self.device.states['temperature'], self.device.states['humidity']))
+        temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
+        self.device.updateStateOnServer(key="status", value='{}°{} / {}%'.format(self.device.states['temperature'], temp_units, self.device.states['humidity']))
         self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
 
     def handleAction(self, action):
