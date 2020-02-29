@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<PluginConfig>
+    <Field type="checkbox" id="debugMode" defaultValue="false">
+	    <Label>Debug Mode:</Label>
+	    <Description>Turn on to show debug messages in the log</Description>
+    </Field>
+</PluginConfig>

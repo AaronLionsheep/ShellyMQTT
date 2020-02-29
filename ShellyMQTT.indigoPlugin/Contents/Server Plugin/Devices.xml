@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<Devices>
+    <Device type="relay" id="shelly-1">
+        <Name>Shelly 1</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="longpush">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Long Push</TriggerLabel>
+                <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-1pm">
+        <Name>Shelly 1PM</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="longpush">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Long Push</TriggerLabel>
+                <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-2-5-relay">
+        <Name>Shelly 2.5 (Relay)</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field type="menu" id="channel" defaultValue="0">
+                <Label>Relay Channel:</Label>
+                <List>
+                    <Option value="0">Channel 0</Option>
+                    <Option value="1">Channel 1</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="longpush">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Long Push</TriggerLabel>
+                <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-2-5-roller">
+        <Name>Shelly 2.5 (Roller)</Name>
+        <ConfigUI>
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="topicRoot" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+        </ConfigUI>
+
+    </Device>
+
+    <Device type="custom" id="shelly-ht">
+        <Name>Shelly H&amp;T</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="humidity">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Humidity</TriggerLabel>
+                <ControlPageLabel>Humidity</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="sensor" id="shelly-flood">
+        <Name>Shelly Flood</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+        </ConfigUI>
+         <States>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+         </States>
+    </Device>
+</Devices>
