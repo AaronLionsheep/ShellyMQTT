@@ -61,11 +61,14 @@ class Shelly:
             return mqtt
 
     def getBrokerId(self):
-        brokerId = self.device.pluginProps.get('brokerID', None)
+        brokerId = self.device.pluginProps.get('broker-id', None)
         if brokerId is None or brokerId == '':
             return None
         else:
             return int(brokerId)
+
+    def getMessageType(self):
+        return self.device.pluginProps.get('message-type', "")
 
     def sendStatusRequestCommand(self):
         """

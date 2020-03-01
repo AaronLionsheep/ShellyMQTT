@@ -5,13 +5,17 @@
         <ConfigUI>
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
         </ConfigUI>
         <States>
@@ -35,13 +39,17 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -92,13 +100,17 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
 
             <Field type="menu" id="channel" defaultValue="0">
@@ -155,20 +167,26 @@
         </States>
     </Device>
 
+    <!--
     <Device type="relay" id="shelly-2-5-roller">
         <Name>Shelly 2.5 (Roller)</Name>
         <ConfigUI>
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
-            <Field id="topicRoot" type="textfield">
+            <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
         </ConfigUI>
 
     </Device>
+    -->
 
     <Device type="custom" id="shelly-ht">
         <Name>Shelly H&amp;T</Name>
@@ -176,13 +194,17 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -223,13 +245,17 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -259,13 +285,17 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
 
             <Field id="use-case-sep" type="separator"/>
@@ -300,13 +330,17 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
-            <Field id="brokerID" type="menu">
+            <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -322,7 +356,7 @@
             </Field>
         </ConfigUI>
         <States>
-            <State id="internal_temperature">
+            <State id="internal-temperature">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Internal Temperature</TriggerLabel>
                 <ControlPageLabel>Internal Temperature</ControlPageLabel>

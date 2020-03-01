@@ -8,7 +8,7 @@ from Devices.Shelly_Door_Window import Shelly_Door_Window
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 from Queue import Queue
 
-kCurDevVersion = 2  # current version of plugin devices
+kCurDevVersion = 0  # current version of plugin devices
 
 
 def createDeviceObject(device):
@@ -19,8 +19,8 @@ def createDeviceObject(device):
         return Shelly_1PM(device)
     elif deviceType == "shelly-2-5-relay":
         return Shelly_2_5_Relay(device)
-    elif deviceType == "shelly-2-5-roller":
-        return None
+    #elif deviceType == "shelly-2-5-roller":
+    #    return None
     elif deviceType == "shelly-ht":
         return Shelly_HT(device)
     elif deviceType == "shelly-flood":
@@ -53,7 +53,7 @@ class Plugin(indigo.PluginBase):
         #   }
         # }
         self.brokerDeviceSubscriptions = {}
-
+        self.messageTypes = []
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
 
@@ -114,6 +114,8 @@ class Plugin(indigo.PluginBase):
         shelly.subscribe()
         self.addDeviceSubscriptions(shelly)
         self.shellyDevices[device.id] = shelly
+        self.messageTypes.append(shelly.getMessageType())
+        self.logger.info(self.messageTypes)
 
     def deviceStopComm(self, device):
         self.logger.info(u"Stopping \"%s\"...", device.name)
@@ -122,6 +124,8 @@ class Plugin(indigo.PluginBase):
 
         shelly = self.shellyDevices[device.id]  # The shelly object for this device
         self.removeDeviceSubscriptions(shelly)  # Remove the subscriptions for this device
+        self.messageTypes.remove(shelly.getMessageType())  # This device listens for a specific message
+        self.logger.info(self.messageTypes)
 
         # Attempt to unsubscribe from topics that are no longer being listened to
         if self.mqttPlugin.isEnabled():
@@ -155,8 +159,13 @@ class Plugin(indigo.PluginBase):
 
             # Now we have our message
             # Find the devices that need to get this message and give it to them
-            props = {'message_type': message["message_type"]}
+            props = {'message_type': message['message_type']}
             brokerID = int(message['brokerID'])
+            if message['message_type'] not in self.messageTypes:
+                # None of the devices care about this message
+                return
+
+            # At least 1 of the devices care about this message
             while True:
                 data = self.mqttPlugin.executeAction("fetchQueuedMessage", deviceId=brokerID, props=props, waitUntilDone=True)
                 if data is None:
@@ -167,9 +176,9 @@ class Plugin(indigo.PluginBase):
                 deviceSubscriptions = self.brokerDeviceSubscriptions.get(brokerID, {})  # get device subscriptions for this broker
                 devices = deviceSubscriptions.get(topic, list())  # get devices listening on this broker for this topic
                 for device in devices:
-                    # Send this message data to the shelly object
                     shelly = self.shellyDevices.get(device, None)
-                    if shelly is not None:
+                    if shelly is not None and shelly.getMessageType() == message['message_type']:
+                        # Send this message data to the shelly object
                         shelly.handleMessage(topic, data['payload'])
 
     def actionControlDevice(self, action, device):

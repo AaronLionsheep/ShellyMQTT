@@ -58,7 +58,7 @@ class Shelly_1PM(Shelly_1):
 
             self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
         elif topic == "{}/temperature".format(self.getAddress()):
-            self.setTemperature(float(payload), state='internal_temperature', unitsProps='int-temp-units')
+            self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
 
