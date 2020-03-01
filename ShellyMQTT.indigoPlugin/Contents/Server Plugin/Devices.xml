@@ -77,6 +77,11 @@
                 <TriggerLabel>SW Input</TriggerLabel>
                 <ControlPageLabel>SW Input</ControlPageLabel>
             </State>
+            <State id="resetEnergyOffset">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
+                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
+            </State>
         </States>
     </Device>
 
@@ -141,6 +146,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="resetEnergyOffset">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
+                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
             </State>
         </States>
     </Device>

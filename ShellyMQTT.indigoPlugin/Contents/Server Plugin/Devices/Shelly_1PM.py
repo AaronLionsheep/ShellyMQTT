@@ -41,7 +41,28 @@ class Shelly_1PM(Shelly_1):
         elif topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer('accumEnergyTotal', payload, uiValue='{} Wh'.format(payload))
+            # pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
+            # If this value is greater than the current energy being reported, then the device must have been powered off
+            # and reset back to 0. We should
+
+            resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+            energy = int(payload) - resetEnergyOffset
+            if energy < 0:  # If the offset is greater than what is being reported, the device must have reset
+                # our last known energy total can be used to determine the previous energy usage
+                self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last know energy usage value...")
+                resetEnergyOffset = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000 * -1
+                self.device.updateStateOnServer('resetEnergyOffset', resetEnergyOffset)
+                energy = int(payload) - resetEnergyOffset
+
+            kwh = float(energy) / 60 / 1000  # energy is reported in watt-minutes
+            if kwh < 0.01:
+                uiValue = '{:.4f} kWh'.format(kwh)
+            elif kwh < 1:
+                uiValue = '{:.3f} kWh'.format(kwh)
+            else:
+                uiValue = '{:.1f} kWh'.format(kwh)
+
+            self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
         elif topic == "{}/temperature".format(self.getAddress()):
             self.setTemperature(float(payload))
         elif topic == "{}/overtemperature".format(self.getAddress()):
@@ -49,6 +70,12 @@ class Shelly_1PM(Shelly_1):
 
     def handleAction(self, action):
         if action == indigo.kUniversalAction.EnergyReset:
+            # We can't tell the device to reset it's internal energy usage
+            # Record the current value being reported so we can offset from it later on
+            currEnergyWattMins = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000
+            previousResetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+            offset = currEnergyWattMins + previousResetEnergyOffset
+            self.device.updateStateOnServer('resetEnergyOffset', offset)
             self.device.updateStateOnServer('accumEnergyTotal', 0.0)
         else:
             Shelly_1.handleAction(self, action)
