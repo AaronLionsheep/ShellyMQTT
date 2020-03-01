@@ -52,7 +52,6 @@ class Plugin(indigo.PluginBase):
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
 
     def startup(self):
-        self.logger.info(u"Starting ShellyMQTT...")
         indigo.server.subscribeToBroadcast(u"com.flyingdiver.indigoplugin.mqtt", u"com.flyingdiver.indigoplugin.mqtt-message_queued", "message_handler")
 
     def shutdown(self):
@@ -85,7 +84,7 @@ class Plugin(indigo.PluginBase):
             self.logger.info(u"Debugging off")
 
     def deviceStartComm(self, device):
-        self.logger.info(u"Starting %s...", device.name)
+        self.logger.info(u"Starting \"%s\"...", device.name)
 
         instanceVers = int(device.pluginProps.get('devVersCount', 0))
         if instanceVers < kCurDevVersion or kCurDevVersion == 0:
@@ -111,9 +110,8 @@ class Plugin(indigo.PluginBase):
         self.shellyDevices[device.id] = shelly
 
     def deviceStopComm(self, device):
-        self.logger.info(u"Stopping %s...", device.name)
+        self.logger.info(u"Stopping \"%s\"...", device.name)
         if device.id not in self.shellyDevices:
-            self.logger.debug(u"Unknown device...")
             return
 
         shelly = self.shellyDevices[device.id]  # The shelly object for this device
@@ -137,7 +135,6 @@ class Plugin(indigo.PluginBase):
                 del brokerSubscriptions[topic]
 
         del self.shellyDevices[device.id]
-        self.logger.info(u"Stopped %s", device.name)
 
     def processMessages(self):
         """

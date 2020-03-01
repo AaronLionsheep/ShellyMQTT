@@ -71,6 +71,9 @@ class Shelly_1PM(Shelly_1):
             offset = currEnergyWattMins + previousResetEnergyOffset
             self.device.updateStateOnServer('resetEnergyOffset', offset)
             self.device.updateStateOnServer('accumEnergyTotal', 0.0)
+        elif action == indigo.kUniversalAction.EnergyUpdate:
+            # This will be handled by making a status request
+            self.sendStatusRequestCommand()
         else:
             Shelly_1.handleAction(self, action)
 

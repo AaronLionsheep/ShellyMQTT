@@ -40,7 +40,7 @@ class Shelly:
                 'retain': 0,
             }
             mqtt.executeAction("publish", deviceId=self.getBrokerId(), props=props, waitUntilDone=False)
-            self.logger.info(u"published '%s' to '%s'", payload, topic)
+            self.logger.info(u"\"%s\" published \"%s\" to \"%s\"", self.device.name, payload, topic)
 
     def getAddress(self):
         address = self.device.pluginProps.get('address', None)
