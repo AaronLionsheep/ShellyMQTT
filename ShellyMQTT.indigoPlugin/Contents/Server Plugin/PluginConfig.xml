@@ -4,4 +4,9 @@
 	    <Label>Debug Mode:</Label>
 	    <Description>Turn on to show debug messages in the log</Description>
     </Field>
+
+    <Field type="checkbox" id="connector-fix" defaultValue="false">
+	    <Label>MQTT Connector Fix:</Label>
+	    <Description>Correctly creates subscriptions for the broker. See Issue #10 on the MQTT-Connector GitHub page.</Description>
+    </Field>
 </PluginConfig>

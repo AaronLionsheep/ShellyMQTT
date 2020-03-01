@@ -15,6 +15,10 @@ class Shelly:
         mqtt = self.getMQTT()
         if mqtt is not None:
             for subscription in self.getSubscriptions():
+                # Band-aid for bug in MQTT-Connector (Issue #10 on MQTT-Connector GitHub)
+                if indigo.activePlugin.pluginPrefs.get('connector-fix', False):
+                    subscription = "0:%s" % subscription
+
                 props = {
                     'topic': subscription,
                     'qos': 0

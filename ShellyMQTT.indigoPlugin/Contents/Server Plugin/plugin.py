@@ -115,7 +115,6 @@ class Plugin(indigo.PluginBase):
         self.addDeviceSubscriptions(shelly)
         self.shellyDevices[device.id] = shelly
         self.messageTypes.append(shelly.getMessageType())
-        self.logger.info(self.messageTypes)
 
     def deviceStopComm(self, device):
         self.logger.info(u"Stopping \"%s\"...", device.name)
@@ -125,7 +124,6 @@ class Plugin(indigo.PluginBase):
         shelly = self.shellyDevices[device.id]  # The shelly object for this device
         self.removeDeviceSubscriptions(shelly)  # Remove the subscriptions for this device
         self.messageTypes.remove(shelly.getMessageType())  # This device listens for a specific message
-        self.logger.info(self.messageTypes)
 
         # Attempt to unsubscribe from topics that are no longer being listened to
         if self.mqttPlugin.isEnabled():
@@ -133,6 +131,10 @@ class Plugin(indigo.PluginBase):
             topicsToRemove = []
             for topic in brokerSubscriptions:
                 if not brokerSubscriptions[topic]:  # If no device is listening on this topic anymore
+                    # Band-aid for bug in MQTT-Connector (Issue #10 on MQTT-Connector GitHub)
+                    if self.pluginPrefs.get('connector-fix', False):
+                        topic = "0:%s" % topic
+
                     props = {
                         'topic': topic
                     }
@@ -142,6 +144,9 @@ class Plugin(indigo.PluginBase):
 
             # Actually remove the unneeded lists associated with the unsubscribed topics
             for topic in topicsToRemove:
+                # Band-aid for bug in MQTT-Connector (Issue #10 on MQTT-Connector GitHub)
+                if self.pluginPrefs.get('connector-fix', False):
+                    topic = topic[2:]
                 del brokerSubscriptions[topic]
 
         del self.shellyDevices[device.id]
