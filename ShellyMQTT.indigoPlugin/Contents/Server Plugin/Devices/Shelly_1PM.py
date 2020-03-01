@@ -29,21 +29,15 @@ class Shelly_1PM(Shelly_1):
             elif payload == "off":
                 self.turnOff()
         elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            if payload == '0':
-                self.device.updateStateOnServer(key="sw-input", value=False)
-            elif payload == '1':
-                self.device.updateStateOnServer(key="sw-input", value=True)
+            self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
         elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
-            if payload == '0':
-                self.device.updateStateOnServer(key="longpush", value=False)
-            elif payload == '1':
-                self.device.updateStateOnServer(key="longpush", value=True)
+            self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
         elif topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
             # pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
             # If this value is greater than the current energy being reported, then the device must have been powered off
-            # and reset back to 0. We should
+            # and reset back to 0.
 
             resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
             energy = int(payload) - resetEnergyOffset

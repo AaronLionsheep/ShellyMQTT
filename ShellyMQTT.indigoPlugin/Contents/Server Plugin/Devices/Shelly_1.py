@@ -24,15 +24,9 @@ class Shelly_1(Shelly):
             elif payload == "off":
                 self.turnOff()
         elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            if payload == '0':
-                self.device.updateStateOnServer(key="sw-input", value=False)
-            elif payload == '1':
-                self.device.updateStateOnServer(key="sw-input", value=True)
+            self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
         elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
-            if payload == '0':
-                self.device.updateStateOnServer(key="longpush", value=False)
-            elif payload == '1':
-                self.device.updateStateOnServer(key="longpush", value=True)
+            self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
 
     def handleAction(self, action):
         if action == indigo.kDeviceAction.TurnOn:
