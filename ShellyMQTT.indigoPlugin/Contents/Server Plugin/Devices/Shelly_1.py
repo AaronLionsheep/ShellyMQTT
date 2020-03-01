@@ -29,13 +29,13 @@ class Shelly_1(Shelly):
             self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
 
     def handleAction(self, action):
-        if action == indigo.kDeviceAction.TurnOn:
+        if action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.turnOn()
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
-        elif action == indigo.kDeviceAction.TurnOff:
+        elif action.deviceAction == indigo.kDeviceAction.TurnOff:
             self.turnOff()
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
-        elif action == indigo.kDeviceAction.RequestStatus:
+        elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
             self.sendStatusRequestCommand()
 
     def turnOn(self):

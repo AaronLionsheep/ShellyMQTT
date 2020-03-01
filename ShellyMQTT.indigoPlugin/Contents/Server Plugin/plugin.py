@@ -4,25 +4,31 @@ from Devices.Shelly_1PM import Shelly_1PM
 from Devices.Shelly_2_5_Relay import Shelly_2_5_Relay
 from Devices.Shelly_HT import Shelly_HT
 from Devices.Shelly_Flood import Shelly_Flood
+from Devices.Shelly_Door_Window import Shelly_Door_Window
+from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 from Queue import Queue
 
-kCurDevVersion = 1  # current version of plugin devices
+kCurDevVersion = 2  # current version of plugin devices
 
 
 def createDeviceObject(device):
     deviceType = device.deviceTypeId
     if deviceType == "shelly-1":
         return Shelly_1(device)
-    if deviceType == "shelly-1pm":
+    elif deviceType == "shelly-1pm":
         return Shelly_1PM(device)
-    if deviceType == "shelly-2-5-relay":
+    elif deviceType == "shelly-2-5-relay":
         return Shelly_2_5_Relay(device)
-    if deviceType == "shelly-2-5-roller":
+    elif deviceType == "shelly-2-5-roller":
         return None
-    if deviceType == "shelly-ht":
+    elif deviceType == "shelly-ht":
         return Shelly_HT(device)
-    if deviceType == "shelly-flood":
+    elif deviceType == "shelly-flood":
         return Shelly_Flood(device)
+    elif deviceType == "shelly-door-window":
+        return Shelly_Door_Window(device)
+    elif deviceType == "shelly-dimmer":
+        return Shelly_Dimmer_SL(device)
 
 
 class Plugin(indigo.PluginBase):
@@ -175,7 +181,7 @@ class Plugin(indigo.PluginBase):
         """
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
-            shelly.handleAction(action.deviceAction)
+            shelly.handleAction(action)
 
     def actionControlUniversal(self, action, device):
         """
@@ -186,7 +192,7 @@ class Plugin(indigo.PluginBase):
         """
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
-            shelly.handleAction(action.deviceAction)
+            shelly.handleAction(action)
 
     def getBrokerDevices(self, filter="", valuesDict=None, typeId="", targetId=0):
         """

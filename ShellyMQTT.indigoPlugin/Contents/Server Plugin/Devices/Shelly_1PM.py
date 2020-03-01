@@ -58,12 +58,12 @@ class Shelly_1PM(Shelly_1):
 
             self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
         elif topic == "{}/temperature".format(self.getAddress()):
-            self.setTemperature(float(payload))
+            self.setTemperature(float(payload), state='internal_temperature', unitsProps='int-temp-units')
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
 
     def handleAction(self, action):
-        if action == indigo.kUniversalAction.EnergyReset:
+        if action.deviceAction == indigo.kUniversalAction.EnergyReset:
             # We can't tell the device to reset it's internal energy usage
             # Record the current value being reported so we can offset from it later on
             currEnergyWattMins = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000
@@ -71,7 +71,7 @@ class Shelly_1PM(Shelly_1):
             offset = currEnergyWattMins + previousResetEnergyOffset
             self.device.updateStateOnServer('resetEnergyOffset', offset)
             self.device.updateStateOnServer('accumEnergyTotal', 0.0)
-        elif action == indigo.kUniversalAction.EnergyUpdate:
+        elif action.deviceAction == indigo.kUniversalAction.EnergyUpdate:
             # This will be handled by making a status request
             self.sendStatusRequestCommand()
         else:
@@ -79,8 +79,8 @@ class Shelly_1PM(Shelly_1):
 
     def turnOn(self):
         self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.EnergyMeterOn)
+        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
 
     def turnOff(self):
         self.device.updateStateOnServer(key='onOffState', value=False)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.EnergyMeterOff)
+        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)

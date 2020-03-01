@@ -46,7 +46,7 @@
 
             <Field id="temp-sep" type="separator"/>
 
-            <Field type="menu" id="temp-units" defaultValue="F">
+            <Field type="menu" id="int-temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
@@ -67,7 +67,7 @@
                 <TriggerLabel>Long Push</TriggerLabel>
                 <ControlPageLabel>Long Push</ControlPageLabel>
             </State>
-            <State id="temperature">
+            <State id="internal-temperature">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Internal Temperature</TriggerLabel>
                 <ControlPageLabel>Internal Temperature</ControlPageLabel>
@@ -111,7 +111,7 @@
 
             <Field id="temp-sep" type="separator"/>
 
-            <Field type="menu" id="temp-units" defaultValue="F">
+            <Field type="menu" id="int-temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
@@ -132,7 +132,7 @@
                 <TriggerLabel>Long Push</TriggerLabel>
                 <ControlPageLabel>Long Push</ControlPageLabel>
             </State>
-            <State id="temperature">
+            <State id="internal-temperature">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Internal Temperature</TriggerLabel>
                 <ControlPageLabel>Internal Temperature</ControlPageLabel>
@@ -251,5 +251,97 @@
                 <ControlPageLabel>Temperature</ControlPageLabel>
             </State>
          </States>
+    </Device>
+
+    <Device type="custom" id="shelly-door-window">
+        <Name>Shelly Door Window</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="use-case-sep" type="separator"/>
+
+            <Field type="menu" id="useCase" defaultValue="door">
+                <Label>Use Case:</Label>
+                <List>
+                    <Option value="door">Show Door Icons</Option>
+                    <Option value="window">Show Window Icons</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="lux">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Lux</TriggerLabel>
+                <ControlPageLabel>Lux</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="dimmer" id="shelly-dimmer">
+        <Name>Shelly Dimmer/SL</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="brokerID" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="internal_temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overload">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="resetEnergyOffset">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
+                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
+            </State>
+        </States>
     </Device>
 </Devices>
