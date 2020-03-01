@@ -67,6 +67,14 @@ class Shelly:
         else:
             return int(brokerId)
 
+    def sendStatusRequestCommand(self):
+        """
+        Tells the shelly device to send out it's status
+        :return: None
+        """
+        if self.getAddress() is not None:
+            self.publish("{}/command".format(self.getAddress()), "update")
+
     def setTemperature(self, temperature, state="temperature", unitsProps="temp-units"):
         """
         Helper function to set the temperature of a device.
