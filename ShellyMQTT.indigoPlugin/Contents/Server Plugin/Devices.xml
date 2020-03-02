@@ -116,8 +116,8 @@
             <Field type="menu" id="channel" defaultValue="0">
                 <Label>Relay Channel:</Label>
                 <List>
-                    <Option value="0">Channel 0</Option>
-                    <Option value="1">Channel 1</Option>
+                    <Option value="0">Channel 1</Option>
+                    <Option value="1">Channel 2</Option>
                 </List>
             </Field>
 
