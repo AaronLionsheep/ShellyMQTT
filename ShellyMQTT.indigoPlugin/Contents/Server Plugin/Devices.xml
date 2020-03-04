@@ -14,9 +14,21 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="sep-1" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
             </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
         </ConfigUI>
         <States>
             <State id="sw-input">
@@ -28,6 +40,16 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Long Push</TriggerLabel>
                 <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
     </Device>
@@ -89,6 +111,16 @@
                 <ValueType>Integer</ValueType>
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
     </Device>
@@ -164,6 +196,16 @@
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
             </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
         </States>
     </Device>
 
@@ -235,6 +277,16 @@
                 <TriggerLabel>Status</TriggerLabel>
                 <ControlPageLabel>Status</ControlPageLabel>
             </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
         </States>
         <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
@@ -270,13 +322,23 @@
                 </List>
             </Field>
         </ConfigUI>
-         <States>
+        <States>
             <State id="temperature">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Temperature</TriggerLabel>
                 <ControlPageLabel>Temperature</ControlPageLabel>
             </State>
-         </States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
     </Device>
 
     <Device type="custom" id="shelly-door-window">
@@ -318,6 +380,16 @@
                 <ValueType>String</ValueType>
                 <TriggerLabel>Status</TriggerLabel>
                 <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
         <UiDisplayStateId>status</UiDisplayStateId>
@@ -375,6 +447,16 @@
                 <ValueType>Integer</ValueType>
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
     </Device>

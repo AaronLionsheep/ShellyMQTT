@@ -13,6 +13,8 @@ class Shelly_Flood(Shelly):
             return []
         else:
             return [
+                "shellies/announce",
+                "{}/online".format(address),
                 "{}/sensor/temperature".format(address),
                 "{}/sensor/flood".format(address),
                 "{}/sensor/battery".format(address)
@@ -30,6 +32,8 @@ class Shelly_Flood(Shelly):
                 self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+        else:
+            Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         pass

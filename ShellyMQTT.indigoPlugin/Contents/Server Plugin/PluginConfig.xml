@@ -7,6 +7,21 @@
 
     <Field type="checkbox" id="connector-fix" defaultValue="false">
 	    <Label>MQTT Connector Fix:</Label>
-	    <Description>Correctly creates subscriptions for the broker. See Issue #10 on the MQTT-Connector GitHub page.</Description>
+	    <Description>Correctly creates subscriptions for the broker.</Description>
+    </Field>
+    <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+        <Label>See Issue #10 on the MQTT-Connector GitHub page.</Label>
+    </Field>
+
+    <Field id="sep-1" type="separator"/>
+
+    <Field type="checkbox" id="all-brokers-subscribe-to-announce" defaultValue="true">
+	    <Label>Subscribe to announcements on all Brokers:</Label>
+	    <Description>Turn on to have all Brokers listening for announcement messages.</Description>
+    </Field>
+
+    <Field id="brokers-subscribing-to-announce" type="list" visibleBindingId="all-brokers-subscribe-to-announce" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+        <Label>Select Brokers to listen for announcement messages:</Label>
+        <List class="self" method="getBrokerDevices" dynamicReload="true"/>
     </Field>
 </PluginConfig>

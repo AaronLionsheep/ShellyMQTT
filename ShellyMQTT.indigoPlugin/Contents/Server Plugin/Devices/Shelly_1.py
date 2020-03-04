@@ -12,6 +12,8 @@ class Shelly_1(Shelly):
             return []
         else:
             return [
+                "shellies/announce",
+                "{}/online".format(address),
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/longpush/{}".format(address, self.getChannel())
@@ -27,6 +29,8 @@ class Shelly_1(Shelly):
             self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
         elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
+        else:
+            Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         if action.deviceAction == indigo.kDeviceAction.TurnOn:

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<MenuItems>
+    <MenuItem id="discover-shelly">
+        <Name>Discover Shelly...</Name>
+        <ConfigUI actionId="discover-shelly"/>
+    </MenuItem>
+
+    <MenuItem id="discover-shellies">
+        <Name>Discover Shellies</Name>
+        <CallbackMethod>discoverShellies</CallbackMethod>
+    </MenuItem>
+
+    <MenuItem id="sep-1"/>
+
+    <MenuItem id="shelly-update-helper">
+        <Name>Firmware Update Helper</Name>
+        <ConfigUI>
+            <Field id="info" type="label">
+                <Label>You can only update a device if it actually has an update. Run the "Discover Shellies" action to refresh device information.</Label>
+            </Field>
+
+            <Field id="sep-1" type="separator"/>
+
+            <Field id="run-discover-devices" type="button" tooltip="Click this button to start the automatic discovery process.">
+                <Label>Auto-discovery:</Label>
+                <Title>Discover Shellies</Title>
+                <CallbackMethod>discoverShellies</CallbackMethod>
+            </Field>
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Watch the logs - this may not be immediate. You should only need to run this once.</Label>
+            </Field>
+
+            <Field id="sep-2" type="separator"/>
+
+            <Field id="refresh-devices" type="button" tooltip="Click this button to get the devices that need updates.">
+                <Label>Reload Updatable Shellies:</Label>
+                <Title>Reload</Title>
+                <CallbackMethod>menuChanged</CallbackMethod>
+            </Field>
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Discovery may take a few seconds, so the device list below needs to be refreshed manually.</Label>
+            </Field>
+
+            <Field id="sep-3" type="separator"/>
+
+            <Field id="shelly-device-id" type="menu">
+                <Label>Shelly Device:</Label>
+                <List class="self" method="getUpdatableShellyDevices" dynamicReload="true"/>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>updateShelly</CallbackMethod>
+        <ButtonTitle>Update!</ButtonTitle>
+    </MenuItem>
+</MenuItems>

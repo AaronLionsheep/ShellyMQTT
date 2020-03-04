@@ -13,6 +13,8 @@ class Shelly_1PM(Shelly_1):
             return []
         else:
             return [
+                "shellies/announce",
+                "{}/online".format(address),
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/longpush/{}".format(address, self.getChannel()),
@@ -23,16 +25,7 @@ class Shelly_1PM(Shelly_1):
             ]
 
     def handleMessage(self, topic, payload):
-        if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
-            if payload == "on":
-                self.turnOn()
-            elif payload == "off":
-                self.turnOff()
-        elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
-        elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
-        elif topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
+        if topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
             # pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
@@ -61,6 +54,8 @@ class Shelly_1PM(Shelly_1):
             self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
+        else:
+            Shelly_1.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         if action.deviceAction == indigo.kUniversalAction.EnergyReset:

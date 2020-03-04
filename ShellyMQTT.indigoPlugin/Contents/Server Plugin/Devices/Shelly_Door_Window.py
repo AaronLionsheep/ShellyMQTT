@@ -13,6 +13,8 @@ class Shelly_Door_Window(Shelly):
             return []
         else:
             return [
+                "shellies/announce",
+                "{}/online".format(address),
                 "{}/sensor/state".format(address),
                 "{}/sensor/lux".format(address),
                 "{}/sensor/battery".format(address)
@@ -35,6 +37,8 @@ class Shelly_Door_Window(Shelly):
             self.device.updateStateOnServer(key="lux", value=payload)
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+        else:
+            Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         pass

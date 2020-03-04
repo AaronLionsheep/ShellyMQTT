@@ -37,7 +37,7 @@ class Plugin(indigo.PluginBase):
         self.debug = pluginPrefs.get("debugMode", False)
 
         # {
-        #   devId: <Shelly object>,
+        #   devId: <Indigo device id>,
         #   anotherDevId: <Shelly object>
         # }
         self.shellyDevices = {}
@@ -64,8 +64,13 @@ class Plugin(indigo.PluginBase):
         self.logger.info(u"Stopped ShellyMQTT...")
 
     def message_handler(self, message):
-        self.logger.debug(u"received MQTT message type {} from {}".format(message["message_type"], indigo.devices[int(message["brokerID"])].name))
-        self.messageQueue.put(message)
+        if message['message_type'] not in self.messageTypes:
+            # None of the devices care about this message
+            self.logger.debug(u"ignoring MQTT message of type \"%s\"", message["message_type"])
+            return
+        else:
+            self.logger.debug(u"Queued MQTT message type {} from {}".format(message["message_type"], indigo.devices[int(message["brokerID"])].name))
+            self.messageQueue.put(message)
 
     def runConcurrentThread(self):
         try:
@@ -115,6 +120,8 @@ class Plugin(indigo.PluginBase):
         self.addDeviceSubscriptions(shelly)
         self.shellyDevices[device.id] = shelly
         self.messageTypes.append(shelly.getMessageType())
+        if shelly.getAnnounceMessageType():
+            self.messageTypes.append(shelly.getAnnounceMessageType())
 
     def deviceStopComm(self, device):
         self.logger.info(u"Stopping \"%s\"...", device.name)
@@ -158,33 +165,32 @@ class Plugin(indigo.PluginBase):
         :return: None
         """
         while not self.messageQueue.empty():
+            # At least 1 of the devices care about this message
             message = self.messageQueue.get()
             if not message:
                 return
 
-            # Now we have our message
+            # We have a valid message
             # Find the devices that need to get this message and give it to them
-            props = {'message_type': message['message_type']}
             brokerID = int(message['brokerID'])
-            if message['message_type'] not in self.messageTypes:
-                # None of the devices care about this message
-                return
-
-            # At least 1 of the devices care about this message
+            props = {'message_type': message['message_type']}
             while True:
                 data = self.mqttPlugin.executeAction("fetchQueuedMessage", deviceId=brokerID, props=props, waitUntilDone=True)
-                if data is None:
+                if data is None:  # Ensure we got data back
                     break
 
-                self.logger.debug(u"Got message: %s", data)
                 topic = '/'.join(data['topic_parts'])  # transform the topic into a single string
+                payload = data['payload']
+                message_type = data['message_type']
+                self.logger.debug(u"    Processing: \"%s\" on topic \"%s\"", payload, topic)
                 deviceSubscriptions = self.brokerDeviceSubscriptions.get(brokerID, {})  # get device subscriptions for this broker
                 devices = deviceSubscriptions.get(topic, list())  # get devices listening on this broker for this topic
-                for device in devices:
-                    shelly = self.shellyDevices.get(device, None)
-                    if shelly is not None and shelly.getMessageType() == message['message_type']:
+                for deviceId in devices:
+                    shelly = self.shellyDevices.get(deviceId, None)
+                    if shelly is not None and message_type in shelly.getMessageTypes():
                         # Send this message data to the shelly object
-                        shelly.handleMessage(topic, data['payload'])
+                        self.logger.debug("        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
+                        shelly.handleMessage(topic, payload)
 
     def actionControlDevice(self, action, device):
         """
@@ -227,6 +233,85 @@ class Plugin(indigo.PluginBase):
         brokers.sort(key=lambda tup: tup[1])
         return brokers
 
+    def getShellyDevices(self, filter="", valuesDict=None, typeId="", targetId=0):
+        """
+        Gets a list of available Shelly devices.
+        :return: A list of shelly device tuples of the form (deviceId, name).
+        """
+        shellies = []
+        for dev in indigo.devices.iter("self"):
+            shellies.append((dev.id, dev.name))
+
+        shellies.sort(key=lambda d: d[1])
+        return shellies
+
+    def getUpdatableShellyDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
+        """
+        Gets a list of shelly devices that can be updated.
+        :return: A list of Indigo deviceId's corresponding to updatable shelly devices.
+        """
+        shellies = self.getShellyDevices()
+        updatable = []
+        for dev in shellies:
+            device = indigo.devices[dev[0]]
+            if device.states.get('has-firmware-update', False):
+                updatable.append(dev)
+        return updatable
+
+    def menuChanged(self, valuesDict, typeId):
+        """
+        Dummy function used to update a ConfigUI dynamic menu
+        :param valuesDict:
+        :param typeId:
+        :param devId:
+        :return: the values currently in the ConfigUI
+        """
+        return valuesDict
+
+    def discoverShelly(self, pluginAction, device, callerWaitingForResult):
+        shellyDevId = int(pluginAction.props['shelly-device-id'])
+        shelly = self.shellyDevices[shellyDevId]
+        if shelly:
+            shelly.announce()
+
+    def discoverShellies(self, pluginAction=None, device=None, callerWaitingForResult=False):
+        """
+        Sends a discovery message to all currently used brokers.
+        :return: None
+        """
+        if not self.mqttPlugin.isEnabled():
+            self.logger.error(u"MQTT plugin must be enabled!")
+            return None
+        else:
+            if self.pluginPrefs.get('all-brokers-subscribe-to-announce', True):
+                # Have all shellies on all broker devices send announcements
+                brokerIds = map(lambda b: b[0], self.getBrokerDevices())
+            else:
+                # We need to get the user-specified brokers from the plugin config
+                brokerIds = self.pluginPrefs.get('brokers-subscribing-to-announce', [])
+
+            for brokerId in brokerIds:
+                brokerId = int(brokerId)
+                props = {
+                    'topic': 'shellies/command',
+                    'payload': 'announce',
+                    'qos': 0,
+                    'retain': 0,
+                }
+                self.mqttPlugin.executeAction("publish", deviceId=brokerId, props=props, waitUntilDone=False)
+                self.logger.info(u"published \"announce\" to \"shellies/command\" on broker \"%s\"", indigo.devices[brokerId].name)
+
+    def updateShelly(self, valuesDict, typeId):
+        if valuesDict['shelly-device-id'] == "":
+            errors = indigo.Dict()
+            errors['shelly-device-id'] = "You must select a device to update!"
+            return False, valuesDict, errors
+        else:
+            shellyDeviceId = int(valuesDict['shelly-device-id'])
+            shelly = self.shellyDevices[shellyDeviceId]
+            shelly.sendUpdateFirmwareCommand()
+            return True
+
     def addDeviceSubscriptions(self, shelly):
         """
         Adds a Shelly device to the dictionary of device subscriptions.
@@ -245,7 +330,7 @@ class Plugin(indigo.PluginBase):
                 # initialize a new list of devices for this subscription
                 brokerSubscriptions[topic] = []
             brokerSubscriptions[topic].append(shelly.device.id)
-            self.logger.debug(u"Added '%s' to '%s' on '%s'", shelly.device.name, topic, indigo.devices[shelly.getBrokerId()].name)
+            # self.logger.debug(u"Added '%s' to '%s' on '%s'", shelly.device.name, topic, indigo.devices[shelly.getBrokerId()].name)
 
     def removeDeviceSubscriptions(self, shelly):
         """
@@ -259,8 +344,12 @@ class Plugin(indigo.PluginBase):
             subscriptions = shelly.getSubscriptions()
             for topic in subscriptions:
                 if topic in brokerSubscriptions and shelly.device.id in brokerSubscriptions[topic]:
-                    self.logger.debug(u"Removed '%s' from '%s' on '%s'", shelly.device.name, topic, indigo.devices[shelly.getBrokerId()].name)
+                    # self.logger.debug(u"Removed '%s' from '%s' on '%s'", shelly.device.name, topic, indigo.devices[shelly.getBrokerId()].name)
                     brokerSubscriptions[topic].remove(shelly.device.id)
+
+            # remove the broker key if there are no more devices using it
+            if len(brokerSubscriptions) == 0:
+                del self.brokerDeviceSubscriptions[shelly.getBrokerId()]
 
     def printBrokerDeviceSubscriptions(self):
         """
@@ -273,3 +362,19 @@ class Plugin(indigo.PluginBase):
             deviceSubscriptions = self.brokerDeviceSubscriptions[broker]
             for topic in deviceSubscriptions:
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
+
+    def validateActionConfigUi(self, valuesDict, typeId, deviceId):
+        if typeId == "update-shelly":
+            if valuesDict['shelly-device-id'] == "":
+                errors = indigo.Dict()
+                errors['shelly-device-id'] = "You must select a device to update!"
+                return False, valuesDict, errors
+            else:
+                return True
+        elif typeId == "discover-shelly":
+            if valuesDict['shelly-device-id'] == "":
+                errors = indigo.Dict()
+                errors['shelly-device-id'] = "You must select a device to discover!"
+                return False, valuesDict, errors
+            else:
+                return True
