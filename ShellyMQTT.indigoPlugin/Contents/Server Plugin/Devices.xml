@@ -14,7 +14,7 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
-            <Field id="sep-1" type="separator"/>
+            <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
@@ -46,6 +46,21 @@
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
             </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
@@ -65,13 +80,23 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
-
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="message-sep" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -117,6 +142,21 @@
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
             </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
@@ -141,9 +181,22 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="message-sep" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
             </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="channel-sep" type="separator"/>
 
             <Field type="menu" id="channel" defaultValue="0">
                 <Label>Relay Channel:</Label>
@@ -201,6 +254,21 @@
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
             </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
@@ -245,8 +313,19 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="message-sep" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -282,6 +361,21 @@
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
             </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
@@ -306,8 +400,19 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="message-sep" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -333,6 +438,21 @@
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
             </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
@@ -356,8 +476,19 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="message-sep" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
             </Field>
 
             <Field id="use-case-sep" type="separator"/>
@@ -386,6 +517,21 @@
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
             </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
@@ -411,8 +557,19 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="message-sep" type="separator"/>
+
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -452,6 +609,90 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
                 <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-duo">
+        <Name>Shelly Duo</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
+            <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
+            <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
+            <Field type="textfield" id="WhiteTemperatureMin" hidden="true" defaultValue="3000" />
+            <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+        </ConfigUI>
+        <States>
+            <State id="resetEnergyOffset">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
+                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>firmware-version</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
             <State id="has-firmware-update">
                 <ValueType>Boolean</ValueType>

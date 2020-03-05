@@ -6,6 +6,7 @@ from Devices.Shelly_HT import Shelly_HT
 from Devices.Shelly_Flood import Shelly_Flood
 from Devices.Shelly_Door_Window import Shelly_Door_Window
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
+from Devices.Shelly_Duo import Shelly_Duo
 from Queue import Queue
 
 kCurDevVersion = 0  # current version of plugin devices
@@ -29,6 +30,8 @@ def createDeviceObject(device):
         return Shelly_Door_Window(device)
     elif deviceType == "shelly-dimmer":
         return Shelly_Dimmer_SL(device)
+    elif deviceType == "shelly-duo":
+        return Shelly_Duo(device)
 
 
 class Plugin(indigo.PluginBase):

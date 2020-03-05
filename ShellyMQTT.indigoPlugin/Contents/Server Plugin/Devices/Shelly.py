@@ -13,6 +13,11 @@ class Shelly:
         return []
 
     def subscribe(self):
+        """
+        Subscribes the device to all required topics on the specified broker.
+
+        :return: None
+        """
         mqtt = self.getMQTT()
         if mqtt is not None:
             for subscription in self.getSubscriptions():
@@ -30,6 +35,14 @@ class Shelly:
         return None
 
     def handleMessage(self, topic, payload):
+        """
+        The default handler for incoming messages.
+        These are messages that are handled by ANY Shelly device.
+
+        :param topic: The topic of the incoming message.
+        :param payload: THe content of the massage.
+        :return:  None
+        """
         if topic == "shellies/announce":
             self.parseAnnouncement(payload)
         elif topic == "{}/online".format(self.getAddress()):
@@ -37,6 +50,12 @@ class Shelly:
         return None
 
     def handleAction(self, action):
+        """
+        The default handler for an action.
+
+        :param action: The Indigo action to handle.
+        :return: None
+        """
         return None
 
     def publish(self, topic, payload):
@@ -198,6 +217,19 @@ class Shelly:
         return (fahrenheit - 32) * 5 / 9
 
     def parseAnnouncement(self, payload):
+        """
+        Parses the data from an announce message. The payload is expected to be of the form:
+        {
+            "id": <SOME_ID>,
+            "mac": <MAC_ADDRESS>,
+            "ip": <IP_ADDRESS>,
+            "fw_ver": <FIRMWARE_VERSION>,
+            "new_fw": <true/false>
+        }
+
+        :param payload: The payload of the announce message.
+        :return: None
+        """
         payload = json.loads(payload)
         id = payload.get('id', None)
         mac_address = payload.get('mac', None)
@@ -208,7 +240,51 @@ class Shelly:
         # id should appear in part of the device address
         if id and self.getAddress() and id in self.getAddress():
             self.logger.info(u"\"%s\" refreshed meta-data from announcement message", self.device.name)
-            # self.device.updateStateOnServer('mac-address', mac_address)
-            # self.device.updateStateOnServer('ip-address', ip_address)
-            # self.device.updateStateOnServer('firmware-version', firmware_version)
+            self.device.updateStateOnServer('mac-address', mac_address)
+            self.device.updateStateOnServer('ip-address', ip_address)
+            self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
+
+    def updateEnergy(self, energy):
+        # states['resetEnergyOffset'] stores the energy reported the last time a reset was requested
+        # If this value is greater than the current energy being reported, then the device must have been powered off
+        # and reset back to 0.
+
+        resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+        new_energy = energy - resetEnergyOffset
+        if new_energy < 0:  # If the offset is greater than what is being reported, the device must have reset
+            # our last known energy total can be used to determine the previous energy usage
+            self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last know energy usage value...")
+            resetEnergyOffset = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000 * -1
+            self.device.updateStateOnServer('resetEnergyOffset', resetEnergyOffset)
+            new_energy = energy - resetEnergyOffset
+
+        kwh = float(new_energy) / 60 / 1000  # energy is reported in watt-minutes
+        if kwh < 0.01:
+            uiValue = '{:.4f} kWh'.format(kwh)
+        elif kwh < 1:
+            uiValue = '{:.3f} kWh'.format(kwh)
+        else:
+            uiValue = '{:.1f} kWh'.format(kwh)
+
+        self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
+
+    def resetEnergy(self):
+        # We can't tell the device to reset it's internal energy usage
+        # Record the current value being reported so we can offset from it later on
+        currEnergyWattMins = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000
+        previousResetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+        offset = currEnergyWattMins + previousResetEnergyOffset
+        self.device.updateStateOnServer('resetEnergyOffset', offset)
+        self.device.updateStateOnServer('accumEnergyTotal', 0.0)
+
+    def turnOn(self):
+        self.device.updateStateOnServer(key='onOffState', value=True)
+        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
+
+    def turnOff(self):
+        self.device.updateStateOnServer(key='onOffState', value=False)
+        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
+
+    def getChannel(self):
+        return self.device.pluginProps.get('channel', 0)

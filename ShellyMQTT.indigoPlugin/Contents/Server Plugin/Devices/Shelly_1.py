@@ -41,14 +41,3 @@ class Shelly_1(Shelly):
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
         elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
             self.sendStatusRequestCommand()
-
-    def turnOn(self):
-        self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
-
-    def turnOff(self):
-        self.device.updateStateOnServer(key='onOffState', value=False)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
-
-    def getChannel(self):
-        return self.device.pluginProps.get('channel', 0)
