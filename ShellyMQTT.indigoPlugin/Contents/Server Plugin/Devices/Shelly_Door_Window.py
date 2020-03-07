@@ -23,6 +23,7 @@ class Shelly_Door_Window(Shelly):
     def handleMessage(self, topic, payload):
         if topic == "{}/sensor/state".format(self.getAddress()):
             self.device.updateStateOnServer(key='status', value=payload)
+            self.logger.info("\"{}\" {}".format(self.device.name, payload))
             if self.device.pluginProps['useCase'] == "door":
                 if payload == "closed":
                     self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorClosed)

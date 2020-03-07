@@ -84,7 +84,7 @@ class Shelly_Duo(Shelly):
         payload = {
             "turn": turn,
             "brightness": brightness,
-            "white": white,
-            "temp": temp
+            # "white": white,
+            # "temp": temp
         }
         self.publish("{}/light/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))

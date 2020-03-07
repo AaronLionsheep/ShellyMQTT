@@ -106,6 +106,7 @@
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
@@ -131,6 +132,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>SW Input</TriggerLabel>
                 <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
             <State id="resetEnergyOffset">
                 <ValueType>Integer</ValueType>
@@ -213,6 +219,7 @@
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
@@ -335,6 +342,7 @@
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
@@ -422,6 +430,7 @@
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
@@ -579,6 +588,7 @@
                 <List>
                     <Option value="F">Show Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
@@ -640,6 +650,7 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
+            <Field type="checkbox" id="SupportsTwoWhiteLevels" hidden="true" defaultValue="false" />
             <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
             <Field type="textfield" id="WhiteTemperatureMin" hidden="true" defaultValue="3000" />
             <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
@@ -700,5 +711,59 @@
                 <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
+    </Device>
+
+    <Device type="custom" id="shelly-temperature-addon">
+        <Name>Shelly Temperature Addon</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field type="menu" id="probe-number" defaultValue="0">
+                <Label>Probe:</Label>
+                <List>
+                    <Option value="0">Probe 1</Option>
+                    <Option value="1">Probe 2</Option>
+                    <Option value="2">Probe 3</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
 </Devices>

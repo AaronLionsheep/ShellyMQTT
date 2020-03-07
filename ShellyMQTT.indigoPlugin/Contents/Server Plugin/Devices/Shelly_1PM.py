@@ -33,6 +33,8 @@ class Shelly_1PM(Shelly_1):
             self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
+        elif topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
+            self.device.updateStateOnServer('overpower', (payload == 'overpower'))
         else:
             Shelly_1.handleMessage(self, topic, payload)
 

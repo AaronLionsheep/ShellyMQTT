@@ -25,9 +25,6 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             ]
 
     def handleMessage(self, topic, payload):
-        if topic == "{}/light/{}".format(self.getAddress(), self.getChannel()):
-            # We will get the on off state from the status payload instead
-            pass
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
             # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
             payload = json.loads(payload)

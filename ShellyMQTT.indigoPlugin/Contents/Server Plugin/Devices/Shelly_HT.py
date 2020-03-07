@@ -32,7 +32,10 @@ class Shelly_HT(Shelly):
 
         temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
         self.device.updateStateOnServer(key="status", value='{}°{} / {}%'.format(self.device.states['temperature'], temp_units, self.device.states['humidity']))
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        if self.device.states.get('online', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
 
     def handleAction(self, action):
         pass
