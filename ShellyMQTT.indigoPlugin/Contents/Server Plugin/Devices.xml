@@ -3,7 +3,10 @@
     <Device type="relay" id="shelly-1">
         <Name>Shelly 1</Name>
         <ConfigUI>
-            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -57,7 +60,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -74,6 +77,7 @@
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
@@ -162,7 +166,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -179,6 +183,7 @@
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
@@ -278,7 +283,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -314,6 +319,8 @@
     <Device type="custom" id="shelly-ht">
         <Name>Shelly H&amp;T</Name>
         <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
@@ -386,7 +393,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -402,6 +409,8 @@
     <Device type="sensor" id="shelly-flood">
         <Name>Shelly Flood</Name>
         <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
@@ -464,7 +473,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -479,6 +488,8 @@
     <Device type="custom" id="shelly-door-window">
         <Name>Shelly Door Window</Name>
         <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
@@ -543,7 +554,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -562,6 +573,7 @@
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
             <Field id="broker-id" type="menu">
@@ -640,7 +652,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -662,6 +674,7 @@
             <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
             <Field type="textfield" id="WhiteTemperatureMin" hidden="true" defaultValue="2700" />
             <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -704,7 +717,7 @@
                 <ControlPageLabel>IP Address</ControlPageLabel>
             </State>
             <State id="firmware-version">
-                <ValueType>firmware-version</ValueType>
+                <ValueType>String</ValueType>
                 <TriggerLabel>Firmware Version</TriggerLabel>
                 <ControlPageLabel>Firmware Version</ControlPageLabel>
             </State>
@@ -719,6 +732,9 @@
     <Device type="custom" id="shelly-temperature-addon">
         <Name>Shelly Temperature Addon</Name>
         <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
             <Field id="host-id" type="menu">

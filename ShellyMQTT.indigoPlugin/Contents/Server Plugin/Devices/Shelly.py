@@ -330,7 +330,7 @@ class Shelly:
         """
 
         if not self.isOn():
-            self.logger.info(u"\"{}\" turned on".format(self.device.name))
+            self.logger.info(u"\"{}\" on".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=True)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
 
@@ -342,7 +342,7 @@ class Shelly:
         """
 
         if not self.isOff():
-            self.logger.info(u"\"{}\" turned off".format(self.device.name))
+            self.logger.info(u"\"{}\" off".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=False)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
 

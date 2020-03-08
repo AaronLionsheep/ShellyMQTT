@@ -352,9 +352,7 @@ class Plugin(indigo.PluginBase):
             brokerID = int(message['brokerID'])
             props = {'message_type': message['message_type']}
             while True:
-                fetch_start = time.time()
                 data = self.mqttPlugin.executeAction("fetchQueuedMessage", deviceId=brokerID, props=props, waitUntilDone=True)
-                #  self.logger.info("fetch took {:.5f} seconds".format(time.time()-fetch_start))
                 if data is None:  # Ensure we got data back
                     break
 
@@ -368,7 +366,7 @@ class Plugin(indigo.PluginBase):
                     shelly = self.shellyDevices.get(deviceId, None)
                     if shelly is not None and message_type in shelly.getMessageTypes():
                         # Send this message data to the shelly object
-                        self.logger.debug("        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
+                        self.logger.debug(u"        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
                         shelly.handleMessage(topic, payload)
 
     def actionControlDevice(self, action, device):
