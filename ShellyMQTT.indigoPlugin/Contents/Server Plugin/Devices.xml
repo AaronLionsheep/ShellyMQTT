@@ -143,13 +143,6 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
-            <!--
-            <State id="resetEnergyOffset">
-                <ValueType>Integer</ValueType>
-                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
-                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
-            </State>
-            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -260,13 +253,6 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
-            <!--
-            <State id="resetEnergyOffset">
-                <ValueType>Integer</ValueType>
-                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
-                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
-            </State>
-            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -629,13 +615,6 @@
                 <TriggerLabel>SW Input</TriggerLabel>
                 <ControlPageLabel>SW Input</ControlPageLabel>
             </State>
-            <!--
-            <State id="resetEnergyOffset">
-                <ValueType>Integer</ValueType>
-                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
-                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
-            </State>
-            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
