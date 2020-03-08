@@ -17,8 +17,8 @@ class Shelly_Duo(Shelly):
                 "shellies/announce",
                 "{}/online".format(address),
                 "{}/light/{}/status".format(address, self.getChannel()),
-                "{}/light/{}/power".format(address, self.getChannel()),
-                "{}/light/{}/energy".format(address, self.getChannel())
+                # "{}/light/{}/power".format(address, self.getChannel()),
+                # "{}/light/{}/energy".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
@@ -33,10 +33,10 @@ class Shelly_Duo(Shelly):
             else:
                 # The light should be off regardless of a reported brightness value
                 self.turnOff()
-        elif topic == "{}/light/{}/power".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
-        elif topic == "{}/light/{}/energy".format(self.getAddress(), self.getChannel()):
-            self.updateEnergy(int(payload))
+        # elif topic == "{}/light/{}/power".format(self.getAddress(), self.getChannel()):
+        #     self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
+        # elif topic == "{}/light/{}/energy".format(self.getAddress(), self.getChannel()):
+        #     self.updateEnergy(int(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
 

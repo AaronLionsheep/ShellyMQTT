@@ -46,11 +46,3 @@ class Shelly_1PM(Shelly_1):
             self.sendStatusRequestCommand()
         else:
             Shelly_1.handleAction(self, action)
-
-    def turnOn(self):
-        self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
-
-    def turnOff(self):
-        self.device.updateStateOnServer(key='onOffState', value=False)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)

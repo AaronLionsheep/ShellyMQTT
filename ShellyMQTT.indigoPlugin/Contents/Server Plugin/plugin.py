@@ -352,10 +352,8 @@ class Plugin(indigo.PluginBase):
                     shelly = self.shellyDevices.get(deviceId, None)
                     if shelly is not None and message_type in shelly.getMessageTypes():
                         # Send this message data to the shelly object
-                        # self.logger.debug("        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
-                        handle_start = time.time()
+                        self.logger.debug("        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
                         shelly.handleMessage(topic, payload)
-                        # self.logger.info("{:25} handled {:50} in {:.5f} seconds".format(shelly.device.name, topic, time.time()-handle_start))
 
     def actionControlDevice(self, action, device):
         """

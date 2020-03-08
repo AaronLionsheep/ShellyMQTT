@@ -231,18 +231,18 @@ class Shelly:
         :return: None
         """
         payload = json.loads(payload)
-        id = payload.get('id', None)
+        identifier = payload.get('id', None)
         mac_address = payload.get('mac', None)
         ip_address = payload.get('ip', None)
         firmware_version = payload.get('fw_ver', None)
         has_firmware_update = payload.get('new_fw', False)
 
         # id should appear in part of the device address
-        if id and self.getAddress() and id in self.getAddress():
+        if identifier and self.getAddress() and identifier in self.getAddress():
             self.logger.info(u"\"%s\" refreshed meta-data from announcement message", self.device.name)
             self.device.updateStateOnServer('mac-address', mac_address)
             self.device.updateStateOnServer('ip-address', ip_address)
-            # self.device.updateStateOnServer('firmware-version', firmware_version)
+            self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
     def updateEnergy(self, energy):

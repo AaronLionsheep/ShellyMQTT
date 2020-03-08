@@ -646,8 +646,8 @@
     <Device type="dimmer" id="shelly-duo">
         <Name>Shelly Duo</Name>
         <ConfigUI>
-            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
-            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsTwoWhiteLevels" hidden="true" defaultValue="false" />
@@ -680,11 +680,13 @@
 
         </ConfigUI>
         <States>
+            <!--
             <State id="resetEnergyOffset">
                 <ValueType>Integer</ValueType>
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
             </State>
+            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
