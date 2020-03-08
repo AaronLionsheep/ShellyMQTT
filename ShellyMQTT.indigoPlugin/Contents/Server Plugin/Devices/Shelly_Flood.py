@@ -35,7 +35,7 @@ class Shelly_Flood(Shelly):
         This method is called when a message comes in and matches one of this devices subscriptions.
 
         :param topic: The topic of the message.
-        :param payload: THe payload of the message.
+        :param payload: The payload of the message.
         :return: None
         """
 
@@ -43,10 +43,10 @@ class Shelly_Flood(Shelly):
             self.setTemperature(float(payload))
         elif topic == "{}/sensor/flood".format(self.getAddress()):
             if payload == 'true':
-                self.device.updateStateOnServer(key='onOffState', value=True, uiValue='Wet')
+                self.device.updateStateOnServer(key='onOffState', value=True, uiValue='wet')
                 self.device.updateStateImageOnServer(indigo.kStateImageSel.SprinklerOn)
             elif payload == 'false':
-                self.device.updateStateOnServer(key='onOffState', value=False, uiValue='Dry')
+                self.device.updateStateOnServer(key='onOffState', value=False, uiValue='dry')
                 self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))

@@ -86,7 +86,7 @@ class Shelly:
                 'retain': 0,
             }
             mqtt.executeAction("publish", deviceId=self.getBrokerId(), props=props, waitUntilDone=False)
-            self.logger.info(u"\"%s\" published \"%s\" to \"%s\"", self.device.name, payload, topic)
+            self.logger.debug(u"\"%s\" published \"%s\" to \"%s\"", self.device.name, payload, topic)
 
     def getAddress(self):
         """
@@ -329,6 +329,8 @@ class Shelly:
         :return: None
         """
 
+        if not self.isOn():
+            self.logger.info(u"\"{}\" turned on".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=True)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
 
@@ -339,8 +341,28 @@ class Shelly:
         :return: None
         """
 
+        if not self.isOff():
+            self.logger.info(u"\"{}\" turned off".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=False)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
+
+    def isOn(self):
+        """
+        Helper to determine if a device is on.
+
+        :return: True if the device is on.
+        """
+
+        return self.device.states.get('onOffState', False)
+
+    def isOff(self):
+        """
+        Helper to determine if a device is off.
+
+        :return: True if the device is off.
+        """
+
+        return not self.device.states.get('onOffState', False)
 
     def getChannel(self):
         """

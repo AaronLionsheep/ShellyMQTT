@@ -43,11 +43,15 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             payload = json.loads(payload)
             if payload['ison']:
                 # we will accept a brightness value and save it
+                if self.device.states['brightnessLevel'] != payload['brightness']:
+                    self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
                 self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
             else:
                 # The light should be off regardless of a reported brightness value
                 self.turnOff()
         elif topic == "{}/overload".format(self.getAddress()):
+            if not self.device.states['overload']:
+                self.logger.error(u"\"{}\" was overloaded!".format(self.device.name))
             self.device.updateStateOnServer('overload', (payload == '1'))
         else:
             Shelly_1PM.handleMessage(self, topic.replace("light", "relay"), payload)
