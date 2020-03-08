@@ -271,7 +271,7 @@ class Shelly:
 
     def updateEnergy(self, energy):
         """
-        states['resetEnergyOffset'] stores the energy reported the last time a reset was requested
+        pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
         If this value is greater than the current energy being reported, then the device must have been powered off
         and reset back to 0.
 
@@ -279,13 +279,17 @@ class Shelly:
         :return: None
         """
 
-        resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+        # resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+        resetEnergyOffset = int(self.device.pluginProps.get('resetEnergyOffset', 0))
         new_energy = energy - resetEnergyOffset
         if new_energy < 0:  # If the offset is greater than what is being reported, the device must have reset
             # our last known energy total can be used to determine the previous energy usage
             self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last know energy usage value...")
             resetEnergyOffset = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000 * -1
-            self.device.updateStateOnServer('resetEnergyOffset', resetEnergyOffset)
+            # self.device.updateStateOnServer('resetEnergyOffset', resetEnergyOffset)
+            newProps = self.device.pluginProps
+            newProps['resetEnergyOffset'] = resetEnergyOffset
+            self.device.replacePluginPropsOnServer(newProps)
             new_energy = energy - resetEnergyOffset
 
         kwh = float(new_energy) / 60 / 1000  # energy is reported in watt-minutes
@@ -293,6 +297,8 @@ class Shelly:
             uiValue = '{:.4f} kWh'.format(kwh)
         elif kwh < 1:
             uiValue = '{:.3f} kWh'.format(kwh)
+        elif kwh < 10:
+            uiValue = '{:.2f} kWh'.format(kwh)
         else:
             uiValue = '{:.1f} kWh'.format(kwh)
 
@@ -307,9 +313,13 @@ class Shelly:
         """
 
         currEnergyWattMins = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000
-        previousResetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+        # previousResetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
+        previousResetEnergyOffset = int(self.device.pluginProps.get('resetEnergyOffset', 0))
         offset = currEnergyWattMins + previousResetEnergyOffset
-        self.device.updateStateOnServer('resetEnergyOffset', offset)
+        # self.device.updateStateOnServer('resetEnergyOffset', offset)
+        newProps = self.device.pluginProps
+        newProps['resetEnergyOffset'] = offset
+        self.device.replacePluginPropsOnServer(newProps)
         self.device.updateStateOnServer('accumEnergyTotal', 0.0)
 
     def turnOn(self):

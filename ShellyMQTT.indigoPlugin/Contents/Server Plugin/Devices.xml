@@ -75,6 +75,7 @@
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -138,11 +139,13 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
+            <!--
             <State id="resetEnergyOffset">
                 <ValueType>Integer</ValueType>
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
             </State>
+            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -177,6 +180,7 @@
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -251,11 +255,13 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
+            <!--
             <State id="resetEnergyOffset">
                 <ValueType>Integer</ValueType>
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
             </State>
+            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -556,6 +562,7 @@
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -610,11 +617,13 @@
                 <TriggerLabel>SW Input</TriggerLabel>
                 <ControlPageLabel>SW Input</ControlPageLabel>
             </State>
+            <!--
             <State id="resetEnergyOffset">
                 <ValueType>Integer</ValueType>
                 <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
                 <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
             </State>
+            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -679,13 +688,6 @@
 
         </ConfigUI>
         <States>
-            <!--
-            <State id="resetEnergyOffset">
-                <ValueType>Integer</ValueType>
-                <TriggerLabel>Reset Energy Offset (Internal)</TriggerLabel>
-                <ControlPageLabel>Reset Energy Offset (Internal)</ControlPageLabel>
-            </State>
-            -->
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
