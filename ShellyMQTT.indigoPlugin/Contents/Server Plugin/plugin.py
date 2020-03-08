@@ -21,6 +21,7 @@ def createDeviceObject(device):
     :param device: The Indigo device object.
     :return: A Shelly device object.
     """
+
     deviceType = device.deviceTypeId
     if deviceType == "shelly-1":
         return Shelly_1(device)
@@ -82,6 +83,7 @@ class Plugin(indigo.PluginBase):
 
         :return: None
         """
+
         if not self.mqttPlugin:
             self.logger.error(u"MQTT Connector plugin is required!!")
             exit(-1)
@@ -93,9 +95,16 @@ class Plugin(indigo.PluginBase):
 
         :return: None
         """
+
         self.logger.info(u"Stopped ShellyMQTT...")
 
     def runConcurrentThread(self):
+        """
+        Main work thread where messages are continually dequeued and processed.
+
+        :return: None
+        """
+
         try:
             while True:
                 if not self.mqttPlugin.isEnabled():
@@ -116,6 +125,7 @@ class Plugin(indigo.PluginBase):
         :param userCancelled: True or false to indicate if the config was cancelled.
         :return: True or false to indicate if the config is valid.
         """
+
         if userCancelled is False:
             self.debug = valuesDict.get('debugMode', False)
 
@@ -132,6 +142,7 @@ class Plugin(indigo.PluginBase):
         :param device: The device that is starting
         :return: True or false to indicate if the device was started.
         """
+
         instanceVers = int(device.pluginProps.get('devVersCount', 0))
         if instanceVers < kCurDevVersion or kCurDevVersion == 0:
             newProps = device.pluginProps
@@ -211,6 +222,7 @@ class Plugin(indigo.PluginBase):
         :param device: The device that is stopping.
         :return: True or false to indicate if the device was stopped.
         """
+
         if device.id not in self.shellyDevices:
             return
         self.logger.info(u"Stopping \"%s\"...", device.name)
@@ -269,6 +281,7 @@ class Plugin(indigo.PluginBase):
         :param shelly: The Shelly device to add.
         :return: None
         """
+
         # ensure that deviceSubscriptions has a dictionary of subscriptions for the broker
         if shelly.getBrokerId() not in self.brokerDeviceSubscriptions:
             self.brokerDeviceSubscriptions[shelly.getBrokerId()] = {}
@@ -290,6 +303,7 @@ class Plugin(indigo.PluginBase):
         :param shelly: The Shelly object to remove.
         :return: None
         """
+
         # make sure that the device's broker has subscriptions
         if shelly.getBrokerId() in self.brokerDeviceSubscriptions:
             brokerSubscriptions = self.brokerDeviceSubscriptions[shelly.getBrokerId()]
@@ -310,6 +324,7 @@ class Plugin(indigo.PluginBase):
         :param message: The message object.
         :return: None
         """
+
         if message['message_type'] not in self.messageTypes:
             # None of the devices care about this message
             self.logger.debug(u"ignoring MQTT message of type \"%s\"", message["message_type"])
@@ -325,6 +340,7 @@ class Plugin(indigo.PluginBase):
 
         :return: None
         """
+
         while not self.messageQueue.empty():
             # At least 1 of the devices care about this message
             message = self.messageQueue.get()
@@ -363,6 +379,7 @@ class Plugin(indigo.PluginBase):
         :param device: The device that was acted on.
         :return: None
         """
+
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
             shelly.handleAction(action)
@@ -375,6 +392,7 @@ class Plugin(indigo.PluginBase):
         :param device: The device that was acted on.
         :return: None
         """
+
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
             shelly.handleAction(action)
@@ -393,6 +411,7 @@ class Plugin(indigo.PluginBase):
         :param targetId:
         :return: A list of brokers.
         """
+
         brokers = []
         for dev in indigo.devices.iter():
             if dev.protocol == indigo.kProtocol.Plugin and \
@@ -409,6 +428,7 @@ class Plugin(indigo.PluginBase):
 
         :return: A list of shelly device tuples of the form (deviceId, name).
         """
+
         shellies = []
         for dev in indigo.devices.iter("self"):
             shellies.append((dev.id, dev.name))
@@ -422,6 +442,7 @@ class Plugin(indigo.PluginBase):
 
         :return: A list of Indigo deviceId's corresponding to updatable shelly devices.
         """
+
         shellies = self.getShellyDevices()
         updatable = []
         for dev in shellies:
@@ -459,6 +480,7 @@ class Plugin(indigo.PluginBase):
         :param devId:
         :return: the values currently in the ConfigUI
         """
+
         return valuesDict
 
     def discoverShelly(self, pluginAction, device, callerWaitingForResult):
@@ -471,6 +493,7 @@ class Plugin(indigo.PluginBase):
         :param callerWaitingForResult:
         :return: None
         """
+
         shellyDevId = int(pluginAction.props['shelly-device-id'])
         shelly = self.shellyDevices[shellyDevId]
         if shelly:
@@ -479,8 +502,10 @@ class Plugin(indigo.PluginBase):
     def discoverShellies(self, pluginAction=None, device=None, callerWaitingForResult=False):
         """
         Sends a discovery message to all currently used brokers.
+
         :return: None
         """
+
         if not self.mqttPlugin.isEnabled():
             self.logger.error(u"MQTT plugin must be enabled!")
             return None
@@ -513,6 +538,7 @@ class Plugin(indigo.PluginBase):
         :param typeId:
         :return: True or false depending on the validity of the submitted data.
         """
+
         if valuesDict['shelly-device-id'] == "":
             errors = indigo.Dict()
             errors['shelly-device-id'] = "You must select a device to update!"
@@ -532,6 +558,7 @@ class Plugin(indigo.PluginBase):
         Prints the data structure that contains brokers, topics, and devices
         :return: None
         """
+
         self.logger.debug(u"Broker-Device Subscriptions:")
         for broker in self.brokerDeviceSubscriptions:
             self.logger.debug(u"    Broker %s:", broker)
@@ -540,6 +567,14 @@ class Plugin(indigo.PluginBase):
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
 
     def validateActionConfigUi(self, valuesDict, typeId, deviceId):
+        """
+        Validates an action config UI.
+
+        :param valuesDict: The values in the UI.
+        :param typeId:
+        :param deviceId:
+        :return: True or false based on the validity of the data.
+        """
         if typeId == "update-shelly":
             if valuesDict['shelly-device-id'] == "":
                 errors = indigo.Dict()

@@ -3,10 +3,20 @@ from Shelly import Shelly
 
 
 class Shelly_1(Shelly):
+    """
+    The Shelly 1 is a simple on/off relay.
+    """
+
     def __init__(self, device):
         Shelly.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list.
+        """
+
         address = self.getAddress()
         if address is None:
             return []
@@ -20,6 +30,14 @@ class Shelly_1(Shelly):
             ]
 
     def handleMessage(self, topic, payload):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
         if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
             if payload == "on":
                 self.turnOn()
@@ -33,6 +51,13 @@ class Shelly_1(Shelly):
             Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         if action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.turnOn()
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")

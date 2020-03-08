@@ -5,11 +5,21 @@ import json
 
 
 class Shelly:
+    """
+    The base class for all Shelly devices.
+    """
+
     def __init__(self, device):
         self.device = device
         self.logger = logging.getLogger("Plugin.ShellyMQTT")
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list.
+        """
+
         return []
 
     def subscribe(self):
@@ -18,6 +28,7 @@ class Shelly:
 
         :return: None
         """
+
         mqtt = self.getMQTT()
         if mqtt is not None:
             for subscription in self.getSubscriptions():
@@ -31,9 +42,6 @@ class Shelly:
                 }
                 mqtt.executeAction("add_subscription", deviceId=self.getBrokerId(), props=props)
 
-    def unsubscribe(self):
-        return None
-
     def handleMessage(self, topic, payload):
         """
         The default handler for incoming messages.
@@ -43,6 +51,7 @@ class Shelly:
         :param payload: THe content of the massage.
         :return:  None
         """
+
         if topic == "shellies/announce":
             self.parseAnnouncement(payload)
         elif topic == "{}/online".format(self.getAddress()):
@@ -56,6 +65,7 @@ class Shelly:
         :param action: The Indigo action to handle.
         :return: None
         """
+
         return None
 
     def publish(self, topic, payload):
@@ -66,6 +76,7 @@ class Shelly:
         :param payload: The data to send over the topic.
         :return: None
         """
+
         mqtt = self.getMQTT()
         if mqtt is not None:
             props = {
@@ -83,6 +94,7 @@ class Shelly:
 
         :return: The cleaned base address.
         """
+
         address = self.device.pluginProps.get('address', None)
         if not address or address == '':
             return None
@@ -98,6 +110,7 @@ class Shelly:
 
         :return: The MQTT Connector plugin if it is running, otherwise None.
         """
+
         mqtt = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
         if not mqtt.isEnabled():
             self.logger.error(u"MQTT plugin must be enabled!")
@@ -111,6 +124,7 @@ class Shelly:
 
         :return: The Indigo deviceId of the broker for this device.
         """
+
         brokerId = self.device.pluginProps.get('broker-id', None)
         if brokerId is None or brokerId == '':
             return None
@@ -123,6 +137,7 @@ class Shelly:
 
         :return: The message type for this device.
         """
+
         return self.device.pluginProps.get('message-type', "")
 
     def getAnnounceMessageType(self):
@@ -131,6 +146,7 @@ class Shelly:
 
         :return: The message type for announce messages, or None if this is the same as the regular message type.
         """
+
         if not self.device.pluginProps.get('announce-message-type-same-as-message-type', True):
             return self.device.pluginProps.get('announce-message-type', "")
         else:
@@ -142,6 +158,7 @@ class Shelly:
 
         :return: A list of messages types for this device.
         """
+
         messageTypes = []
         if self.getMessageType() != "":
             messageTypes.append(self.getMessageType())
@@ -155,6 +172,7 @@ class Shelly:
 
         :return: None
         """
+
         if self.getAddress() is not None:
             self.publish("{}/command".format(self.getAddress()), "update")
 
@@ -164,6 +182,7 @@ class Shelly:
 
         :return: None
         """
+
         self.publish("{}/command".format(self.getAddress()), "announce")
 
     def sendUpdateFirmwareCommand(self):
@@ -172,6 +191,7 @@ class Shelly:
 
         :return: None
         """
+
         if self.getAddress() is not None:
             if not self.device.states.get('has-firmware-update', False):
                 self.logger.warning(u"\"%s\" has not notified that it has a newer firmware. Attempting to update anyway...", self.device.name)
@@ -186,6 +206,7 @@ class Shelly:
         :param unitsProps: The props containing the units to use or to convert to.
         :return: None
         """
+
         units = self.device.pluginProps.get(unitsProps, None)
         if units == "F":
             self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
@@ -205,6 +226,7 @@ class Shelly:
         :param celsius: The temperature in celsius.
         :return: The temperature in Fahrenheit.
         """
+
         return (celsius * 9 / 5) + 32
 
     def convertFtoC(self, fahrenheit):
@@ -214,6 +236,7 @@ class Shelly:
         :param fahrenheit: The temperature in fahrenheit.
         :return: The temperature in Celsius.
         """
+
         return (fahrenheit - 32) * 5 / 9
 
     def parseAnnouncement(self, payload):
@@ -230,6 +253,7 @@ class Shelly:
         :param payload: The payload of the announce message.
         :return: None
         """
+
         payload = json.loads(payload)
         identifier = payload.get('id', None)
         mac_address = payload.get('mac', None)
@@ -246,9 +270,14 @@ class Shelly:
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
     def updateEnergy(self, energy):
-        # states['resetEnergyOffset'] stores the energy reported the last time a reset was requested
-        # If this value is greater than the current energy being reported, then the device must have been powered off
-        # and reset back to 0.
+        """
+        states['resetEnergyOffset'] stores the energy reported the last time a reset was requested
+        If this value is greater than the current energy being reported, then the device must have been powered off
+        and reset back to 0.
+
+        :param energy: The energy utilization counter.
+        :return: None
+        """
 
         resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
         new_energy = energy - resetEnergyOffset
@@ -270,8 +299,13 @@ class Shelly:
         self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
 
     def resetEnergy(self):
-        # We can't tell the device to reset it's internal energy usage
-        # Record the current value being reported so we can offset from it later on
+        """
+        We can't tell the device to reset it's internal energy usage
+        Record the current value being reported so we can offset from it later on
+
+        :return: None
+        """
+
         currEnergyWattMins = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000
         previousResetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
         offset = currEnergyWattMins + previousResetEnergyOffset
@@ -279,12 +313,30 @@ class Shelly:
         self.device.updateStateOnServer('accumEnergyTotal', 0.0)
 
     def turnOn(self):
+        """
+        Turns on the device.
+
+        :return: None
+        """
+
         self.device.updateStateOnServer(key='onOffState', value=True)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
 
     def turnOff(self):
+        """
+        Turns off the device.
+
+        :return: None
+        """
+
         self.device.updateStateOnServer(key='onOffState', value=False)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
 
     def getChannel(self):
+        """
+        Getter for the device channel.
+
+        :return: The channel of the device. If no channel is found, then 0.
+        """
+
         return self.device.pluginProps.get('channel', 0)

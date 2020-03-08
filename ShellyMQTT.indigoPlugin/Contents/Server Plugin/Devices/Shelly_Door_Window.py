@@ -4,10 +4,20 @@ from Shelly import Shelly
 
 
 class Shelly_Door_Window(Shelly):
+    """
+    The Shelly Door/Window is small battery-operated contact sensor that reports lux values.
+    """
+
     def __init__(self, device):
         Shelly.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list of topics.
+        """
+
         address = self.getAddress()
         if address is None:
             return []
@@ -21,6 +31,14 @@ class Shelly_Door_Window(Shelly):
             ]
 
     def handleMessage(self, topic, payload):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
         if topic == "{}/sensor/state".format(self.getAddress()):
             self.device.updateStateOnServer(key='status', value=payload)
             self.logger.info("\"{}\" {}".format(self.device.name, payload))
@@ -42,4 +60,11 @@ class Shelly_Door_Window(Shelly):
             Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         pass

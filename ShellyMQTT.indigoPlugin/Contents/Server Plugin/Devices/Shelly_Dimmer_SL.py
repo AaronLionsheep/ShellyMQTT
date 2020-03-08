@@ -9,6 +9,11 @@ class Shelly_Dimmer_SL(Shelly_1PM):
         Shelly_1PM.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list.
+        """
         address = self.getAddress()
         if address is None:
             return []
@@ -25,6 +30,14 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             ]
 
     def handleMessage(self, topic, payload):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
             # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
             payload = json.loads(payload)
@@ -40,6 +53,13 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             Shelly_1PM.handleMessage(self, topic.replace("light", "relay"), payload)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         if action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.turnOn()
             self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "on")
@@ -62,6 +82,13 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             Shelly_1PM.handleAction(self, action)
 
     def setAndSendBrightness(self, level):
+        """
+        Sets and send the brightness values.
+
+        :param level: The brightness level to set.
+        :return: None
+        """
+
         self.device.updateStateOnServer("brightnessLevel", level)
         payload = {
             "turn": "on" if level >= 1 else "off",

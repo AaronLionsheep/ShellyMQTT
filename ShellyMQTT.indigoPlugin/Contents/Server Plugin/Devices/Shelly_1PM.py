@@ -4,10 +4,20 @@ from Shelly_1 import Shelly_1
 
 
 class Shelly_1PM(Shelly_1):
+    """
+    The Shelly 1PM is a Shelly 1 with power, energy, and temperature reporting.
+    """
+
     def __init__(self, device):
         Shelly_1.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list of topics.
+        """
+
         address = self.getAddress()
         if address is None:
             return []
@@ -25,6 +35,14 @@ class Shelly_1PM(Shelly_1):
             ]
 
     def handleMessage(self, topic, payload):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
         if topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
@@ -34,11 +52,24 @@ class Shelly_1PM(Shelly_1):
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
         elif topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
+            # The 1PM will report overpower as well as on and off
+            # Pass the on/off messages to the Shelly 1 implementation.
+            overpower = (payload == 'overpower')
+            # Set overpower in any case since on/off should clear the overpower state
             self.device.updateStateOnServer('overpower', (payload == 'overpower'))
+            if not overpower:
+                Shelly_1.handleMessage(self, topic, payload)
         else:
             Shelly_1.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         if action.deviceAction == indigo.kUniversalAction.EnergyReset:
             self.resetEnergy()
         elif action.deviceAction == indigo.kUniversalAction.EnergyUpdate:

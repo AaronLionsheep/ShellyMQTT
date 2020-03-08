@@ -5,10 +5,20 @@ from Shelly import Shelly
 
 
 class Shelly_Duo(Shelly):
+    """
+    The Shelly Duo is a light-bulb with dimming, white, and white-temperature control.
+    """
+
     def __init__(self, device):
         Shelly.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list.
+        """
+
         address = self.getAddress()
         if address is None:
             return []
@@ -16,12 +26,18 @@ class Shelly_Duo(Shelly):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
-                "{}/light/{}/status".format(address, self.getChannel()),
-                # "{}/light/{}/power".format(address, self.getChannel()),
-                # "{}/light/{}/energy".format(address, self.getChannel())
+                "{}/light/{}/status".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
             # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
             payload = json.loads(payload)
@@ -33,14 +49,17 @@ class Shelly_Duo(Shelly):
             else:
                 # The light should be off regardless of a reported brightness value
                 self.turnOff()
-        # elif topic == "{}/light/{}/power".format(self.getAddress(), self.getChannel()):
-        #     self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
-        # elif topic == "{}/light/{}/energy".format(self.getAddress(), self.getChannel()):
-        #     self.updateEnergy(int(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         if action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.turnOn()
             self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "on")
@@ -77,6 +96,12 @@ class Shelly_Duo(Shelly):
             Shelly.handleAction(self, action)
 
     def set(self):
+        """
+        Method that sets the data on the device. The Duo has a topic where you set all parameters.
+
+        :return: None
+        """
+
         brightness = self.device.states.get('brightnessLevel', 0)
         white = self.device.states.get('whiteLevel', 0)
         temp = self.device.states.get('whiteTemperature', 5000)

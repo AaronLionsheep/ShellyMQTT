@@ -4,10 +4,20 @@ from Shelly import Shelly
 
 
 class Shelly_HT(Shelly):
+    """
+    The Shelly H&T is a small temperature and humidity sensor.
+    """
+
     def __init__(self, device):
         Shelly.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list.
+        """
+
         address = self.getAddress()
         if address is None:
             return []
@@ -21,6 +31,14 @@ class Shelly_HT(Shelly):
             ]
 
     def handleMessage(self, topic, payload):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
         if topic == "{}/sensor/temperature".format(self.getAddress()):
             self.setTemperature(float(payload))
         elif topic == "{}/sensor/humidity".format(self.getAddress()):
@@ -38,4 +56,11 @@ class Shelly_HT(Shelly):
             self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         pass

@@ -650,9 +650,8 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
-            <Field type="checkbox" id="SupportsTwoWhiteLevels" hidden="true" defaultValue="false" />
             <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
-            <Field type="textfield" id="WhiteTemperatureMin" hidden="true" defaultValue="3000" />
+            <Field type="textfield" id="WhiteTemperatureMin" hidden="true" defaultValue="2700" />
             <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
 
             <Field id="broker-id" type="menu">
