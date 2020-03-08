@@ -1,12 +1,16 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_1PM import Shelly_1PM
+from Shelly import Shelly
 
 
-class Shelly_Dimmer_SL(Shelly_1PM):
+class Shelly_Duo(Shelly):
+    """
+    The Shelly Duo is a light-bulb with dimming, white, and white-temperature control.
+    """
+
     def __init__(self, device):
-        Shelly_1PM.__init__(self, device)
+        Shelly.__init__(self, device)
 
     def getSubscriptions(self):
         """
@@ -14,6 +18,7 @@ class Shelly_Dimmer_SL(Shelly_1PM):
 
         :return: A list.
         """
+
         address = self.getAddress()
         if address is None:
             return []
@@ -21,12 +26,7 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
-                "{}/light/{}/status".format(address, self.getChannel()),
-                "{}/light/{}/power".format(address, self.getChannel()),
-                "{}/light/{}/energy".format(address, self.getChannel()),
-                "{}/temperature".format(address),
-                "{}/overtemperature".format(address),
-                "{}/overload".format(address)
+                "{}/light/{}/status".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
@@ -43,18 +43,14 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             payload = json.loads(payload)
             if payload['ison']:
                 # we will accept a brightness value and save it
-                if self.device.states['brightnessLevel'] != payload['brightness']:
-                    self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
                 self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
+                self.device.updateStateOnServer("whiteLevel", payload['white'])
+                self.device.updateStateOnServer("whiteTemperature", payload['temp'])
             else:
                 # The light should be off regardless of a reported brightness value
                 self.turnOff()
-        elif topic == "{}/overload".format(self.getAddress()):
-            if not self.device.states['overload']:
-                self.logger.error(u"\"{}\" was overloaded!".format(self.device.name))
-            self.device.updateStateOnServer('overload', (payload == '1'))
         else:
-            Shelly_1PM.handleMessage(self, topic.replace("light", "relay"), payload)
+            Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         """
@@ -71,31 +67,49 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             self.turnOff()
             self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "off")
         elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
-            self.setAndSendBrightness(action.actionValue)
+            self.device.updateStateOnServer("brightnessLevel", action.actionValue)
+            self.set()
         elif action.deviceAction == indigo.kDeviceAction.BrightenBy:
             newBrightness = self.device.brightness + action.actionValue
             if newBrightness > 100:
                 newBrightness = 100
-            self.setAndSendBrightness(newBrightness)
+            self.device.updateStateOnServer("brightnessLevel", newBrightness)
+            self.set()
         elif action.deviceAction == indigo.kDeviceAction.DimBy:
             newBrightness = self.device.brightness - action.actionValue
             if newBrightness < 0:
                 newBrightness = 0
-            self.setAndSendBrightness(newBrightness)
+            self.device.updateStateOnServer("brightnessLevel", newBrightness)
+            self.set()
+        elif action.deviceAction == indigo.kDeviceAction.SetColorLevels:
+            if 'whiteLevel' in action.actionValue:
+                self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
+            if 'whiteTemperature' in action.actionValue:
+                self.device.updateStateOnServer("whiteTemperature", action.actionValue['whiteTemperature'])
+            self.set()
+        elif action.deviceAction == indigo.kUniversalAction.EnergyReset:
+            self.resetEnergy()
+        elif action.deviceAction == indigo.kUniversalAction.EnergyUpdate:
+            # This will be handled by making a status request
+            self.sendStatusRequestCommand()
         else:
-            Shelly_1PM.handleAction(self, action)
+            Shelly.handleAction(self, action)
 
-    def setAndSendBrightness(self, level):
+    def set(self):
         """
-        Sets and send the brightness values.
+        Method that sets the data on the device. The Duo has a topic where you set all parameters.
 
-        :param level: The brightness level to set.
         :return: None
         """
 
-        self.device.updateStateOnServer("brightnessLevel", level)
+        brightness = self.device.states.get('brightnessLevel', 0)
+        white = self.device.states.get('whiteLevel', 0)
+        temp = self.device.states.get('whiteTemperature', 5000)
+        turn = "on" if brightness >= 1 else "off"
         payload = {
-            "turn": "on" if level >= 1 else "off",
-            "brightness": level
+            "turn": turn,
+            "brightness": brightness,
+            # "white": white,
+            # "temp": temp
         }
         self.publish("{}/light/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))

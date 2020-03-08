@@ -4,15 +4,27 @@ from Shelly_1 import Shelly_1
 
 
 class Shelly_1PM(Shelly_1):
+    """
+    The Shelly 1PM is a Shelly 1 with power, energy, and temperature reporting.
+    """
+
     def __init__(self, device):
         Shelly_1.__init__(self, device)
 
     def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list of topics.
+        """
+
         address = self.getAddress()
         if address is None:
             return []
         else:
             return [
+                "shellies/announce",
+                "{}/online".format(address),
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/longpush/{}".format(address, self.getChannel()),
@@ -23,64 +35,45 @@ class Shelly_1PM(Shelly_1):
             ]
 
     def handleMessage(self, topic, payload):
-        if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
-            if payload == "on":
-                self.turnOn()
-            elif payload == "off":
-                self.turnOff()
-        elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
-        elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
-        elif topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
+        """
+        This method is called when a message comes in and matches one of this devices subscriptions.
+
+        :param topic: The topic of the message.
+        :param payload: THe payload of the message.
+        :return: None
+        """
+
+        if topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
-            # pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
-            # If this value is greater than the current energy being reported, then the device must have been powered off
-            # and reset back to 0.
-
-            resetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
-            energy = int(payload) - resetEnergyOffset
-            if energy < 0:  # If the offset is greater than what is being reported, the device must have reset
-                # our last known energy total can be used to determine the previous energy usage
-                self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last know energy usage value...")
-                resetEnergyOffset = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000 * -1
-                self.device.updateStateOnServer('resetEnergyOffset', resetEnergyOffset)
-                energy = int(payload) - resetEnergyOffset
-
-            kwh = float(energy) / 60 / 1000  # energy is reported in watt-minutes
-            if kwh < 0.01:
-                uiValue = '{:.4f} kWh'.format(kwh)
-            elif kwh < 1:
-                uiValue = '{:.3f} kWh'.format(kwh)
-            else:
-                uiValue = '{:.1f} kWh'.format(kwh)
-
-            self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
+            self.updateEnergy(int(payload))
         elif topic == "{}/temperature".format(self.getAddress()):
             self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
+        elif topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
+            # The 1PM will report overpower as well as on and off
+            # Pass the on/off messages to the Shelly 1 implementation.
+            overpower = (payload == 'overpower')
+            # Set overpower in any case since on/off should clear the overpower state
+            self.device.updateStateOnServer('overpower', (payload == 'overpower'))
+            if not overpower:
+                Shelly_1.handleMessage(self, topic, payload)
+        else:
+            Shelly_1.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
+        """
+        The method that gets called when an Indigo action takes place.
+
+        :param action: The Indigo action.
+        :return: None
+        """
+
         if action.deviceAction == indigo.kUniversalAction.EnergyReset:
-            # We can't tell the device to reset it's internal energy usage
-            # Record the current value being reported so we can offset from it later on
-            currEnergyWattMins = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000
-            previousResetEnergyOffset = int(self.device.states.get('resetEnergyOffset', 0))
-            offset = currEnergyWattMins + previousResetEnergyOffset
-            self.device.updateStateOnServer('resetEnergyOffset', offset)
-            self.device.updateStateOnServer('accumEnergyTotal', 0.0)
+            self.resetEnergy()
         elif action.deviceAction == indigo.kUniversalAction.EnergyUpdate:
             # This will be handled by making a status request
             self.sendStatusRequestCommand()
         else:
             Shelly_1.handleAction(self, action)
-
-    def turnOn(self):
-        self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
-
-    def turnOff(self):
-        self.device.updateStateOnServer(key='onOffState', value=False)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
