@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>PluginVersion</key>
-	<string>0.0.4</string>
+	<string>0.0.5</string>
 	<key>ServerApiVersion</key>
 	<string>2.0</string>
 	<key>IwsApiVersion</key>
@@ -18,7 +18,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>https://www.github.com/HackintoshMan/ShellyMQTT</string>
+			<string>https://forums.indigodomo.com/viewforum.php?f=330</string>
 		</dict>
 	</array>
 </dict>

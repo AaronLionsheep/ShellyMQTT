@@ -50,9 +50,10 @@ class Shelly_Dimmer_SL(Shelly_1PM):
                 # The light should be off regardless of a reported brightness value
                 self.turnOff()
         elif topic == "{}/overload".format(self.getAddress()):
-            if not self.device.states['overload']:
+            overloaded = (payload == '1')
+            if not self.device.states['overload'] and overloaded:
                 self.logger.error(u"\"{}\" was overloaded!".format(self.device.name))
-            self.device.updateStateOnServer('overload', (payload == '1'))
+            self.device.updateStateOnServer('overload', overloaded)
         else:
             Shelly_1PM.handleMessage(self, topic.replace("light", "relay"), payload)
 
