@@ -99,4 +99,5 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             "turn": "on" if level >= 1 else "off",
             "brightness": level
         }
+        self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
         self.publish("{}/light/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))
