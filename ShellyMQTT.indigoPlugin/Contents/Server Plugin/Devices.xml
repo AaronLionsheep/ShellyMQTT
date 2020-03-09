@@ -217,13 +217,10 @@
             <Field id="temp-sep" type="separator"/>
 
             <Field type="menu" id="int-temp-units" defaultValue="F">
-                <Label>Temperature Units:</Label>
+                <Label>Internal Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
-                    <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
                 </List>
             </Field>
         </ConfigUI>
@@ -429,11 +426,8 @@
             <Field type="menu" id="temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
-                    <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
                 </List>
             </Field>
         </ConfigUI>
@@ -589,13 +583,10 @@
             <Field id="temp-sep" type="separator"/>
 
             <Field type="menu" id="int-temp-units" defaultValue="F">
-                <Label>Temperature Units:</Label>
+                <Label>Internal Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
-                    <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
                 </List>
             </Field>
         </ConfigUI>
@@ -737,11 +728,8 @@
             <Field type="menu" id="temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
-                    <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
                 </List>
             </Field>
         </ConfigUI>
