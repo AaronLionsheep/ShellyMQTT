@@ -553,7 +553,7 @@
         <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
 
-    <Device type="dimmer" id="shelly-dimmer">
+    <Device type="dimmer" id="shelly-dimmer-sl">
         <Name>Shelly Dimmer/SL</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
@@ -643,11 +643,11 @@
         </States>
     </Device>
 
-    <Device type="dimmer" id="shelly-duo">
-        <Name>Shelly Duo</Name>
+    <Device type="dimmer" id="shelly-bulb-duo">
+        <Name>Shelly Bulb Duo</Name>
         <ConfigUI>
-            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />

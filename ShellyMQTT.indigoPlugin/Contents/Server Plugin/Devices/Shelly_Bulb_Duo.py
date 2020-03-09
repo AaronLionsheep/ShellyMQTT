@@ -1,16 +1,16 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly import Shelly
+from Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
 
-class Shelly_Duo(Shelly):
+class Shelly_Bulb_Duo(Shelly_Dimmer_SL):
     """
     The Shelly Duo is a light-bulb with dimming, white, and white-temperature control.
     """
 
     def __init__(self, device):
-        Shelly.__init__(self, device)
+        Shelly_Dimmer_SL.__init__(self, device)
 
     def getSubscriptions(self):
         """
@@ -26,7 +26,9 @@ class Shelly_Duo(Shelly):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
-                "{}/light/{}/status".format(address, self.getChannel())
+                "{}/light/{}/status".format(address, self.getChannel()),
+                "{}/light/{}/power".format(address, self.getChannel()),
+                "{}/light/{}/energy".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
@@ -50,7 +52,7 @@ class Shelly_Duo(Shelly):
                 # The light should be off regardless of a reported brightness value
                 self.turnOff()
         else:
-            Shelly.handleMessage(self, topic, payload)
+            Shelly_Dimmer_SL.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         """
@@ -60,28 +62,7 @@ class Shelly_Duo(Shelly):
         :return: None
         """
 
-        if action.deviceAction == indigo.kDeviceAction.TurnOn:
-            self.turnOn()
-            self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "on")
-        elif action.deviceAction == indigo.kDeviceAction.TurnOff:
-            self.turnOff()
-            self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "off")
-        elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
-            self.device.updateStateOnServer("brightnessLevel", action.actionValue)
-            self.set()
-        elif action.deviceAction == indigo.kDeviceAction.BrightenBy:
-            newBrightness = self.device.brightness + action.actionValue
-            if newBrightness > 100:
-                newBrightness = 100
-            self.device.updateStateOnServer("brightnessLevel", newBrightness)
-            self.set()
-        elif action.deviceAction == indigo.kDeviceAction.DimBy:
-            newBrightness = self.device.brightness - action.actionValue
-            if newBrightness < 0:
-                newBrightness = 0
-            self.device.updateStateOnServer("brightnessLevel", newBrightness)
-            self.set()
-        elif action.deviceAction == indigo.kDeviceAction.SetColorLevels:
+        if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
             if 'whiteLevel' in action.actionValue:
                 self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
             if 'whiteTemperature' in action.actionValue:
@@ -93,7 +74,7 @@ class Shelly_Duo(Shelly):
             # This will be handled by making a status request
             self.sendStatusRequestCommand()
         else:
-            Shelly.handleAction(self, action)
+            Shelly_Dimmer_SL.handleAction(self, action)
 
     def set(self):
         """
@@ -109,7 +90,7 @@ class Shelly_Duo(Shelly):
         payload = {
             "turn": turn,
             "brightness": brightness,
-            # "white": white,
-            # "temp": temp
+            "white": white,
+            "temp": temp
         }
         self.publish("{}/light/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))

@@ -6,7 +6,7 @@ from Devices.Shelly_HT import Shelly_HT
 from Devices.Shelly_Flood import Shelly_Flood
 from Devices.Shelly_Door_Window import Shelly_Door_Window
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
-from Devices.Shelly_Duo import Shelly_Duo
+from Devices.Shelly_Bulb_Duo import Shelly_Bulb_Duo
 from Devices.Shelly_Temperature_Addon import Shelly_Temperature_Addon
 from Queue import Queue
 import time
@@ -35,10 +35,10 @@ def createDeviceObject(device):
         return Shelly_Flood(device)
     elif deviceType == "shelly-door-window":
         return Shelly_Door_Window(device)
-    elif deviceType == "shelly-dimmer":
+    elif deviceType == "shelly-dimmer-sl":
         return Shelly_Dimmer_SL(device)
-    elif deviceType == "shelly-duo":
-        return Shelly_Duo(device)
+    elif deviceType == "shelly-bulb-duo":
+        return Shelly_Bulb_Duo(device)
     elif deviceType == "shelly-temperature-addon":
         return Shelly_Temperature_Addon(device)
 
