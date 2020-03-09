@@ -1,5 +1,5 @@
 import indigo
-from Shelly import Shelly
+from ..Shelly import Shelly
 
 
 class Shelly_1(Shelly):

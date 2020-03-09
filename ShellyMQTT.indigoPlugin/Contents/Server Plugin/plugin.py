@@ -1,14 +1,24 @@
 import indigo
-from Devices.Shelly_1 import Shelly_1
-from Devices.Shelly_1PM import Shelly_1PM
-from Devices.Shelly_2_5_Relay import Shelly_2_5_Relay
-from Devices.Shelly_HT import Shelly_HT
-from Devices.Shelly_Flood import Shelly_Flood
-from Devices.Shelly_Door_Window import Shelly_Door_Window
+
+# Import the relay devices
+from Devices.Relays.Shelly_1 import Shelly_1
+from Devices.Relays.Shelly_1PM import Shelly_1PM
+from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
+
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
-from Devices.Shelly_Bulb_Duo import Shelly_Bulb_Duo
+
+# Import the sensor devices
+from Devices.Sensors.Shelly_HT import Shelly_HT
+from Devices.Sensors.Shelly_Flood import Shelly_Flood
+from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
+
+# Import the bulb devices
+from Devices.Bulbs.Shelly_Bulb_Duo import Shelly_Bulb_Duo
+
+# Import the add-on devices
 from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
 from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
+
 from Queue import Queue
 
 kCurDevVersion = 0  # current version of plugin devices

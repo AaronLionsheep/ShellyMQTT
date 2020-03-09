@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_1PM import Shelly_1PM
+from Relays.Shelly_1PM import Shelly_1PM
 
 
 class Shelly_Dimmer_SL(Shelly_1PM):

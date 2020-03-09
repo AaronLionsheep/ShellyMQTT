@@ -1,6 +1,6 @@
 # coding=utf-8
 import indigo
-from Shelly import Shelly
+from ..Shelly import Shelly
 
 
 class Shelly_Door_Window(Shelly):
@@ -75,4 +75,4 @@ class Shelly_Door_Window(Shelly):
         :return: None
         """
 
-        pass
+        Shelly.handleAction(self, action)

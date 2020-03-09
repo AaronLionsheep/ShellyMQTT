@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_Dimmer_SL import Shelly_Dimmer_SL
+from ..Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
 
 class Shelly_Bulb_Duo(Shelly_Dimmer_SL):
