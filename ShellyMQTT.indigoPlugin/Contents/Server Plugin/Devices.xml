@@ -514,6 +514,16 @@
             </Field>
         </ConfigUI>
         <States>
+            <State id="tilt">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Tilt</TriggerLabel>
+                <ControlPageLabel>Tilt</ControlPageLabel>
+            </State>
+            <State id="vibration">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Vibration Detected</TriggerLabel>
+                <ControlPageLabel>Vibration Detected</ControlPageLabel>
+            </State>
             <State id="lux">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Lux</TriggerLabel>

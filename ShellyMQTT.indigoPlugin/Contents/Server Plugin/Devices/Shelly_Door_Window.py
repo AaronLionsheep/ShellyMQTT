@@ -27,6 +27,8 @@ class Shelly_Door_Window(Shelly):
                 "{}/online".format(address),
                 "{}/sensor/state".format(address),
                 "{}/sensor/lux".format(address),
+                "{}/sensor/tilt".format(address),
+                "{}/sensor/vibration".format(address),
                 "{}/sensor/battery".format(address)
             ]
 
@@ -56,6 +58,10 @@ class Shelly_Door_Window(Shelly):
                     self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorOpened)
         elif topic == "{}/sensor/lux".format(self.getAddress()):
             self.device.updateStateOnServer(key="lux", value=payload)
+        elif topic == "{}/sensor/tilt".format(self.getAddress()):
+            self.device.updateStateOnServer(key="tilt", value=payload, uiValue="{}°".format(payload))
+        elif topic == "{}/sensor/vibration".format(self.getAddress()):
+            self.device.updateStateOnServer(key="vibration", value=(payload == "1"))
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
         else:
