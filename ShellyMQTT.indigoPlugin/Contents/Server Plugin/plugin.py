@@ -15,6 +15,10 @@ from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb_Duo import Shelly_Bulb_Duo
 
+# Import the plug devices
+from Devices.Plugs.Shelly_Plug import Shelly_Plug
+from Devices.Plugs.Shelly_Plug_S import Shelly_Plug_S
+
 # Import the add-on devices
 from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
 from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
@@ -53,6 +57,10 @@ def createDeviceObject(device):
         return Shelly_Addon_DS1820(device)
     elif deviceType == "shelly-addon-dht22":
         return Shelly_Addon_DHT22(device)
+    elif deviceType == "shelly-plug":
+        return Shelly_Plug(device)
+    elif deviceType == "shelly-plug-s":
+        return Shelly_Plug_S(device)
 
 
 class Plugin(indigo.PluginBase):

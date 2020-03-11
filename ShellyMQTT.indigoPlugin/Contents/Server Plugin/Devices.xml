@@ -825,4 +825,160 @@
         </States>
         <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
+
+    <Device type="relay" id="shelly-plug">
+        <Name>Shelly Plug</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+        </ConfigUI>
+        <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-plug-s">
+        <Name>Shelly PlugS</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="internal-temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
 </Devices>
