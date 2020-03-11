@@ -1,16 +1,16 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_Bulb_Vintage import Shelly_Bulb_Vintage
+from ..Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
 
-class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
+class Shelly_Bulb_Vintage(Shelly_Dimmer_SL):
     """
     The Shelly Duo is a light-bulb with dimming, white, and white-temperature control.
     """
 
     def __init__(self, device):
-        Shelly_Bulb_Vintage.__init__(self, device)
+        Shelly_Dimmer_SL.__init__(self, device)
 
     def getSubscriptions(self):
         """
@@ -41,21 +41,25 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         """
 
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
-            # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
+            # the payload will be json in the form:
+            # {
+            #     "ison": false,        /* whether the bulb is on */
+            #     "has_timer": false,   /* whether a timer is currently armed */
+            #     "timer_remaining": 0, /* if there is an active timer, shows seconds until timer elapses; 0 otherwise */
+            #     "brightness": 90      /* brightness, 0..100 */
+            # }
             try:
                 payload = json.loads(payload)
                 if payload['ison']:
                     # we will accept a brightness value and save it
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
-                    self.device.updateStateOnServer("whiteLevel", payload['white'])
-                    self.device.updateStateOnServer("whiteTemperature", payload['temp'])
                 else:
                     # The light should be off regardless of a reported brightness value
                     self.turnOff()
             except ValueError:
                 self.logger.error(u"Problem parsing JSON: {}".format(payload))
         else:
-            Shelly_Bulb_Vintage.handleMessage(self, topic, payload)
+            Shelly_Dimmer_SL.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         """
@@ -65,14 +69,7 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         :return: None
         """
 
-        if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
-            if 'whiteLevel' in action.actionValue:
-                self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
-            if 'whiteTemperature' in action.actionValue:
-                self.device.updateStateOnServer("whiteTemperature", action.actionValue['whiteTemperature'])
-            self.set()
-        else:
-            Shelly_Bulb_Vintage.handleAction(self, action)
+        Shelly_Dimmer_SL.handleAction(self, action)
 
     def set(self):
         """
@@ -82,20 +79,14 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         """
 
         brightness = self.device.states.get('brightnessLevel', 0)
-        white = self.device.states.get('whiteLevel', 0)
-        temp = self.device.states.get('whiteTemperature', 5000)
         turn = "on" if brightness >= 1 else "off"
 
-        # Ensure values are within their operating range
-        white, brightness = (min(255, max(0, c)) for c in (white, brightness))
-        temp = min(6500, min(2700, temp))
+        # Ensure brightness is within the 8-bit range
+        brightness = min(255, max(0, brightness))
 
         payload = {
-            "mode": "white",
             "turn": turn,
-            "brightness": brightness,
-            "white": white,
-            "temp": temp
+            "brightness": brightness
         }
 
         try:

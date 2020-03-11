@@ -13,6 +13,8 @@ from Devices.Sensors.Shelly_Flood import Shelly_Flood
 from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
 
 # Import the bulb devices
+from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
+from Devices.Bulbs.Shelly_Bulb_Vintage import Shelly_Bulb_Vintage
 from Devices.Bulbs.Shelly_Bulb_Duo import Shelly_Bulb_Duo
 
 # Import the plug devices
@@ -51,6 +53,10 @@ def createDeviceObject(device):
         return Shelly_Door_Window(device)
     elif deviceType == "shelly-dimmer-sl":
         return Shelly_Dimmer_SL(device)
+    elif deviceType == "shelly-bulb":
+        return Shelly_Bulb(device)
+    elif deviceType == "shelly-bulb-vintage":
+        return Shelly_Bulb_Vintage(device)
     elif deviceType == "shelly-bulb-duo":
         return Shelly_Bulb_Duo(device)
     elif deviceType == "shelly-addon-ds1820":
