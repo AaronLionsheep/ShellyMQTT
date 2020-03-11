@@ -42,15 +42,18 @@ class Shelly_Bulb_Duo(Shelly_Dimmer_SL):
 
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
             # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
-            payload = json.loads(payload)
-            if payload['ison']:
-                # we will accept a brightness value and save it
-                self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
-                self.device.updateStateOnServer("whiteLevel", payload['white'])
-                self.device.updateStateOnServer("whiteTemperature", payload['temp'])
-            else:
-                # The light should be off regardless of a reported brightness value
-                self.turnOff()
+            try:
+                payload = json.loads(payload)
+                if payload['ison']:
+                    # we will accept a brightness value and save it
+                    self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
+                    self.device.updateStateOnServer("whiteLevel", payload['white'])
+                    self.device.updateStateOnServer("whiteTemperature", payload['temp'])
+                else:
+                    # The light should be off regardless of a reported brightness value
+                    self.turnOff()
+            except ValueError:
+                self.logger.error(u"Problem parsing JSON: {}".format(payload))
         else:
             Shelly_Dimmer_SL.handleMessage(self, topic, payload)
 

@@ -40,15 +40,18 @@ class Shelly_Dimmer_SL(Shelly_1PM):
 
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
             # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
-            payload = json.loads(payload)
-            if payload['ison']:
-                # we will accept a brightness value and save it
-                if self.device.states['brightnessLevel'] != payload['brightness']:
-                    self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
-                self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
-            else:
-                # The light should be off regardless of a reported brightness value
-                self.turnOff()
+            try:
+                payload = json.loads(payload)
+                if payload['ison']:
+                    # we will accept a brightness value and save it
+                    if self.device.states['brightnessLevel'] != payload['brightness']:
+                        self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
+                    self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
+                else:
+                    # The light should be off regardless of a reported brightness value
+                    self.turnOff()
+            except ValueError:
+                self.logger.error(u"Problem parsing JSON: {}".format(payload))
         elif topic == "{}/overload".format(self.getAddress()):
             overloaded = (payload == '1')
             if not self.device.states['overload'] and overloaded:
