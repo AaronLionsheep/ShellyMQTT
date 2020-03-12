@@ -184,9 +184,11 @@ class Plugin(indigo.PluginBase):
         #
         # Get or generate a shelly device
         #
-        shelly = self.dependents.get(device.id, None)
+        shelly = self.dependents.get(device.id, createDeviceObject(device))
         if not shelly:
-            shelly = createDeviceObject(device)
+            # The device is not dependent on a device and was not able to be created...
+            self.logger.error(u"\"{}\" has an unknown deviceTypeId of: \"{}\"!".format(device.name, device.deviceTypeId))
+            return False
 
         #
         # If the device starting is an addon device, make sure the host has already been started

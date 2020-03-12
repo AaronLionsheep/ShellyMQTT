@@ -97,9 +97,8 @@ class Shelly_Dimmer_SL(Shelly_1PM):
 
     def set(self):
         """
-        Sets and send the brightness values.
+        Sets and sends the brightness value and on/off data.
 
-        :param level: The brightness level to set.
         :return: None
         """
 
