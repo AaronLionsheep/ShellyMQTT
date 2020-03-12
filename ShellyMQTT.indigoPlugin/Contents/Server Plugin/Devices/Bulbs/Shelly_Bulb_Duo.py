@@ -84,11 +84,11 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         brightness = self.device.states.get('brightnessLevel', 0)
         white = self.device.states.get('whiteLevel', 0)
         temp = self.device.states.get('whiteTemperature', 5000)
-        turn = "on" if brightness >= 1 else "off"
+        turn = "on" if self.isOn() else "off"
 
         # Ensure values are within their operating range
         white, brightness = (min(255, max(0, c)) for c in (white, brightness))
-        temp = min(6500, min(2700, temp))
+        temp = min(6500, max(2700, temp))
 
         payload = {
             "turn": turn,
