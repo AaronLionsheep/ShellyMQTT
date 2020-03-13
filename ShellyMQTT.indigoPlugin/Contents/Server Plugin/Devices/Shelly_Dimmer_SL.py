@@ -90,6 +90,14 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             newBrightness = max(0, self.device.brightness - action.actionValue)
             self.applyBrightness(newBrightness)
             self.set()
+        elif action.deviceAction == indigo.kDeviceAction.Toggle:
+            # Override the toggle since dimmer's need their brightness set.
+            if self.isOn():
+                self.applyBrightness(0)
+                self.set()
+            elif self.isOff():
+                self.applyBrightness(100)
+                self.set()
         else:
             Shelly_1PM.handleAction(self, action)
 
