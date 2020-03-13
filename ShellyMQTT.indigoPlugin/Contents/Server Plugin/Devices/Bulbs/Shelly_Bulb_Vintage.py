@@ -52,6 +52,8 @@ class Shelly_Bulb_Vintage(Shelly_Dimmer_SL):
                 payload = json.loads(payload)
                 if payload['ison']:
                     # we will accept a brightness value and save it
+                    if self.device.states['brightnessLevel'] != payload['brightness']:
+                        self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
                 else:
                     # The light should be off regardless of a reported brightness value

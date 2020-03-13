@@ -40,11 +40,11 @@ class Shelly_Addon_DHT22(Shelly_Addon):
 
         if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
             # For some reason, the shelly reports the temperature with a preceding colon...
-            temperature = payload[1:]
+            temperature = payload
             self.setTemperature(float(temperature))
         elif topic == "{}/ext_humidity/{}".format(self.getAddress(), self.getProbeNumber()):
             # For some reason, the shelly reports the temperature with a preceding colon...
-            humidity = payload[1:]
+            humidity = payload
             self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{}%'.format(humidity))
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)

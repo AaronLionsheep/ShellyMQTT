@@ -46,6 +46,10 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
                 payload = json.loads(payload)
                 if payload['ison']:
                     # we will accept a brightness value and save it
+                    if self.isOff():
+                        self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
+                    elif self.device.states['brightnessLevel'] != payload['brightness']:
+                        self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
                     self.device.updateStateOnServer("whiteLevel", payload['white'])
                     self.device.updateStateOnServer("whiteTemperature", payload['temp'])

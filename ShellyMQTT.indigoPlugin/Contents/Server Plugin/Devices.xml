@@ -662,7 +662,7 @@
             <Field id="SupportsColor" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
 			<Field id="SupportsRGB" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
 			<Field id="SupportsWhite" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
-			<Field id="SupportsWhiteTemperature" 			 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhiteTemperature" 			 type="checkbox"  defaultValue="false" hidden ="true" />
             <Field id="WhiteTemperatureMin"                  type="textfield" defaultValue="2700"  hidden="true" />
             <Field id="WhiteTemperatureMax"                  type="textfield" defaultValue="6500"  hidden="true" />
 			<Field id="SupportsRGBandWhiteSimultaneously" 	 type="checkbox"  defaultValue="true"  hidden ="true" />

@@ -81,14 +81,12 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
         if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
             if 'whiteLevel' in action.actionValue:
                 self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
-            if 'whiteTemperature' in action.actionValue:
-                self.device.updateStateOnServer("whiteTemperature", action.actionValue['whiteTemperature'])
             if 'redLevel' in action.actionValue:
-                self.device.updateStateOnServer("redLevel", action.actionValue['redLevel'])
+                self.device.updateStateOnServer("redLevel", int(action.actionValue['redLevel']))
             if 'greenLevel' in action.actionValue:
-                self.device.updateStateOnServer("greenLevel", action.actionValue['greenLevel'])
+                self.device.updateStateOnServer("greenLevel", int(action.actionValue['greenLevel']))
             if 'blueLevel' in action.actionValue:
-                self.device.updateStateOnServer("blueLevel", action.actionValue['blueLevel'])
+                self.device.updateStateOnServer("blueLevel", int(action.actionValue['blueLevel']))
             self.set()
         else:
             Shelly_Bulb_Vintage.handleAction(self, action)
@@ -104,7 +102,7 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
         green = self.device.states.get('greenLevel', 0)
         blue = self.device.states.get('blueLevel', 0)
         white = self.device.states.get('whiteLevel', 0)
-        brightness = self.device.states.get('whiteLevel', 0)
+        brightness = self.device.states.get('brightnessLevel', 0)
         turn = "on" if brightness >= 1 else "off"
 
         # Ensure all values are in the 8-bit range
