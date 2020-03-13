@@ -217,12 +217,12 @@
             <Field id="temp-sep" type="separator"/>
 
             <Field type="menu" id="int-temp-units" defaultValue="F">
-                <Label>Temperature Units:</Label>
+                <Label>Internal Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="F">Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
                     <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
+                    <Option value="C">Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
@@ -355,8 +355,8 @@
             </State>
             <State id="humidity">
                 <ValueType>Float</ValueType>
-                <TriggerLabel>Humidity</TriggerLabel>
-                <ControlPageLabel>Humidity</ControlPageLabel>
+                <TriggerLabel>Relative Humidity</TriggerLabel>
+                <ControlPageLabel>Relative Humidity</ControlPageLabel>
             </State>
             <State id="status">
                 <ValueType>String</ValueType>
@@ -429,10 +429,10 @@
             <Field type="menu" id="temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="F">Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
                     <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
+                    <Option value="C">Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
@@ -514,6 +514,16 @@
             </Field>
         </ConfigUI>
         <States>
+            <State id="tilt">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Tilt</TriggerLabel>
+                <ControlPageLabel>Tilt</ControlPageLabel>
+            </State>
+            <State id="vibration">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Vibration Detected</TriggerLabel>
+                <ControlPageLabel>Vibration Detected</ControlPageLabel>
+            </State>
             <State id="lux">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Lux</TriggerLabel>
@@ -553,7 +563,7 @@
         <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
 
-    <Device type="dimmer" id="shelly-dimmer">
+    <Device type="dimmer" id="shelly-dimmer-sl">
         <Name>Shelly Dimmer/SL</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
@@ -589,12 +599,12 @@
             <Field id="temp-sep" type="separator"/>
 
             <Field type="menu" id="int-temp-units" defaultValue="F">
-                <Label>Temperature Units:</Label>
+                <Label>Internal Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="F">Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
                     <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
+                    <Option value="C">Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
@@ -643,11 +653,141 @@
         </States>
     </Device>
 
-    <Device type="dimmer" id="shelly-duo">
-        <Name>Shelly Duo</Name>
+    <Device type="dimmer" id="shelly-bulb">
+        <Name>Shelly Bulb</Name>
         <ConfigUI>
-            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field id="SupportsColor" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsRGB" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhite" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhiteTemperature" 			 type="checkbox"  defaultValue="false" hidden ="true" />
+            <Field id="WhiteTemperatureMin"                  type="textfield" defaultValue="2700"  hidden="true" />
+            <Field id="WhiteTemperatureMax"                  type="textfield" defaultValue="6500"  hidden="true" />
+			<Field id="SupportsRGBandWhiteSimultaneously" 	 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
+			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-bulb-vintage">
+        <Name>Shelly Bulb Vintage</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="false" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-bulb-duo">
+        <Name>Shelly Bulb Duo</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
@@ -708,13 +848,13 @@
         </States>
     </Device>
 
-    <Device type="custom" id="shelly-temperature-addon">
-        <Name>Shelly Temperature Addon</Name>
+    <Device type="custom" id="shelly-addon-ds1820">
+        <Name>Shelly DS1820 Addon</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
 
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
@@ -737,10 +877,10 @@
             <Field type="menu" id="temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
-                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="F">Fahrenheit</Option>
                     <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
                     <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Show Celsius</Option>
+                    <Option value="C">Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
@@ -763,5 +903,212 @@
             </State>
         </States>
         <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="custom" id="shelly-addon-dht22">
+        <Name>Shelly DHT22 Addon</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="humidity">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Relative Humidity</TriggerLabel>
+                <ControlPageLabel>Relative Humidity</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="relay" id="shelly-plug">
+        <Name>Shelly Plug</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+        </ConfigUI>
+        <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-plug-s">
+        <Name>Shelly PlugS</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="internal-temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
     </Device>
 </Devices>

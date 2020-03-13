@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_1PM import Shelly_1PM
+from Relays.Shelly_1PM import Shelly_1PM
 
 
 class Shelly_Dimmer_SL(Shelly_1PM):
@@ -40,15 +40,23 @@ class Shelly_Dimmer_SL(Shelly_1PM):
 
         if topic == "{}/light/{}/status".format(self.getAddress(), self.getChannel()):
             # the payload will be json in the form: {"ison": true/false, "mode": "white", "brightness": x}
-            payload = json.loads(payload)
-            if payload['ison']:
-                # we will accept a brightness value and save it
-                if self.device.states['brightnessLevel'] != payload['brightness']:
-                    self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
-                self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
-            else:
-                # The light should be off regardless of a reported brightness value
-                self.turnOff()
+            try:
+                payload = json.loads(payload)
+                if payload['ison']:
+                    # we will accept a brightness value and save it
+
+                    if self.isOff():
+                        self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
+                    elif self.device.states['brightnessLevel'] != payload['brightness']:
+                        # Brightness will change
+                        self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
+
+                    self.applyBrightness(payload['brightness'])
+                else:
+                    # The light should be off regardless of a reported brightness value
+                    self.turnOff()
+            except ValueError:
+                self.logger.error(u"Problem parsing JSON: {}".format(payload))
         elif topic == "{}/overload".format(self.getAddress()):
             overloaded = (payload == '1')
             if not self.device.states['overload'] and overloaded:
@@ -66,38 +74,74 @@ class Shelly_Dimmer_SL(Shelly_1PM):
         """
 
         if action.deviceAction == indigo.kDeviceAction.TurnOn:
-            self.turnOn()
-            self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "on")
+            self.applyBrightness(100)
+            self.set()
         elif action.deviceAction == indigo.kDeviceAction.TurnOff:
-            self.turnOff()
-            self.publish("{}/light/{}/command".format(self.getAddress(), self.getChannel()), "off")
+            self.applyBrightness(0)
+            self.set()
         elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
-            self.setAndSendBrightness(action.actionValue)
+            self.applyBrightness(action.actionValue)
+            self.set()
         elif action.deviceAction == indigo.kDeviceAction.BrightenBy:
-            newBrightness = self.device.brightness + action.actionValue
-            if newBrightness > 100:
-                newBrightness = 100
-            self.setAndSendBrightness(newBrightness)
+            newBrightness = min(100, self.device.brightness + action.actionValue)
+            self.applyBrightness(newBrightness)
+            self.set()
         elif action.deviceAction == indigo.kDeviceAction.DimBy:
-            newBrightness = self.device.brightness - action.actionValue
-            if newBrightness < 0:
-                newBrightness = 0
-            self.setAndSendBrightness(newBrightness)
+            newBrightness = max(0, self.device.brightness - action.actionValue)
+            self.applyBrightness(newBrightness)
+            self.set()
+        elif action.deviceAction == indigo.kDeviceAction.Toggle:
+            # Override the toggle since dimmer's need their brightness set.
+            if self.isOn():
+                self.applyBrightness(0)
+                self.set()
+            elif self.isOff():
+                self.applyBrightness(100)
+                self.set()
         else:
             Shelly_1PM.handleAction(self, action)
 
-    def setAndSendBrightness(self, level):
+    def applyBrightness(self, brightness):
         """
-        Sets and send the brightness values.
+        Updates the device states with the appropriate values based on the brightness value.
 
-        :param level: The brightness level to set.
+        :param brightness: The brightness value to set.
         :return: None
         """
 
-        self.device.updateStateOnServer("brightnessLevel", level)
+        if brightness > 0:
+            if self.device.states['brightnessLevel'] != brightness:
+                if self.isOn():
+                    self.logger.info(u"\"{}\" set to {}%".format(self.device.name, brightness))
+                else:
+                    self.logger.info(u"\"{}\" on to {}%".format(self.device.name, brightness))
+            self.turnOn()
+        else:
+            self.turnOff()
+
+        self.device.updateStateOnServer("brightnessLevel", brightness)
+
+    def set(self):
+        """
+        Sets and sends the brightness value and on/off data.
+
+        :return: None
+        """
+
+        brightness = self.device.states.get('brightnessLevel', 0)
+        turn = "on" if self.isOn() else "off"
         payload = {
-            "turn": "on" if level >= 1 else "off",
-            "brightness": level
+            "turn": turn,
+            "brightness": brightness
         }
-        self.logger.info(u"\"{}\" brightness set to {}%".format(self.device.name, payload['brightness']))
         self.publish("{}/light/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))
+
+    def turnOn(self):
+        """
+        Turns on the device.
+
+        :return: None
+        """
+
+        self.device.updateStateOnServer(key='onOffState', value=True)
+        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)

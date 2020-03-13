@@ -1,15 +1,16 @@
 # coding=utf-8
 import indigo
-from Shelly import Shelly
+from Shelly_Addon import Shelly_Addon
 
 
-class Shelly_HT(Shelly):
+class Shelly_Addon_DS1820(Shelly_Addon):
     """
-    The Shelly H&T is a small temperature and humidity sensor.
+    The Shelly Temperature Add-on is a sensor tht attaches to a host device.
+    The host devices can be a Shelly 1 or Shelly 1PM.
     """
 
     def __init__(self, device):
-        Shelly.__init__(self, device)
+        Shelly_Addon.__init__(self, device)
 
     def getSubscriptions(self):
         """
@@ -23,11 +24,8 @@ class Shelly_HT(Shelly):
             return []
         else:
             return [
-                "shellies/announce",
                 "{}/online".format(address),
-                "{}/sensor/temperature".format(address),
-                "{}/sensor/humidity".format(address),
-                "{}/sensor/battery".format(address)
+                "{}/ext_temperature/{}".format(address, self.getProbeNumber()),
             ]
 
     def handleMessage(self, topic, payload):
@@ -39,17 +37,18 @@ class Shelly_HT(Shelly):
         :return: None
         """
 
-        if topic == "{}/sensor/temperature".format(self.getAddress()):
-            self.setTemperature(float(payload))
-        elif topic == "{}/sensor/humidity".format(self.getAddress()):
-            self.device.updateStateOnServer(key="humidity", value=payload, uiValue='{}%'.format(payload))
-        elif topic == "{}/sensor/battery".format(self.getAddress()):
-            self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
-        else:
-            Shelly.handleMessage(self, topic, payload)
+        if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
+            # For some reason, the shelly reports the temperature with a preceding colon...
+            temperature = payload[1:]
+            self.setTemperature(float(temperature))
+        elif topic == "{}/online".format(self.getAddress()):
+            Shelly_Addon.handleMessage(self, topic, payload)
 
+        # Update the display state after data changed
         temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
-        self.device.updateStateOnServer(key="status", value='{}°{} / {}%'.format(self.device.states['temperature'], temp_units, self.device.states['humidity']))
+        self.device.updateStateOnServer(key="status", value='{}°{}'.format(self.device.states['temperature'], temp_units))
+
+        # Set the icon based on the online status
         if self.device.states.get('online', True):
             self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
         else:
@@ -63,4 +62,13 @@ class Shelly_HT(Shelly):
         :return: None
         """
 
-        pass
+        Shelly_Addon.handleAction(self, action)
+
+    def getProbeNumber(self):
+        """
+        Getter for the identifier of the probe.
+
+        :return: The probe number to be used in the topic.
+        """
+
+        return self.device.pluginProps.get('probe-number', None)

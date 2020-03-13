@@ -1,15 +1,31 @@
 import indigo
-from Devices.Shelly_1 import Shelly_1
-from Devices.Shelly_1PM import Shelly_1PM
-from Devices.Shelly_2_5_Relay import Shelly_2_5_Relay
-from Devices.Shelly_HT import Shelly_HT
-from Devices.Shelly_Flood import Shelly_Flood
-from Devices.Shelly_Door_Window import Shelly_Door_Window
+
+# Import the relay devices
+from Devices.Relays.Shelly_1 import Shelly_1
+from Devices.Relays.Shelly_1PM import Shelly_1PM
+from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
+
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
-from Devices.Shelly_Duo import Shelly_Duo
-from Devices.Shelly_Temperature_Addon import Shelly_Temperature_Addon
+
+# Import the sensor devices
+from Devices.Sensors.Shelly_HT import Shelly_HT
+from Devices.Sensors.Shelly_Flood import Shelly_Flood
+from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
+
+# Import the bulb devices
+from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
+from Devices.Bulbs.Shelly_Bulb_Vintage import Shelly_Bulb_Vintage
+from Devices.Bulbs.Shelly_Bulb_Duo import Shelly_Bulb_Duo
+
+# Import the plug devices
+from Devices.Plugs.Shelly_Plug import Shelly_Plug
+from Devices.Plugs.Shelly_Plug_S import Shelly_Plug_S
+
+# Import the add-on devices
+from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
+from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
+
 from Queue import Queue
-import time
 
 kCurDevVersion = 0  # current version of plugin devices
 
@@ -35,12 +51,22 @@ def createDeviceObject(device):
         return Shelly_Flood(device)
     elif deviceType == "shelly-door-window":
         return Shelly_Door_Window(device)
-    elif deviceType == "shelly-dimmer":
+    elif deviceType == "shelly-dimmer-sl":
         return Shelly_Dimmer_SL(device)
-    elif deviceType == "shelly-duo":
-        return Shelly_Duo(device)
-    elif deviceType == "shelly-temperature-addon":
-        return Shelly_Temperature_Addon(device)
+    elif deviceType == "shelly-bulb":
+        return Shelly_Bulb(device)
+    elif deviceType == "shelly-bulb-vintage":
+        return Shelly_Bulb_Vintage(device)
+    elif deviceType == "shelly-bulb-duo":
+        return Shelly_Bulb_Duo(device)
+    elif deviceType == "shelly-addon-ds1820":
+        return Shelly_Addon_DS1820(device)
+    elif deviceType == "shelly-addon-dht22":
+        return Shelly_Addon_DHT22(device)
+    elif deviceType == "shelly-plug":
+        return Shelly_Plug(device)
+    elif deviceType == "shelly-plug-s":
+        return Shelly_Plug_S(device)
 
 
 class Plugin(indigo.PluginBase):
@@ -158,15 +184,17 @@ class Plugin(indigo.PluginBase):
         #
         # Get or generate a shelly device
         #
-        shelly = self.dependents.get(device.id, None)
+        shelly = self.dependents.get(device.id, createDeviceObject(device))
         if not shelly:
-            shelly = createDeviceObject(device)
+            # The device is not dependent on a device and was not able to be created...
+            self.logger.error(u"\"{}\" has an unknown deviceTypeId of: \"{}\"!".format(device.name, device.deviceTypeId))
+            return False
 
         #
         # If the device starting is an addon device, make sure the host has already been started
         # Save the device so that the host can trigger it to start later
         #
-        if shelly.device.deviceTypeId == "shelly-temperature-addon":
+        if shelly.isAddon():
             # Ensure the temperature addon has a host
             if shelly.getHostDevice() is None:
                 # If the host is missing, this device has been started before the host
@@ -209,7 +237,7 @@ class Plugin(indigo.PluginBase):
         #
         for devId in self.dependents.keys():
             addon = self.dependents[devId]
-            if addon.device.deviceTypeId == "shelly-temperature-addon" and addon.getHostDevice().device.id == shelly.device.id:
+            if addon.isAddon() and addon.getHostDevice().device.id == shelly.device.id:
                 # This addon is hosted by the device that has just been started, so it must have failed startup before
                 self.deviceStartComm(addon.device)
 
@@ -234,7 +262,7 @@ class Plugin(indigo.PluginBase):
         #
         for addonDev in self.shellyDevices.keys():
             addon_shelly = self.shellyDevices[addonDev]
-            if addon_shelly.device.deviceTypeId == "shelly-temperature-addon" and addon_shelly.getHostDevice().device.id == shelly.device.id:
+            if addon_shelly.isAddon() and addon_shelly.getHostDevice().device.id == shelly.device.id:
                 self.deviceStopComm(addon_shelly.device)
 
         #

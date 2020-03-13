@@ -368,3 +368,13 @@ class Shelly:
         """
 
         return self.device.pluginProps.get('channel', 0)
+
+    def isAddon(self):
+        """
+        Helper method to determine if a device is an addon device. This defaults to false since most devices
+        are not add-ons.
+
+        :return: True if the device is an addon.
+        """
+
+        return False

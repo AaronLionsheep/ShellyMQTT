@@ -1,6 +1,6 @@
 # coding=utf-8
 import indigo
-from Shelly import Shelly
+from ..Shelly import Shelly
 
 
 class Shelly_Flood(Shelly):
@@ -61,4 +61,4 @@ class Shelly_Flood(Shelly):
         :return: None
         """
 
-        pass
+        Shelly.handleAction(self, action)

@@ -1,5 +1,5 @@
 import indigo
-from Shelly import Shelly
+from ..Shelly import Shelly
 
 
 class Shelly_1(Shelly):
@@ -66,3 +66,10 @@ class Shelly_1(Shelly):
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
         elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
             self.sendStatusRequestCommand()
+        elif action.deviceAction == indigo.kDeviceAction.Toggle:
+            if self.isOn():
+                self.turnOff()
+                self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
+            elif self.isOff():
+                self.turnOn()
+                self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
