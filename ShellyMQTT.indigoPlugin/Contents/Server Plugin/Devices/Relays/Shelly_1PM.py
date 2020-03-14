@@ -48,7 +48,7 @@ class Shelly_1PM(Shelly_1):
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
             self.updateEnergy(int(payload))
         elif topic == "{}/temperature".format(self.getAddress()):
-            self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
+            self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units', decimalsProps='int-temp-decimals', offsetProps='int-temp-offset')
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
         elif topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):

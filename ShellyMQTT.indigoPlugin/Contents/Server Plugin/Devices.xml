@@ -116,6 +116,27 @@
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
+
+            <Field type="menu" id="int-temp-decimals" defaultValue="1">
+                <Label>Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="int-temp-offset" type="textfield">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the internal temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
         </ConfigUI>
         <States>
             <State id="sw-input">

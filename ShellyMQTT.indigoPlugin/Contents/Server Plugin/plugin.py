@@ -592,6 +592,60 @@ class Plugin(indigo.PluginBase):
             for topic in deviceSubscriptions:
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
 
+    def validateDeviceConfigUi(self, valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: True if the config is valid.
+        """
+
+        # Container for errors found and their reasons
+        errors = indigo.Dict()
+
+        if typeId == "shelly-1pm":
+            # Check for a valid internal temperature offset
+            offset = valuesDict.get('int-temp-offset')
+            try:
+                float(offset)
+            except ValueError:
+                errors['int-temp-offset'] = "Unable to convert this value to a float!"
+        elif typeId == "shelly-2.5":
+            # Check for a valid internal temperature offset
+            pass
+        elif typeId == "shelly-ht":
+            # Check for a valid temperature offset
+            # Check for a valid humidity offset
+            pass
+        elif typeId == "shelly-flood":
+            # Check for a valid temperature offset
+            pass
+        elif typeId == "shelly-door-window":
+            # Check for a valid lux offset
+            pass
+        elif typeId == "shelly-dimmer-sl":
+            # Check for a valid internal temperature offset
+            pass
+        elif typeId == "shelly-addon-ds1820":
+            # Check for a valid temperature offset
+            pass
+        elif typeId == "shelly-addon-dht22":
+            # Check for a valid temperature offset
+            # Check for a valid humidity offset
+            pass
+        elif typeId == "shelly-plug-s":
+            # Check for a valid internal temperature offset
+            pass
+
+        if len(errors) == 0:
+            # No errors were found, must be valid
+            return True
+        else:
+            # Errors were found, return the data back and the errors
+            return False, valuesDict, errors
+
     def validateActionConfigUi(self, valuesDict, typeId, deviceId):
         """
         Validates an action config UI.

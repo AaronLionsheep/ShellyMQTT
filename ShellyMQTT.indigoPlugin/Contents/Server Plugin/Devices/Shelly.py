@@ -197,27 +197,40 @@ class Shelly:
                 self.logger.warning(u"\"%s\" has not notified that it has a newer firmware. Attempting to update anyway...", self.device.name)
             self.publish("{}/command".format(self.getAddress()), "update_fw")
 
-    def setTemperature(self, temperature, state="temperature", unitsProps="temp-units"):
+    def setTemperature(self, temperature, state="temperature", unitsProps="temp-units", decimalsProps="temp-decimals", offsetProps="temp-offset"):
         """
         Helper function to set the temperature of a device.
 
         :param temperature: The temperature to set.
         :param state: The state key to update.
         :param unitsProps: The props containing the units to use or to convert to.
+        :param decimalsProps: The props containing the number of decimals to display.
+        :param offsetProps: The props containing the offset to apply after conversions.
         :return: None
         """
 
         units = self.device.pluginProps.get(unitsProps, None)
+        decimals = self.device.pluginProps.get(decimalsProps, 1)
+        offset = 0
+        try:
+            offset = float(self.device.pluginProps.get(offsetProps, 0))
+        except ValueError:
+            self.logger.error(u"Unable to convert offset of \"{}\" into a float!".format(self.device.pluginProps.get(offsetProps, 0)))
+
         if units == "F":
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °F'.format(temperature, decimals), decimalPlaces=decimals)
         elif units == "C->F":
             temperature = self.convertCtoF(temperature)
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °F'.format(temperature, decimals), decimalPlaces=decimals)
         elif units == "C":
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °C'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °C'.format(temperature, decimals), decimalPlaces=decimals)
         elif units == "F->C":
             temperature = self.convertFtoC(temperature)
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °C'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °C'.format(temperature, decimals), decimalPlaces=decimals)
 
     def convertCtoF(self, celsius):
         """
