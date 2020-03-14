@@ -575,6 +575,16 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
+    def timedHigh(self, pluginAction, device, callerWaitingForResult):
+        deviceId = int(pluginAction.props['device-id'])
+        duration = int(pluginAction.props['duration'])
+        indigo.device.turnOn(deviceId, delay=0, duration=duration)
+
+    def timedLow(self, pluginAction, device, callerWaitingForResult):
+        deviceId = int(pluginAction.props['device-id'])
+        duration = int(pluginAction.props['duration'])
+        indigo.device.turnOff(deviceId, delay=0, duration=duration)
+
     #####################
     #     Utilities     #
     #####################
@@ -655,17 +665,25 @@ class Plugin(indigo.PluginBase):
         :param deviceId:
         :return: True or false based on the validity of the data.
         """
+
+        errors = indigo.Dict()
+
         if typeId == "update-shelly":
             if valuesDict['shelly-device-id'] == "":
-                errors = indigo.Dict()
                 errors['shelly-device-id'] = "You must select a device to update!"
-                return False, valuesDict, errors
-            else:
-                return True
         elif typeId == "discover-shelly":
             if valuesDict['shelly-device-id'] == "":
-                errors = indigo.Dict()
                 errors['shelly-device-id'] = "You must select a device to discover!"
-                return False, valuesDict, errors
-            else:
-                return True
+        elif typeId == "timed-high" or typeId == "timed-low":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device!"
+
+            try:
+                int(valuesDict['duration'])
+            except ValueError:
+                errors['duration'] = "Unable to convert this value to an integer!"
+
+        if len(errors) == 0:
+            return True
+        else:
+            return False, valuesDict, errors
