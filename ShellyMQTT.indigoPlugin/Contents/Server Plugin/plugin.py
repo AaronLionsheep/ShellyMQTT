@@ -239,7 +239,7 @@ class Plugin(indigo.PluginBase):
             addon = self.dependents[devId]
             if addon.isAddon() and addon.getHostDevice().device.id == shelly.device.id:
                 # This addon is hosted by the device that has just been started, so it must have failed startup before
-                self.deviceStartComm(addon.device)
+                self.deviceStartComm(indigo.devices[devId])
 
     def deviceStopComm(self, device):
         """
@@ -576,11 +576,29 @@ class Plugin(indigo.PluginBase):
             return True
 
     def timedHigh(self, pluginAction, device, callerWaitingForResult):
+        """
+        Turns a configured device on for a specified duration before turning it back off.
+
+        :param pluginAction: The action properties.
+        :param device: N/A
+        :param callerWaitingForResult: N/A
+        :return: None
+        """
+
         deviceId = int(pluginAction.props['device-id'])
         duration = int(pluginAction.props['duration'])
         indigo.device.turnOn(deviceId, delay=0, duration=duration)
 
     def timedLow(self, pluginAction, device, callerWaitingForResult):
+        """
+        Turns a configured device off for a specified duration before turning it back on.
+
+        :param pluginAction: The action properties.
+        :param device: N/A
+        :param callerWaitingForResult: N/A
+        :return: none
+        """
+
         deviceId = int(pluginAction.props['device-id'])
         duration = int(pluginAction.props['duration'])
         indigo.device.turnOff(deviceId, delay=0, duration=duration)
@@ -616,45 +634,87 @@ class Plugin(indigo.PluginBase):
         errors = indigo.Dict()
 
         if typeId == "shelly-1pm":
-            # Check for a valid internal temperature offset
-            offset = valuesDict.get('int-temp-offset')
-            try:
-                float(offset)
-            except ValueError:
-                errors['int-temp-offset'] = "Unable to convert this value to a float!"
+            pass
         elif typeId == "shelly-2.5":
-            # Check for a valid internal temperature offset
             pass
         elif typeId == "shelly-ht":
             # Check for a valid temperature offset
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
+
             # Check for a valid humidity offset
-            pass
+            humidityOffset = valuesDict.get('humidity-offset')
+            if humidityOffset == "":
+                valuesDict['humidity-offset'] = 0
+            else:
+                try:
+                    float(humidityOffset)
+                except ValueError:
+                    errors['humidity-offset'] = "Unable to convert this value to a float!"
         elif typeId == "shelly-flood":
             # Check for a valid temperature offset
-            pass
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
         elif typeId == "shelly-door-window":
-            # Check for a valid lux offset
             pass
         elif typeId == "shelly-dimmer-sl":
-            # Check for a valid internal temperature offset
             pass
         elif typeId == "shelly-addon-ds1820":
             # Check for a valid temperature offset
-            pass
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
         elif typeId == "shelly-addon-dht22":
             # Check for a valid temperature offset
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
+
             # Check for a valid humidity offset
-            pass
+            humidityOffset = valuesDict.get('humidity-offset')
+            if humidityOffset == "":
+                valuesDict['humidity-offset'] = 0
+            else:
+                try:
+                    float(humidityOffset)
+                except ValueError:
+                    errors['humidity-offset'] = "Unable to convert this value to a float!"
         elif typeId == "shelly-plug-s":
-            # Check for a valid internal temperature offset
             pass
 
         if len(errors) == 0:
             # No errors were found, must be valid
-            return True
+            return True, valuesDict
         else:
             # Errors were found, return the data back and the errors
             return False, valuesDict, errors
+
+    def closedDeviceConfigUi(self, valuesDict, userCancelled, typeId, devId):
+        # self.shellyDevices[devId].device = indigo.devices[devId]
+        # self.logger.info(indigo.devices[devId].pluginProps)
+        pass
 
     def validateActionConfigUi(self, valuesDict, typeId, deviceId):
         """

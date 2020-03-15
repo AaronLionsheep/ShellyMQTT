@@ -39,14 +39,16 @@ class Shelly_Addon_DS1820(Shelly_Addon):
 
         if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
             # For some reason, the shelly reports the temperature with a preceding colon...
-            temperature = payload[1:]
-            self.setTemperature(float(temperature))
+            temperature = float(payload)
+            self.setTemperature(temperature)
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 
         # Update the display state after data changed
+        temp = self.device.states['temperature']
+        temp_decimals = int(self.device.pluginProps.get('temp-decimals', 1))
         temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
-        self.device.updateStateOnServer(key="status", value='{}°{}'.format(self.device.states['temperature'], temp_units))
+        self.device.updateStateOnServer(key="status", value='{:.{}f}°{}'.format(temp, temp_decimals, temp_units))
 
         # Set the icon based on the online status
         if self.device.states.get('online', True):

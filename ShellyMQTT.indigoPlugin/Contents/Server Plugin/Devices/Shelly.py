@@ -210,7 +210,7 @@ class Shelly:
         """
 
         units = self.device.pluginProps.get(unitsProps, None)
-        decimals = self.device.pluginProps.get(decimalsProps, 1)
+        decimals = int(self.device.pluginProps.get(decimalsProps, 1))
         offset = 0
         try:
             offset = float(self.device.pluginProps.get(offsetProps, 0))

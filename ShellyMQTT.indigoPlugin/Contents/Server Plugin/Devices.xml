@@ -116,27 +116,6 @@
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
-
-            <Field type="menu" id="int-temp-decimals" defaultValue="1">
-                <Label>Decimal Places:</Label>
-                <List>
-                    <Option value="0">0</Option>
-                    <Option value="1">1</Option>
-                    <Option value="2">2</Option>
-                </List>
-            </Field>
-
-            <Field id="int-temp-offset" type="textfield">
-                <Label>Temperature Offset:</Label>
-            </Field>
-
-            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>Enter a positive or negative number to offset the internal temperature by.</Label>
-            </Field>
-
-            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
-            </Field>
         </ConfigUI>
         <States>
             <State id="sw-input">
@@ -323,6 +302,8 @@
     </Device>
     -->
 
+    <!--<Device id="sep-sensors" />-->
+
     <Device type="custom" id="shelly-ht">
         <Name>Shelly H&amp;T</Name>
         <ConfigUI>
@@ -366,6 +347,46 @@
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="humidity-sep" type="separator" />
+
+            <Field type="menu" id="humidity-decimals" defaultValue="1">
+                <Label>Humidity Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="humidity-offset" type="textfield" defaultValue="0">
+                <Label>Humidity Offset:</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the humidity by.</Label>
             </Field>
         </ConfigUI>
         <States>
@@ -456,6 +477,27 @@
                     <Option value="C">Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
             </Field>
         </ConfigUI>
         <States>
@@ -583,6 +625,8 @@
         </States>
         <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
+
+    <!--<Device id="sep-dimmer" />-->
 
     <Device type="dimmer" id="shelly-dimmer-sl">
         <Name>Shelly Dimmer/SL</Name>
@@ -869,113 +913,7 @@
         </States>
     </Device>
 
-    <Device type="custom" id="shelly-addon-ds1820">
-        <Name>Shelly DS1820 Addon</Name>
-        <ConfigUI>
-            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
-
-            <Field id="host-id" type="menu">
-                <Label>Shelly Host Device:</Label>
-                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
-            </Field>
-
-            <Field id="message-sep" type="separator"/>
-
-            <Field type="menu" id="probe-number" defaultValue="0">
-                <Label>Probe:</Label>
-                <List>
-                    <Option value="0">Probe 1</Option>
-                    <Option value="1">Probe 2</Option>
-                    <Option value="2">Probe 3</Option>
-                </List>
-            </Field>
-
-            <Field id="temp-sep" type="separator"/>
-
-            <Field type="menu" id="temp-units" defaultValue="F">
-                <Label>Temperature Units:</Label>
-                <List>
-                    <Option value="F">Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
-                    <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
-                </List>
-            </Field>
-        </ConfigUI>
-        <States>
-            <State id="online">
-                <ValueType>Boolean</ValueType>
-                <TriggerLabel>Online</TriggerLabel>
-                <ControlPageLabel>Online</ControlPageLabel>
-            </State>
-            <State id="temperature">
-                <ValueType>Float</ValueType>
-                <TriggerLabel>Temperature</TriggerLabel>
-                <ControlPageLabel>Temperature</ControlPageLabel>
-            </State>
-            <State id="status">
-                <ValueType>String</ValueType>
-                <TriggerLabel>Status</TriggerLabel>
-                <ControlPageLabel>Status</ControlPageLabel>
-            </State>
-        </States>
-        <UiDisplayStateId>status</UiDisplayStateId>
-    </Device>
-
-    <Device type="custom" id="shelly-addon-dht22">
-        <Name>Shelly DHT22 Addon</Name>
-        <ConfigUI>
-            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
-
-            <Field id="host-id" type="menu">
-                <Label>Shelly Host Device:</Label>
-                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
-            </Field>
-
-            <Field id="temp-sep" type="separator"/>
-
-            <Field type="menu" id="temp-units" defaultValue="F">
-                <Label>Temperature Units:</Label>
-                <List>
-                    <Option value="F">Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
-                    <Option value="-1">%%separator%%</Option>
-                    <Option value="C">Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
-                </List>
-            </Field>
-        </ConfigUI>
-        <States>
-            <State id="online">
-                <ValueType>Boolean</ValueType>
-                <TriggerLabel>Online</TriggerLabel>
-                <ControlPageLabel>Online</ControlPageLabel>
-            </State>
-            <State id="temperature">
-                <ValueType>Float</ValueType>
-                <TriggerLabel>Temperature</TriggerLabel>
-                <ControlPageLabel>Temperature</ControlPageLabel>
-            </State>
-            <State id="humidity">
-                <ValueType>Float</ValueType>
-                <TriggerLabel>Relative Humidity</TriggerLabel>
-                <ControlPageLabel>Relative Humidity</ControlPageLabel>
-            </State>
-            <State id="status">
-                <ValueType>String</ValueType>
-                <TriggerLabel>Status</TriggerLabel>
-                <ControlPageLabel>Status</ControlPageLabel>
-            </State>
-        </States>
-        <UiDisplayStateId>status</UiDisplayStateId>
-    </Device>
+    <!--<Device id="sep-plugs" />-->
 
     <Device type="relay" id="shelly-plug">
         <Name>Shelly Plug</Name>
@@ -1131,5 +1069,176 @@
                 <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
+    </Device>
+
+    <!--<Device id="sep-addons" />-->
+
+    <Device type="custom" id="shelly-addon-ds1820">
+        <Name>Shelly DS1820 Addon</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field type="menu" id="probe-number" defaultValue="0">
+                <Label>Probe:</Label>
+                <List>
+                    <Option value="0">Probe 1</Option>
+                    <Option value="1">Probe 2</Option>
+                    <Option value="2">Probe 3</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="custom" id="shelly-addon-dht22">
+        <Name>Shelly DHT22 Addon</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="humidity-sep" type="separator" />
+
+            <Field type="menu" id="humidity-decimals" defaultValue="1">
+                <Label>Humidity Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="humidity-offset" type="textfield" defaultValue="0">
+                <Label>Humidity Offset:</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the humidity by.</Label>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="humidity">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Relative Humidity</TriggerLabel>
+                <ControlPageLabel>Relative Humidity</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
 </Devices>
