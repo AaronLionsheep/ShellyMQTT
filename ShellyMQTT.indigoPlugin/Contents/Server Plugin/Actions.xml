@@ -31,8 +31,8 @@
 
     <Action id="sep2"/>
 
-    <Action id="timed-high">
-        <Name>Timed High</Name>
+    <Action id="timed-on">
+        <Name>Timed On Period</Name>
         <ConfigUI>
             <Field id="device-id" type="menu">
                 <Label>Shelly Relay Device:</Label>
@@ -43,11 +43,11 @@
                 <Label>The duration to turn on before turning back off (seconds):</Label>
             </Field>
         </ConfigUI>
-        <CallbackMethod>timedHigh</CallbackMethod>
+        <CallbackMethod>timedOn</CallbackMethod>
     </Action>
 
-    <Action id="timed-low">
-        <Name>Timed Low</Name>
+    <Action id="timed-off">
+        <Name>Timed Off Period</Name>
         <ConfigUI>
             <Field id="device-id" type="menu">
                 <Label>Shelly Relay Device:</Label>
@@ -58,6 +58,6 @@
                 <Label>The duration to turn off before turning back on (seconds):</Label>
             </Field>
         </ConfigUI>
-        <CallbackMethod>timedLow</CallbackMethod>
+        <CallbackMethod>timedOff</CallbackMethod>
     </Action>
 </Actions>

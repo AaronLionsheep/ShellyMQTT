@@ -576,7 +576,7 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
-    def timedHigh(self, pluginAction, device, callerWaitingForResult):
+    def timedOn(self, pluginAction, device, callerWaitingForResult):
         """
         Turns a configured device on for a specified duration before turning it back off.
 
@@ -590,7 +590,7 @@ class Plugin(indigo.PluginBase):
         duration = int(pluginAction.props['duration'])
         indigo.device.turnOn(deviceId, delay=0, duration=duration)
 
-    def timedLow(self, pluginAction, device, callerWaitingForResult):
+    def timedOff(self, pluginAction, device, callerWaitingForResult):
         """
         Turns a configured device off for a specified duration before turning it back on.
 
@@ -735,7 +735,7 @@ class Plugin(indigo.PluginBase):
         elif typeId == "discover-shelly":
             if valuesDict['shelly-device-id'] == "":
                 errors['shelly-device-id'] = "You must select a device to discover!"
-        elif typeId == "timed-high" or typeId == "timed-low":
+        elif typeId == "timed-on" or typeId == "timed-off":
             if valuesDict['device-id'] == "":
                 errors['device-id'] = "You must select a device!"
 
