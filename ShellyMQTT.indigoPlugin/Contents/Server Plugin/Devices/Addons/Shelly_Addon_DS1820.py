@@ -49,12 +49,7 @@ class Shelly_Addon_DS1820(Shelly_Addon):
         temp_decimals = int(self.device.pluginProps.get('temp-decimals', 1))
         temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
         self.device.updateStateOnServer(key="status", value='{:.{}f}°{}'.format(temp, temp_decimals, temp_units))
-
-        # Set the icon based on the online status
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
-        else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -74,3 +69,15 @@ class Shelly_Addon_DS1820(Shelly_Addon):
         """
 
         return self.device.pluginProps.get('probe-number', None)
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return:
+        """
+
+        if self.device.states.get('online', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)

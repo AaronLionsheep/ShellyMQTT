@@ -62,12 +62,7 @@ class Shelly_Addon_DHT22(Shelly_Addon):
         humidity = self.device.states['humidity']
         humidity_decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
         self.device.updateStateOnServer(key="status", value='{:.{}f}°{} / {:.{}f}%'.format(temp, temp_decimals, temp_units, humidity, humidity_decimals))
-
-        # Set icon based on the online status
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
-        else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -87,3 +82,15 @@ class Shelly_Addon_DHT22(Shelly_Addon):
         """
 
         return 0
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return:
+        """
+
+        if self.device.states.get('online', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)

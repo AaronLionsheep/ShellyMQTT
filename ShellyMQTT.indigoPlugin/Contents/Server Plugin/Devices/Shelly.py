@@ -341,7 +341,7 @@ class Shelly:
         if not self.isOn():
             self.logger.info(u"\"{}\" on".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
+        self.updateStateImage()
 
     def turnOff(self):
         """
@@ -353,7 +353,7 @@ class Shelly:
         if not self.isOff():
             self.logger.info(u"\"{}\" off".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=False)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
+        self.updateStateImage()
 
     def isOn(self):
         """
@@ -391,3 +391,15 @@ class Shelly:
         """
 
         return False
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on the current device states.
+
+        :return: None
+        """
+
+        if self.isOn():
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)

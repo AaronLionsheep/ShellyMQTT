@@ -35,7 +35,7 @@ class Shelly_HT(Shelly):
         This method is called when a message comes in and matches one of this devices subscriptions.
 
         :param topic: The topic of the message.
-        :param payload: THe payload of the message.
+        :param payload: The payload of the message.
         :return: None
         """
 
@@ -62,10 +62,7 @@ class Shelly_HT(Shelly):
         humidity = self.device.states['humidity']
         humidity_decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
         self.device.updateStateOnServer(key="status", value='{:.{}f}°{} / {:.{}f}%'.format(temp, temp_decimals, temp_units, humidity, humidity_decimals))
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
-        else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -76,3 +73,15 @@ class Shelly_HT(Shelly):
         """
 
         Shelly.handleAction(self, action)
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return:
+        """
+
+        if self.device.states.get('online', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
