@@ -93,4 +93,4 @@ class Shelly_Addon_DHT22(Shelly_Addon):
         if self.device.states.get('online', True):
             self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
         else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
