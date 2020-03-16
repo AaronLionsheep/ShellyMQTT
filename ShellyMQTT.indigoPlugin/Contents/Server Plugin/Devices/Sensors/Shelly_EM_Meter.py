@@ -169,3 +169,15 @@ class Shelly_EM_Meter(Shelly):
             uiValue = '{:.1f} kWh'.format(kwh)
 
         return uiValue
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return: None
+        """
+
+        if self.device.states['online']:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.EnergyMeterOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.EnergyMeterOff)

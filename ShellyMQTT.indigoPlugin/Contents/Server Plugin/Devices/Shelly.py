@@ -56,6 +56,7 @@ class Shelly:
             self.parseAnnouncement(payload)
         elif topic == "{}/online".format(self.getAddress()):
             self.device.updateStateOnServer(key='online', value=(payload == "true"))
+            self.updateStateImage()
         return None
 
     def handleAction(self, action):
