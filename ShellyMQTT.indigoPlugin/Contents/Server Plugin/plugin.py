@@ -4,6 +4,7 @@ import indigo
 from Devices.Relays.Shelly_1 import Shelly_1
 from Devices.Relays.Shelly_1PM import Shelly_1PM
 from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
+from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
@@ -11,6 +12,8 @@ from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 from Devices.Sensors.Shelly_HT import Shelly_HT
 from Devices.Sensors.Shelly_Flood import Shelly_Flood
 from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
+from Devices.Sensors.Shelly_EM_Meter import Shelly_EM_Meter
+from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -67,6 +70,12 @@ def createDeviceObject(device):
         return Shelly_Plug(device)
     elif deviceType == "shelly-plug-s":
         return Shelly_Plug_S(device)
+    elif deviceType == "shelly-em-meter":
+        return Shelly_EM_Meter(device)
+    elif deviceType == "shelly-3em-meter":
+        return Shelly_3EM_Meter(device)
+    elif deviceType == "shelly-em-relay":
+        return Shelly_EM_Relay(device)
 
 
 class Plugin(indigo.PluginBase):
@@ -200,7 +209,7 @@ class Plugin(indigo.PluginBase):
                 # If the host is missing, this device has been started before the host
                 if device.id in self.dependents.keys():
                     # This device has already been attempted to be started, so it must not have a host defined
-                    self.logger.error("%s is not properly setup! Check the device host.", device.name)
+                    self.logger.error(u"{} is not properly setup! Check the device host.".format(device.name))
                     del self.dependents[device.id]
                     return False
                 else:
@@ -208,7 +217,7 @@ class Plugin(indigo.PluginBase):
                     # Add it to the known device list and stop attempting startup
                     # The host will attempt to start any of its addons
                     self.dependents[device.id] = shelly
-                    self.logger.info("first attempt at starting {} failed".format(shelly.device.name))
+                    self.logger.info(u"{} is queued to be started after the host starts".format(shelly.device.name))
                     return False
 
         self.logger.info(u"Starting \"%s\"...", device.name)
@@ -218,8 +227,8 @@ class Plugin(indigo.PluginBase):
         #
         if shelly.getBrokerId() is None or shelly.getAddress() is None:
             # Ensure the device has a broker and address
-            self.logger.error("brokerId: {} address: {}".format(shelly.getBrokerId(), shelly.getAddress()))
-            self.logger.error("%s is not properly setup! Check the broker and topic root.", device.name)
+            self.logger.error(u"brokerId: \"{}\" address: \"{}\"".format(shelly.getBrokerId(), shelly.getAddress()))
+            self.logger.error(u"\"{}\" is not properly setup! Check the broker and topic root.".format(device.name))
             return False
 
         #
@@ -235,12 +244,12 @@ class Plugin(indigo.PluginBase):
         #
         # Attempt to start any addon devices that this device hosts
         #
-        for devId in self.dependents.keys():
-            addon = self.dependents[devId]
-            if addon.isAddon() and addon.getHostDevice().device.id == shelly.device.id:
+        for dependentId in self.dependents.keys():
+            addon = self.dependents[dependentId]
+            if addon.isAddon() and addon.getHostDevice() and addon.getHostDevice().device.id == shelly.device.id:
                 # This addon is hosted by the device that has just been started, so it must have failed startup before
-                del self.dependents[devId]
-                self.deviceStartComm(indigo.devices[devId])
+                del self.dependents[dependentId]
+                self.deviceStartComm(indigo.devices[dependentId])
 
     def deviceStopComm(self, device):
         """
