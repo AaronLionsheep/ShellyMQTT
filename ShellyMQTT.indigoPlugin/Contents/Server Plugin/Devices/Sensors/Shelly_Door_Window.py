@@ -74,7 +74,7 @@ class Shelly_Door_Window(Shelly):
         :return: None
         """
 
-        if self.device.states['status'] == "opened":
+        if self.device.states['status'] == "open":
             if self.device.pluginProps['useCase'] == "door":
                 self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorOpened)
             elif self.device.pluginProps['useCase'] == "window":
