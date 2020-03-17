@@ -28,4 +28,36 @@
         </ConfigUI>
         <CallbackMethod>updateShelly</CallbackMethod>
     </Action>
+
+    <Action id="sep2"/>
+
+    <Action id="timed-on">
+        <Name>Timed On Period</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Shelly Relay Device:</Label>
+                <List class="indigo.devices" filter="indigo.relay" dynamicReload="true"/>
+            </Field>
+
+            <Field id="duration" type="textfield" defaultValue="1">
+                <Label>The duration to turn on before turning back off (seconds):</Label>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>timedOn</CallbackMethod>
+    </Action>
+
+    <Action id="timed-off">
+        <Name>Timed Off Period</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Shelly Relay Device:</Label>
+                <List class="indigo.devices" filter="indigo.relay" dynamicReload="true"/>
+            </Field>
+
+            <Field id="duration" type="textfield" defaultValue="1">
+                <Label>The duration to turn off before turning back on (seconds):</Label>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>timedOff</CallbackMethod>
+    </Action>
 </Actions>

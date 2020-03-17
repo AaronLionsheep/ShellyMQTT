@@ -56,6 +56,7 @@ class Shelly:
             self.parseAnnouncement(payload)
         elif topic == "{}/online".format(self.getAddress()):
             self.device.updateStateOnServer(key='online', value=(payload == "true"))
+            self.updateStateImage()
         return None
 
     def handleAction(self, action):
@@ -197,27 +198,40 @@ class Shelly:
                 self.logger.warning(u"\"%s\" has not notified that it has a newer firmware. Attempting to update anyway...", self.device.name)
             self.publish("{}/command".format(self.getAddress()), "update_fw")
 
-    def setTemperature(self, temperature, state="temperature", unitsProps="temp-units"):
+    def setTemperature(self, temperature, state="temperature", unitsProps="temp-units", decimalsProps="temp-decimals", offsetProps="temp-offset"):
         """
         Helper function to set the temperature of a device.
 
         :param temperature: The temperature to set.
         :param state: The state key to update.
         :param unitsProps: The props containing the units to use or to convert to.
+        :param decimalsProps: The props containing the number of decimals to display.
+        :param offsetProps: The props containing the offset to apply after conversions.
         :return: None
         """
 
         units = self.device.pluginProps.get(unitsProps, None)
+        decimals = int(self.device.pluginProps.get(decimalsProps, 1))
+        offset = 0
+        try:
+            offset = float(self.device.pluginProps.get(offsetProps, 0))
+        except ValueError:
+            self.logger.error(u"Unable to convert offset of \"{}\" into a float!".format(self.device.pluginProps.get(offsetProps, 0)))
+
         if units == "F":
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °F'.format(temperature, decimals), decimalPlaces=decimals)
         elif units == "C->F":
             temperature = self.convertCtoF(temperature)
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °F'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °F'.format(temperature, decimals), decimalPlaces=decimals)
         elif units == "C":
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °C'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °C'.format(temperature, decimals), decimalPlaces=decimals)
         elif units == "F->C":
             temperature = self.convertFtoC(temperature)
-            self.device.updateStateOnServer(state, temperature, uiValue='{} °C'.format(temperature))
+            temperature += offset
+            self.device.updateStateOnServer(state, temperature, uiValue='{:.{}f} °C'.format(temperature, decimals), decimalPlaces=decimals)
 
     def convertCtoF(self, celsius):
         """
@@ -269,24 +283,26 @@ class Shelly:
             self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
-    def updateEnergy(self, energy):
+    def updateEnergy(self, energy, offsetProp='resetEnergyOffset', energyState='accumEnergyTotal'):
         """
         pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
         If this value is greater than the current energy being reported, then the device must have been powered off
         and reset back to 0.
 
         :param energy: The energy utilization counter.
+        :param offsetProp: The property key that contains the offset value.
+        :param energyState: The state that stores energy usage.
         :return: None
         """
 
-        resetEnergyOffset = int(self.device.pluginProps.get('resetEnergyOffset', 0))
+        resetEnergyOffset = int(self.device.pluginProps.get(offsetProp, 0))
         new_energy = energy - resetEnergyOffset
         if new_energy < 0:  # If the offset is greater than what is being reported, the device must have reset
             # our last known energy total can be used to determine the previous energy usage
-            self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last know energy usage value...")
-            resetEnergyOffset = self.device.states.get('accumEnergyTotal', 0) * 60 * 1000 * -1
+            self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last known energy usage value...")
+            resetEnergyOffset = self.device.states.get(energyState, 0) * 60 * 1000 * -1
             newProps = self.device.pluginProps
-            newProps['resetEnergyOffset'] = resetEnergyOffset
+            newProps[offsetProp] = resetEnergyOffset
             self.device.replacePluginPropsOnServer(newProps)
             new_energy = energy - resetEnergyOffset
 
@@ -300,7 +316,7 @@ class Shelly:
         else:
             uiValue = '{:.1f} kWh'.format(kwh)
 
-        self.device.updateStateOnServer('accumEnergyTotal', kwh, uiValue=uiValue)
+        self.device.updateStateOnServer(energyState, kwh, uiValue=uiValue, decimalPlaces=4)
 
     def resetEnergy(self):
         """
@@ -315,8 +331,8 @@ class Shelly:
         offset = currEnergyWattMins + previousResetEnergyOffset
         newProps = self.device.pluginProps
         newProps['resetEnergyOffset'] = offset
-        self.device.replacePluginPropsOnServer(newProps)
         self.device.updateStateOnServer('accumEnergyTotal', 0.0)
+        self.device.replacePluginPropsOnServer(newProps)
 
     def turnOn(self):
         """
@@ -328,7 +344,7 @@ class Shelly:
         if not self.isOn():
             self.logger.info(u"\"{}\" on".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
+        self.updateStateImage()
 
     def turnOff(self):
         """
@@ -340,7 +356,7 @@ class Shelly:
         if not self.isOff():
             self.logger.info(u"\"{}\" off".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=False)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
+        self.updateStateImage()
 
     def isOn(self):
         """
@@ -378,3 +394,15 @@ class Shelly:
         """
 
         return False
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on the current device states.
+
+        :return: None
+        """
+
+        if self.isOn():
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)

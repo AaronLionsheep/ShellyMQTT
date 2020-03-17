@@ -39,20 +39,17 @@ class Shelly_Addon_DS1820(Shelly_Addon):
 
         if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
             # For some reason, the shelly reports the temperature with a preceding colon...
-            temperature = payload[1:]
-            self.setTemperature(float(temperature))
+            temperature = float(payload)
+            self.setTemperature(temperature)
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 
         # Update the display state after data changed
+        temp = self.device.states['temperature']
+        temp_decimals = int(self.device.pluginProps.get('temp-decimals', 1))
         temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
-        self.device.updateStateOnServer(key="status", value='{}°{}'.format(self.device.states['temperature'], temp_units))
-
-        # Set the icon based on the online status
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
-        else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        self.device.updateStateOnServer(key="status", value='{:.{}f}°{}'.format(temp, temp_decimals, temp_units))
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -72,3 +69,15 @@ class Shelly_Addon_DS1820(Shelly_Addon):
         """
 
         return self.device.pluginProps.get('probe-number', None)
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return:
+        """
+
+        if self.device.states.get('online', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)

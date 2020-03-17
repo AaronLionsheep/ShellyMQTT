@@ -4,6 +4,7 @@ import indigo
 from Devices.Relays.Shelly_1 import Shelly_1
 from Devices.Relays.Shelly_1PM import Shelly_1PM
 from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
+from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
@@ -11,6 +12,8 @@ from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 from Devices.Sensors.Shelly_HT import Shelly_HT
 from Devices.Sensors.Shelly_Flood import Shelly_Flood
 from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
+from Devices.Sensors.Shelly_EM_Meter import Shelly_EM_Meter
+from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -67,6 +70,12 @@ def createDeviceObject(device):
         return Shelly_Plug(device)
     elif deviceType == "shelly-plug-s":
         return Shelly_Plug_S(device)
+    elif deviceType == "shelly-em-meter":
+        return Shelly_EM_Meter(device)
+    elif deviceType == "shelly-3em-meter":
+        return Shelly_3EM_Meter(device)
+    elif deviceType == "shelly-em-relay":
+        return Shelly_EM_Relay(device)
 
 
 class Plugin(indigo.PluginBase):
@@ -184,7 +193,7 @@ class Plugin(indigo.PluginBase):
         #
         # Get or generate a shelly device
         #
-        shelly = self.dependents.get(device.id, createDeviceObject(device))
+        shelly = createDeviceObject(device)
         if not shelly:
             # The device is not dependent on a device and was not able to be created...
             self.logger.error(u"\"{}\" has an unknown deviceTypeId of: \"{}\"!".format(device.name, device.deviceTypeId))
@@ -200,7 +209,7 @@ class Plugin(indigo.PluginBase):
                 # If the host is missing, this device has been started before the host
                 if device.id in self.dependents.keys():
                     # This device has already been attempted to be started, so it must not have a host defined
-                    self.logger.error("%s is not properly setup! Check the device host.", device.name)
+                    self.logger.error(u"{} is not properly setup! Check the device host.".format(device.name))
                     del self.dependents[device.id]
                     return False
                 else:
@@ -208,7 +217,7 @@ class Plugin(indigo.PluginBase):
                     # Add it to the known device list and stop attempting startup
                     # The host will attempt to start any of its addons
                     self.dependents[device.id] = shelly
-                    self.logger.info("first attempt at starting {} failed".format(shelly.device.name))
+                    self.logger.info(u"{} is queued to be started after the host starts".format(shelly.device.name))
                     return False
 
         self.logger.info(u"Starting \"%s\"...", device.name)
@@ -218,8 +227,8 @@ class Plugin(indigo.PluginBase):
         #
         if shelly.getBrokerId() is None or shelly.getAddress() is None:
             # Ensure the device has a broker and address
-            self.logger.error("brokerId: {} address: {}".format(shelly.getBrokerId(), shelly.getAddress()))
-            self.logger.error("%s is not properly setup! Check the broker and topic root.", device.name)
+            self.logger.error(u"brokerId: \"{}\" address: \"{}\"".format(shelly.getBrokerId(), shelly.getAddress()))
+            self.logger.error(u"\"{}\" is not properly setup! Check the broker and topic root.".format(device.name))
             return False
 
         #
@@ -235,11 +244,12 @@ class Plugin(indigo.PluginBase):
         #
         # Attempt to start any addon devices that this device hosts
         #
-        for devId in self.dependents.keys():
-            addon = self.dependents[devId]
-            if addon.isAddon() and addon.getHostDevice().device.id == shelly.device.id:
+        for dependentId in self.dependents.keys():
+            addon = self.dependents[dependentId]
+            if addon.isAddon() and addon.getHostDevice() and addon.getHostDevice().device.id == shelly.device.id:
                 # This addon is hosted by the device that has just been started, so it must have failed startup before
-                self.deviceStartComm(addon.device)
+                del self.dependents[dependentId]
+                self.deviceStartComm(indigo.devices[dependentId])
 
     def deviceStopComm(self, device):
         """
@@ -575,6 +585,34 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
+    def timedOn(self, pluginAction, device, callerWaitingForResult):
+        """
+        Turns a configured device on for a specified duration before turning it back off.
+
+        :param pluginAction: The action properties.
+        :param device: N/A
+        :param callerWaitingForResult: N/A
+        :return: None
+        """
+
+        deviceId = int(pluginAction.props['device-id'])
+        duration = int(pluginAction.props['duration'])
+        indigo.device.turnOn(deviceId, delay=0, duration=duration)
+
+    def timedOff(self, pluginAction, device, callerWaitingForResult):
+        """
+        Turns a configured device off for a specified duration before turning it back on.
+
+        :param pluginAction: The action properties.
+        :param device: N/A
+        :param callerWaitingForResult: N/A
+        :return: none
+        """
+
+        deviceId = int(pluginAction.props['device-id'])
+        duration = int(pluginAction.props['duration'])
+        indigo.device.turnOff(deviceId, delay=0, duration=duration)
+
     #####################
     #     Utilities     #
     #####################
@@ -592,6 +630,102 @@ class Plugin(indigo.PluginBase):
             for topic in deviceSubscriptions:
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
 
+    def validateDeviceConfigUi(self, valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: True if the config is valid.
+        """
+
+        # Container for errors found and their reasons
+        errors = indigo.Dict()
+
+        if typeId == "shelly-1pm":
+            pass
+        elif typeId == "shelly-2.5":
+            pass
+        elif typeId == "shelly-ht":
+            # Check for a valid temperature offset
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
+
+            # Check for a valid humidity offset
+            humidityOffset = valuesDict.get('humidity-offset')
+            if humidityOffset == "":
+                valuesDict['humidity-offset'] = 0
+            else:
+                try:
+                    float(humidityOffset)
+                except ValueError:
+                    errors['humidity-offset'] = "Unable to convert this value to a float!"
+        elif typeId == "shelly-flood":
+            # Check for a valid temperature offset
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
+        elif typeId == "shelly-door-window":
+            pass
+        elif typeId == "shelly-dimmer-sl":
+            pass
+        elif typeId == "shelly-addon-ds1820":
+            # Check for a valid temperature offset
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
+        elif typeId == "shelly-addon-dht22":
+            # Check for a valid temperature offset
+            tempOffset = valuesDict.get('temp-offset')
+            if tempOffset == "":
+                valuesDict['temp-offset'] = 0
+            else:
+                try:
+                    float(tempOffset)
+                except ValueError:
+                    errors['temp-offset'] = "Unable to convert this value to a float!"
+
+            # Check for a valid humidity offset
+            humidityOffset = valuesDict.get('humidity-offset')
+            if humidityOffset == "":
+                valuesDict['humidity-offset'] = 0
+            else:
+                try:
+                    float(humidityOffset)
+                except ValueError:
+                    errors['humidity-offset'] = "Unable to convert this value to a float!"
+        elif typeId == "shelly-plug-s":
+            pass
+
+        if len(errors) == 0:
+            # No errors were found, must be valid
+            return True, valuesDict
+        else:
+            # Errors were found, return the data back and the errors
+            return False, valuesDict, errors
+
+    def closedDeviceConfigUi(self, valuesDict, userCancelled, typeId, devId):
+        # self.shellyDevices[devId].device = indigo.devices[devId]
+        # self.logger.info(indigo.devices[devId].pluginProps)
+        pass
+
     def validateActionConfigUi(self, valuesDict, typeId, deviceId):
         """
         Validates an action config UI.
@@ -601,17 +735,25 @@ class Plugin(indigo.PluginBase):
         :param deviceId:
         :return: True or false based on the validity of the data.
         """
+
+        errors = indigo.Dict()
+
         if typeId == "update-shelly":
             if valuesDict['shelly-device-id'] == "":
-                errors = indigo.Dict()
                 errors['shelly-device-id'] = "You must select a device to update!"
-                return False, valuesDict, errors
-            else:
-                return True
         elif typeId == "discover-shelly":
             if valuesDict['shelly-device-id'] == "":
-                errors = indigo.Dict()
                 errors['shelly-device-id'] = "You must select a device to discover!"
-                return False, valuesDict, errors
-            else:
-                return True
+        elif typeId == "timed-on" or typeId == "timed-off":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device!"
+
+            try:
+                int(valuesDict['duration'])
+            except ValueError:
+                errors['duration'] = "Unable to convert this value to an integer!"
+
+        if len(errors) == 0:
+            return True
+        else:
+            return False, valuesDict, errors

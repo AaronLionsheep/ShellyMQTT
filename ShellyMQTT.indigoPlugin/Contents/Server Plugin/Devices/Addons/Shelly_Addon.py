@@ -1,5 +1,6 @@
 # coding=utf-8
 import indigo
+import json
 from ..Shelly import Shelly
 
 
@@ -30,7 +31,7 @@ class Shelly_Addon(Shelly):
         :return: None
         """
 
-        pass
+        Shelly.handleMessage(self, topic, payload)
 
     def handleAction(self, action):
         """
@@ -111,3 +112,20 @@ class Shelly_Addon(Shelly):
         """
 
         return True
+
+    def parseAnnouncement(self, payload):
+        """
+        Parses the data from an announce message. The payload is expected to be of the form:
+        {
+            "id": <SOME_ID>,
+            "mac": <MAC_ADDRESS>,
+            "ip": <IP_ADDRESS>,
+            "fw_ver": <FIRMWARE_VERSION>,
+            "new_fw": <true/false>
+        }
+
+        :param payload: The payload of the announce message.
+        :return: None
+        """
+
+        pass

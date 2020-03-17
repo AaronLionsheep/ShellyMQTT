@@ -44,10 +44,10 @@ class Shelly_Flood(Shelly):
         elif topic == "{}/sensor/flood".format(self.getAddress()):
             if payload == 'true':
                 self.device.updateStateOnServer(key='onOffState', value=True, uiValue='wet')
-                self.device.updateStateImageOnServer(indigo.kStateImageSel.SprinklerOn)
             elif payload == 'false':
                 self.device.updateStateOnServer(key='onOffState', value=False, uiValue='dry')
-                self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
+
+            self.updateStateImage()
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
         else:
@@ -62,3 +62,15 @@ class Shelly_Flood(Shelly):
         """
 
         Shelly.handleAction(self, action)
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return: None
+        """
+
+        if self.device.states['onOffState']:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorTripped)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)

@@ -45,17 +45,7 @@ class Shelly_Door_Window(Shelly):
             if self.device.states['status'] != payload:
                 self.logger.info("\"{}\" {}".format(self.device.name, payload))
             self.device.updateStateOnServer(key='status', value=payload)
-
-            if self.device.pluginProps['useCase'] == "door":
-                if payload == "closed":
-                    self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorClosed)
-                elif payload == "opened":
-                    self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorOpened)
-            elif self.device.pluginProps['useCase'] == "window":
-                if payload == "closed":
-                    self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorClosed)
-                elif payload == "opened":
-                    self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorOpened)
+            self.updateStateImage()
         elif topic == "{}/sensor/lux".format(self.getAddress()):
             self.device.updateStateOnServer(key="lux", value=payload)
         elif topic == "{}/sensor/tilt".format(self.getAddress()):
@@ -76,3 +66,21 @@ class Shelly_Door_Window(Shelly):
         """
 
         Shelly.handleAction(self, action)
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return: None
+        """
+
+        if self.device.states['status'] == "open":
+            if self.device.pluginProps['useCase'] == "door":
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorOpened)
+            elif self.device.pluginProps['useCase'] == "window":
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorOpened)
+        else:
+            if self.device.pluginProps['useCase'] == "door":
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorClosed)
+            elif self.device.pluginProps['useCase'] == "window":
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorClosed)

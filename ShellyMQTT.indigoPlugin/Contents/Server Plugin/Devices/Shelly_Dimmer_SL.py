@@ -144,4 +144,16 @@ class Shelly_Dimmer_SL(Shelly_1PM):
         """
 
         self.device.updateStateOnServer(key='onOffState', value=True)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
+        self.updateStateImage()
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on the device states.
+
+        :return: None
+        """
+
+        if self.isOn():
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.DimmerOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.DimmerOff)

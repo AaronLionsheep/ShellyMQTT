@@ -35,25 +35,34 @@ class Shelly_HT(Shelly):
         This method is called when a message comes in and matches one of this devices subscriptions.
 
         :param topic: The topic of the message.
-        :param payload: THe payload of the message.
+        :param payload: The payload of the message.
         :return: None
         """
 
         if topic == "{}/sensor/temperature".format(self.getAddress()):
             self.setTemperature(float(payload))
         elif topic == "{}/sensor/humidity".format(self.getAddress()):
-            self.device.updateStateOnServer(key="humidity", value=payload, uiValue='{}%'.format(payload))
+            decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
+            offset = 0
+            try:
+                offset = float(self.device.pluginProps.get('humidity-offset', 0))
+            except ValueError:
+                self.logger.error(u"Unable to convert offset of \"{}\" into a float!".format(self.device.pluginProps.get('humidity-offset', 0)))
+
+            humidity = float(payload) + offset
+            self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{:.{}f}%'.format(humidity, decimals), decimalPlaces=decimals)
         elif topic == "{}/sensor/battery".format(self.getAddress()):
             self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
 
+        temp = self.device.states['temperature']
+        temp_decimals = int(self.device.pluginProps.get('temp-decimals', 1))
         temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
-        self.device.updateStateOnServer(key="status", value='{}°{} / {}%'.format(self.device.states['temperature'], temp_units, self.device.states['humidity']))
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
-        else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        humidity = self.device.states['humidity']
+        humidity_decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
+        self.device.updateStateOnServer(key="status", value='{:.{}f}°{} / {:.{}f}%'.format(temp, temp_decimals, temp_units, humidity, humidity_decimals))
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -64,3 +73,15 @@ class Shelly_HT(Shelly):
         """
 
         Shelly.handleAction(self, action)
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return:
+        """
+
+        if self.device.states.get('online', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
