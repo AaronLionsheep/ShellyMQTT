@@ -1,4 +1,5 @@
 import indigo
+import json
 
 # Import the relay devices
 from Devices.Relays.Shelly_1 import Shelly_1
@@ -108,6 +109,16 @@ class Plugin(indigo.PluginBase):
         #   }
         # }
         self.brokerDeviceSubscriptions = {}
+
+        # {
+        #     <brokerId>: {
+        #         id: {id, mac, ip, fw_ver, new_fw}
+        #     }
+        # }
+        # This is used to store the latest announcement message for each device that
+        # has broadcast on a broker
+        self.discoveredDevices = {}
+
         self.messageTypes = []
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
@@ -407,6 +418,10 @@ class Plugin(indigo.PluginBase):
                         self.logger.debug(u"        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
                         shelly.handleMessage(topic, payload)
 
+                if topic == "shellies/announce":
+                    # Send this message to also be parsed by the plugin
+                    self.processAnnouncement(brokerID, payload)
+
     def actionControlDevice(self, action, device):
         """
         Handles an action being performed on the device.
@@ -432,6 +447,46 @@ class Plugin(indigo.PluginBase):
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
             shelly.handleAction(action)
+
+    def processAnnouncement(self, brokerID, payload):
+        """
+        Parses the data from an announce message. The payload is expected to be of the form:
+        {
+            "id": <SOME_ID>,
+            "mac": <MAC_ADDRESS>,
+            "ip": <IP_ADDRESS>,
+            "fw_ver": <FIRMWARE_VERSION>,
+            "new_fw": <true/false>
+        }
+
+        This method will check against a list of known devices and will keep track
+        of announcement messages that don't belong to a known device.
+
+        :param brokerID The device id of the broker that the message was published to.
+        :param payload The payload of the message.
+        :return: None
+        """
+
+        # Parse the json message into a python object
+        try:
+            announcement = json.loads(payload)
+        except ValueError:
+            self.logger.error(u"Unable to convert '{}' into python object!".format(payload))
+            return
+
+        # Ensure we at least have the id key present
+        identifier = announcement.get('id', None)
+        if not identifier:
+            self.logger.error(u"Unable to parse announcement: {}".format(announcement))
+            return
+
+        # Ensure that the broker is present in the discovered devices
+        if brokerID not in self.discoveredDevices:
+            self.discoveredDevices[brokerID] = {}
+
+        # store the announcement within the broker list using the id as the key
+        self.discoveredDevices[brokerID][identifier] = announcement
+
 
     ###############################
     #     Getters for Devices     #
