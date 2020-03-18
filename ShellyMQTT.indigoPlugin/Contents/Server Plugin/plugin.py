@@ -448,7 +448,7 @@ class Plugin(indigo.PluginBase):
         if shelly is not None:
             shelly.handleAction(action)
 
-    def processAnnouncement(self, brokerID, payload):
+    def processAnnouncement(self, brokerId, payload):
         """
         Parses the data from an announce message. The payload is expected to be of the form:
         {
@@ -462,7 +462,7 @@ class Plugin(indigo.PluginBase):
         This method will check against a list of known devices and will keep track
         of announcement messages that don't belong to a known device.
 
-        :param brokerID The device id of the broker that the message was published to.
+        :param brokerId The device id of the broker that the message was published to.
         :param payload The payload of the message.
         :return: None
         """
@@ -481,12 +481,24 @@ class Plugin(indigo.PluginBase):
             return
 
         # Ensure that the broker is present in the discovered devices
-        if brokerID not in self.discoveredDevices:
-            self.discoveredDevices[brokerID] = {}
+        if brokerId not in self.discoveredDevices:
+            self.discoveredDevices[brokerId] = {}
 
         # store the announcement within the broker list using the id as the key
-        self.discoveredDevices[brokerID][identifier] = announcement
+        self.discoveredDevices[brokerId][identifier] = announcement
 
+        # See if this device is not in our indigo devices list
+        # This would indicate that this is an unknown device
+        known = False
+        for shelly in self.shellyDevices.values():
+            if shelly.getBrokerId() and shelly.getBrokerId() == brokerId and shelly.getAddress() == identifier:
+                # This device is on the same broker and has the same address/identifier
+                known = True
+                break
+
+        if not known:
+            # Here is where device creation COULD happen automatically
+            self.logger.info(u"Discovered a new device with an address of \"{}\"".format(identifier))
 
     ###############################
     #     Getters for Devices     #
