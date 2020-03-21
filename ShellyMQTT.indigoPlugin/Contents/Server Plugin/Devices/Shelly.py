@@ -280,6 +280,9 @@ class Shelly:
             self.logger.info(u"\"%s\" refreshed meta-data from announcement message", self.device.name)
             self.device.updateStateOnServer('mac-address', mac_address)
             self.device.updateStateOnServer('ip-address', ip_address)
+
+            if self.device.states.get('firmware-version', '') != firmware_version:
+                self.logger.info(u"Detected a firmware change for \"{}\"".format(self.device.name))
             self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
