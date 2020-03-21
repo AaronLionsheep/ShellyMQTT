@@ -680,6 +680,23 @@ class Plugin(indigo.PluginBase):
         duration = int(pluginAction.props['duration'])
         indigo.device.turnOff(deviceId, delay=0, duration=duration)
 
+    def printDiscoveredShellies(self, pluginAction=None, device=None, callerWaitingForResult=False):
+        """
+        Print out all discovered shellies connected to each broker
+
+        :param pluginAction:
+        :param device:
+        :param callerWaitingForResult:
+        :return: None
+        """
+
+        for brokerId in self.discoveredDevices.keys():
+            broker = indigo.devices[int(brokerId)]
+            self.logger.info(u"Discovered Devices on \"{}\"".format(broker.name))
+            for identifier in self.discoveredDevices.keys():
+                ip = self.discoveredDevices[identifier].get('ip', '')
+                self.logger.info(u"    {:25} ({})".format(identifier, ip))
+
     #####################
     #     Utilities     #
     #####################
