@@ -799,6 +799,18 @@ class Plugin(indigo.PluginBase):
             pass
 
         if len(errors) == 0:
+            # Get the address from the current valid properties
+            # No address present will cause the shelly device to get the address
+            shelly = self.shellyDevices.get(devId, None)
+            address = valuesDict.get('address', shelly.getAddress() if shelly else None)
+            if address and shelly:
+                # See if we are now replacing an unknown device on the same broker
+                devicesOnBroker = self.discoveredDevices[shelly.getBrokerId()]
+                for identifier in devicesOnBroker.keys():
+                    if identifier in address:
+                        # This address will match with the unknown device
+                        del devicesOnBroker[identifier]
+
             # No errors were found, must be valid
             return True, valuesDict
         else:
