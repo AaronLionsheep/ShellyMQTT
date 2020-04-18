@@ -5,6 +5,7 @@ import json
 from Devices.Relays.Shelly_1 import Shelly_1
 from Devices.Relays.Shelly_1PM import Shelly_1PM
 from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
+from Devices.Relays.Shelly_4_Pro import Shelly_4_Pro
 from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
@@ -33,50 +34,37 @@ from Queue import Queue
 
 kCurDevVersion = 0  # current version of plugin devices
 
+# Maps each device type to a python class for the device
+deviceClasses = {
+    # Relay devices
+    "shelly-1": Shelly_1,
+    "shelly-1pm": Shelly_1PM,
+    "shelly-2-5-relay": Shelly_2_5_Relay,
+    "shelly-4-pro": Shelly_4_Pro,
+    "shelly-em-relay": Shelly_EM_Relay,
 
-def createDeviceObject(device):
-    """
-    Helper function to generate a Shelly object from an indigo device
+    # Sensor devices
+    "shelly-ht": Shelly_HT,
+    "shelly-flood": Shelly_Flood,
+    "shelly-door-window": Shelly_Door_Window,
+    "shelly-em-meter": Shelly_EM_Meter,
+    "shelly-3em-meter": Shelly_3EM_Meter,
 
-    :param device: The Indigo device object.
-    :return: A Shelly device object.
-    """
+    # Bulb devices
+    "shelly-bulb": Shelly_Bulb,
+    "shelly-bulb-vintage": Shelly_Bulb_Vintage,
+    "shelly-bulb-duo": Shelly_Bulb_Duo,
 
-    deviceType = device.deviceTypeId
-    if deviceType == "shelly-1":
-        return Shelly_1(device)
-    elif deviceType == "shelly-1pm":
-        return Shelly_1PM(device)
-    elif deviceType == "shelly-2-5-relay":
-        return Shelly_2_5_Relay(device)
-    elif deviceType == "shelly-ht":
-        return Shelly_HT(device)
-    elif deviceType == "shelly-flood":
-        return Shelly_Flood(device)
-    elif deviceType == "shelly-door-window":
-        return Shelly_Door_Window(device)
-    elif deviceType == "shelly-dimmer-sl":
-        return Shelly_Dimmer_SL(device)
-    elif deviceType == "shelly-bulb":
-        return Shelly_Bulb(device)
-    elif deviceType == "shelly-bulb-vintage":
-        return Shelly_Bulb_Vintage(device)
-    elif deviceType == "shelly-bulb-duo":
-        return Shelly_Bulb_Duo(device)
-    elif deviceType == "shelly-addon-ds1820":
-        return Shelly_Addon_DS1820(device)
-    elif deviceType == "shelly-addon-dht22":
-        return Shelly_Addon_DHT22(device)
-    elif deviceType == "shelly-plug":
-        return Shelly_Plug(device)
-    elif deviceType == "shelly-plug-s":
-        return Shelly_Plug_S(device)
-    elif deviceType == "shelly-em-meter":
-        return Shelly_EM_Meter(device)
-    elif deviceType == "shelly-3em-meter":
-        return Shelly_3EM_Meter(device)
-    elif deviceType == "shelly-em-relay":
-        return Shelly_EM_Relay(device)
+    # Plug devices
+    "shelly-plug": Shelly_Plug,
+    "shelly-plug-s": Shelly_Plug_S,
+
+    # Add-on devices
+    "shelly-addon-ds1820": Shelly_Addon_DS1820,
+    "shelly-addon-dht22": Shelly_Addon_DHT22,
+
+    "shelly-dimmer-sl": Shelly_Dimmer_SL
+}
 
 
 class Plugin(indigo.PluginBase):
@@ -180,6 +168,21 @@ class Plugin(indigo.PluginBase):
         else:
             self.logger.info(u"Debugging off")
 
+    def createDeviceObject(self, device):
+        """
+        Helper function to generate a Shelly object from an indigo device
+
+        :param device: The Indigo device object.
+        :return: A Shelly device object.
+        """
+
+        deviceType = device.deviceTypeId
+        deviceClass = deviceClasses[deviceType]
+        if deviceClass:
+            return deviceClass(device)
+        else:
+            self.logger.error(u"Unable to build a device with type \"{}\"".format(deviceType))
+
     def deviceStartComm(self, device):
         """
         Handles processes for starting a device. This will check dependencies, validate configurations,
@@ -204,7 +207,7 @@ class Plugin(indigo.PluginBase):
         #
         # Get or generate a shelly device
         #
-        shelly = createDeviceObject(device)
+        shelly = self.createDeviceObject(device)
         if not shelly:
             # The device is not dependent on a device and was not able to be created...
             self.logger.error(u"\"{}\" has an unknown deviceTypeId of: \"{}\"!".format(device.name, device.deviceTypeId))
