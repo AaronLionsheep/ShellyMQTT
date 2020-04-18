@@ -65,6 +65,12 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
                 else:
                     # The light should be off regardless of a reported brightness value
                     self.turnOff()
+
+                # Record the color data
+                self.device.updateStateOnServer("redLevel", payload.get("red", 0))
+                self.device.updateStateOnServer("greenLevel", payload.get("green", 0))
+                self.device.updateStateOnServer("blueLevel", payload.get("blue", 0))
+                self.device.updateStateOnServer("whiteLevel", payload.get("white", 0))
             except ValueError:
                 self.logger.error(u"Problem parsing JSON: {}".format(payload))
         else:
