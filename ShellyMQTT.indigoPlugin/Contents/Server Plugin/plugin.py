@@ -10,6 +10,10 @@ from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
+# Import the RGBW2 devices
+from Devices.RGBW2.Shelly_RGBW2_White import Shelly_RGBW2_White
+from Devices.RGBW2.Shelly_RGBW2_Color import Shelly_RGBW2_Color
+
 # Import the sensor devices
 from Devices.Sensors.Shelly_HT import Shelly_HT
 from Devices.Sensors.Shelly_Flood import Shelly_Flood
@@ -42,6 +46,10 @@ deviceClasses = {
     "shelly-2-5-relay": Shelly_2_5_Relay,
     "shelly-4-pro": Shelly_4_Pro,
     "shelly-em-relay": Shelly_EM_Relay,
+
+    # RGBW2 devices
+    "shelly-rgbw2-white": Shelly_RGBW2_White,
+    "shelly-rgbw2-color": Shelly_RGBW2_Color,
 
     # Sensor devices
     "shelly-ht": Shelly_HT,
