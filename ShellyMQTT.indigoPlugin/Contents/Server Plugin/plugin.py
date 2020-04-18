@@ -484,21 +484,24 @@ class Plugin(indigo.PluginBase):
         if brokerId not in self.discoveredDevices:
             self.discoveredDevices[brokerId] = {}
 
-        # store the announcement within the broker list using the id as the key
-        self.discoveredDevices[brokerId][identifier] = announcement
-
         # See if this device is not in our indigo devices list
         # This would indicate that this is an unknown device
         known = False
         for shelly in self.shellyDevices.values():
-            if shelly.getBrokerId() and shelly.getBrokerId() == brokerId and shelly.getAddress() == identifier:
+            if shelly.getBrokerId() and shelly.getBrokerId() == brokerId and identifier in shelly.getAddress():
                 # This device is on the same broker and has the same address/identifier
                 known = True
+
+                # Ensure this identifier on the broker is not in the "unknown" list
+                self.discoveredDevices[brokerId].pop(identifier, None)
                 break
 
         if not known:
             # Here is where device creation COULD happen automatically
-            self.logger.info(u"Discovered a new device with an address of \"{}\"".format(identifier))
+            self.logger.info(u"Discovered a new device with an address of \"{}\" with ip: \"{}\"".format(identifier, announcement.get('ip', "Unavailable")))
+
+            # store the announcement within the broker list using the id as the key
+            self.discoveredDevices[brokerId][identifier] = announcement
 
     ###############################
     #     Getters for Devices     #
@@ -693,8 +696,8 @@ class Plugin(indigo.PluginBase):
         for brokerId in self.discoveredDevices.keys():
             broker = indigo.devices[int(brokerId)]
             self.logger.info(u"Discovered Devices on \"{}\"".format(broker.name))
-            for identifier in self.discoveredDevices.keys():
-                ip = self.discoveredDevices[identifier].get('ip', '')
+            for identifier in self.discoveredDevices[brokerId].keys():
+                ip = self.discoveredDevices[brokerId][identifier].get('ip', '')
                 self.logger.info(u"    {:25} ({})".format(identifier, ip))
 
     #####################
