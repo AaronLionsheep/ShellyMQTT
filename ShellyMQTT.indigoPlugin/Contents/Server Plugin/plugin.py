@@ -1,4 +1,5 @@
 import indigo
+import json
 
 # Import the relay devices
 from Devices.Relays.Shelly_1 import Shelly_1
@@ -108,6 +109,16 @@ class Plugin(indigo.PluginBase):
         #   }
         # }
         self.brokerDeviceSubscriptions = {}
+
+        # {
+        #     <brokerId>: {
+        #         id: {id, mac, ip, fw_ver, new_fw}
+        #     }
+        # }
+        # This is used to store the latest announcement message for each device that
+        # has broadcast on a broker
+        self.discoveredDevices = {}
+
         self.messageTypes = []
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
@@ -407,6 +418,10 @@ class Plugin(indigo.PluginBase):
                         self.logger.debug(u"        \"%s\" handling \"%s\" on \"%s\"", shelly.device.name, payload, topic)
                         shelly.handleMessage(topic, payload)
 
+                if topic == "shellies/announce":
+                    # Send this message to also be parsed by the plugin
+                    self.processAnnouncement(brokerID, payload)
+
     def actionControlDevice(self, action, device):
         """
         Handles an action being performed on the device.
@@ -432,6 +447,61 @@ class Plugin(indigo.PluginBase):
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
             shelly.handleAction(action)
+
+    def processAnnouncement(self, brokerId, payload):
+        """
+        Parses the data from an announce message. The payload is expected to be of the form:
+        {
+            "id": <SOME_ID>,
+            "mac": <MAC_ADDRESS>,
+            "ip": <IP_ADDRESS>,
+            "fw_ver": <FIRMWARE_VERSION>,
+            "new_fw": <true/false>
+        }
+
+        This method will check against a list of known devices and will keep track
+        of announcement messages that don't belong to a known device.
+
+        :param brokerId The device id of the broker that the message was published to.
+        :param payload The payload of the message.
+        :return: None
+        """
+
+        # Parse the json message into a python object
+        try:
+            announcement = json.loads(payload)
+        except ValueError:
+            self.logger.error(u"Unable to convert '{}' into python object!".format(payload))
+            return
+
+        # Ensure we at least have the id key present
+        identifier = announcement.get('id', None)
+        if not identifier:
+            self.logger.error(u"Unable to parse announcement: {}".format(announcement))
+            return
+
+        # Ensure that the broker is present in the discovered devices
+        if brokerId not in self.discoveredDevices:
+            self.discoveredDevices[brokerId] = {}
+
+        # See if this device is not in our indigo devices list
+        # This would indicate that this is an unknown device
+        known = False
+        for shelly in self.shellyDevices.values():
+            if shelly.getBrokerId() and shelly.getBrokerId() == brokerId and identifier in shelly.getAddress():
+                # This device is on the same broker and has the same address/identifier
+                known = True
+
+                # Ensure this identifier on the broker is not in the "unknown" list
+                self.discoveredDevices[brokerId].pop(identifier, None)
+                break
+
+        if not known:
+            # Here is where device creation COULD happen automatically
+            self.logger.info(u"Discovered a new device with an address of \"{}\" with ip: \"{}\"".format(identifier, announcement.get('ip', "Unavailable")))
+
+            # store the announcement within the broker list using the id as the key
+            self.discoveredDevices[brokerId][identifier] = announcement
 
     ###############################
     #     Getters for Devices     #
@@ -613,6 +683,23 @@ class Plugin(indigo.PluginBase):
         duration = int(pluginAction.props['duration'])
         indigo.device.turnOff(deviceId, delay=0, duration=duration)
 
+    def printDiscoveredShellies(self, pluginAction=None, device=None, callerWaitingForResult=False):
+        """
+        Print out all discovered shellies connected to each broker
+
+        :param pluginAction:
+        :param device:
+        :param callerWaitingForResult:
+        :return: None
+        """
+
+        for brokerId in self.discoveredDevices.keys():
+            broker = indigo.devices[int(brokerId)]
+            self.logger.info(u"Discovered Devices on \"{}\"".format(broker.name))
+            for identifier in self.discoveredDevices[brokerId].keys():
+                ip = self.discoveredDevices[brokerId][identifier].get('ip', '')
+                self.logger.info(u"    {:25} ({})".format(identifier, ip))
+
     #####################
     #     Utilities     #
     #####################
@@ -715,6 +802,18 @@ class Plugin(indigo.PluginBase):
             pass
 
         if len(errors) == 0:
+            # Get the address from the current valid properties
+            # No address present will cause the shelly device to get the address
+            shelly = self.shellyDevices.get(devId, None)
+            address = valuesDict.get('address', shelly.getAddress() if shelly else None)
+            if address and shelly:
+                # See if we are now replacing an unknown device on the same broker
+                devicesOnBroker = self.discoveredDevices[shelly.getBrokerId()]
+                for identifier in devicesOnBroker.keys():
+                    if identifier in address:
+                        # This address will match with the unknown device
+                        del devicesOnBroker[identifier]
+
             # No errors were found, must be valid
             return True, valuesDict
         else:

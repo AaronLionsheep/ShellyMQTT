@@ -7,7 +7,7 @@
 
     <Field type="checkbox" id="connector-fix" defaultValue="false">
 	    <Label>MQTT Connector Fix:</Label>
-	    <Description>Correctly creates subscriptions for the broker.</Description>
+	    <Description>Check if using MQTT Connector pre-v0.3.3</Description>
     </Field>
     <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
         <Label>See Issue #10 on the MQTT-Connector GitHub page.</Label>
