@@ -843,6 +843,11 @@
 
         </ConfigUI>
         <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -915,6 +920,11 @@
             </Field>
         </ConfigUI>
         <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>

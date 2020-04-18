@@ -48,7 +48,7 @@ class Shelly_RGBW2_White(Shelly_1PM):
                 payload = json.loads(payload)
                 # Ensure the device is in white mode
                 if payload.get("mode", "") != "white":
-                    self.logger.error(u"\"{}\" expects the device to be in color mode \"white\", but is in mode \"{}\"".format(self.device.name, payload.get("mode", "")))
+                    self.logger.error(u"\"{}\" expects the device to be in mode \"white\", but is in mode \"{}\"".format(self.device.name, payload.get("mode", "")))
                     return
 
                 if payload.get("ison", False):
@@ -66,9 +66,9 @@ class Shelly_RGBW2_White(Shelly_1PM):
 
                 # Record the overpower status
                 overloaded = payload.get("overpower", False)
-                if not self.device.states['overload'] and overloaded:
+                if not self.device.states['overpower'] and overloaded:
                     self.logger.error(u"\"{}\" was overloaded!".format(self.device.name))
-                self.device.updateStateOnServer('overload', overloaded)
+                self.device.updateStateOnServer('overpower', overloaded)
 
                 # Record the current power
                 power = payload.get("power", None)

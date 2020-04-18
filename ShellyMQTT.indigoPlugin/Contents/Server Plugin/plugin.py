@@ -819,7 +819,7 @@ class Plugin(indigo.PluginBase):
             address = valuesDict.get('address', shelly.getAddress() if shelly else None)
             if address and shelly:
                 # See if we are now replacing an unknown device on the same broker
-                devicesOnBroker = self.discoveredDevices[shelly.getBrokerId()]
+                devicesOnBroker = self.discoveredDevices.get(shelly.getBrokerId(), {})
                 for identifier in devicesOnBroker.keys():
                     if identifier in address:
                         # This address will match with the unknown device
@@ -834,7 +834,7 @@ class Plugin(indigo.PluginBase):
     def closedDeviceConfigUi(self, valuesDict, userCancelled, typeId, devId):
         # self.shellyDevices[devId].device = indigo.devices[devId]
         # self.logger.info(indigo.devices[devId].pluginProps)
-        pass
+        return True
 
     def validateActionConfigUi(self, valuesDict, typeId, deviceId):
         """
