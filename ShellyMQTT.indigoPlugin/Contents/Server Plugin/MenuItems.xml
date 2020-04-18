@@ -10,6 +10,11 @@
         <CallbackMethod>discoverShellies</CallbackMethod>
     </MenuItem>
 
+    <MenuItem id="print-discovered-shellies">
+        <Name>Print Discovered Shellies</Name>
+        <CallbackMethod>printDiscoveredShellies</CallbackMethod>
+    </MenuItem>
+
     <MenuItem id="sep-1"/>
 
     <MenuItem id="shelly-update-helper">
