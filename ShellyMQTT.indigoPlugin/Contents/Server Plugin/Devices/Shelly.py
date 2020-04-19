@@ -105,6 +105,33 @@ class Shelly:
             address = address[:-1]
         return address
 
+    def getIpAddress(self):
+        """
+        Helper function to get the ip address of the device.
+
+        :return: The device ip address
+        """
+
+        return self.device.states.get('ip-address', None)
+
+    def updateAvailable(self):
+        """
+        Helper function to determine if there is a firmware update.
+
+        :return: True or false to indicate if there is a firmware update.
+        """
+
+        return self.device.states.get('has-firmware-update', False)
+
+    def getFirmware(self):
+        """
+        Getter for the device firmware.
+
+        :return: The current firmware of the device.
+        """
+
+        return self.device.states.get('firmware-version', None)
+
     def getMQTT(self):
         """
         Helper function to get the MQTT plugin instance.

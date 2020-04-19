@@ -711,6 +711,64 @@ class Plugin(indigo.PluginBase):
                 ip = self.discoveredDevices[brokerId][identifier].get('ip', '')
                 self.logger.info(u"    {:25} ({})".format(identifier, ip))
 
+    def printShellyDevicesOverview(self, pluginAction=None, device=None, callerWaitingForResult=False):
+        """
+        Print out all shellies connected to each broker
+
+        :param pluginAction:
+        :param device:
+        :param callerWaitingForResult:
+        :return: None
+        """
+
+        overview = {}
+        # {
+        #     broker1Id: [shelly1, shelly2],
+        #     broker2Id: [shelly3, shelly4]
+        # }
+
+        # Gather our devices
+        for shelly in self.shellyDevices.values():
+            brokerId = shelly.getBrokerId()
+            if brokerId not in overview.keys():
+                overview[brokerId] = []
+
+            overview[brokerId].append(shelly)
+
+        # Output
+        nameLength = 40
+        ipLength = 15
+        addressLength = 40
+        updateLength = 16
+        firmwareLength = 35
+        row = u"{no: >2} | {name: <{nameWidth}}|{ip: ^{ipWidth}}| {address: <{addressWidth}}| {host: ^{nameWidth}}|{update: ^{updateWidth}}|{firmware: ^{firmwareWidth}}| {no: <2}"
+
+        def logDividerRow():
+            self.logger.info(
+                u"   +{5:-^{0}s}+{5:-<{1}s}+{5:-<{2}s}+{5:-<{0}s}+{5:-<{3}s}+{5:-<{4}s}+".format(nameLength + 3, ipLength + 2, addressLength + 3, updateLength + 2, firmwareLength + 2, ""))
+
+        def logRow(name, ip, address, host, update, firmware, no=""):
+            self.logger.info(
+                row.format(no=no, name=name, nameWidth=nameLength + 2, ip=ip, ipWidth=ipLength + 2, address=address, addressWidth=addressLength + 2, host=host,
+                           update=update, updateWidth=updateLength + 2, firmware=firmware, firmwareWidth=firmwareLength + 2))
+
+        for brokerId in overview.keys():
+            self.logger.info(u"Shelly devices connected to {} ({})".format(indigo.devices[brokerId].name, len(overview[brokerId])))
+            logDividerRow()
+            logRow(name="Name", ip="IP Address", address="MQTT Address", host="Host Device", update="Update Available", firmware="Current Firmware")
+            logDividerRow()
+
+            shellies = sorted(overview[brokerId], key=lambda s: s.device.name)
+            no = 1
+            for shelly in shellies:
+                if not shelly.isAddon():
+                    logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address=shelly.getAddress(), host="N/A", update="Yes" if shelly.updateAvailable() else "No", firmware=shelly.getFirmware())
+                else:
+                    logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address="", host=shelly.getHostDevice().device.name, update="", firmware="")
+                no += 1
+
+            logDividerRow()
+
     #####################
     #     Utilities     #
     #####################

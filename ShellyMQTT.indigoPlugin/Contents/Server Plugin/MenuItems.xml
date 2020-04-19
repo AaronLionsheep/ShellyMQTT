@@ -15,6 +15,11 @@
         <CallbackMethod>printDiscoveredShellies</CallbackMethod>
     </MenuItem>
 
+    <MenuItem id="print-shelly-overview">
+        <Name>Print Shelly Devices Overview</Name>
+        <CallbackMethod>printShellyDevicesOverview</CallbackMethod>
+    </MenuItem>
+
     <MenuItem id="sep-1"/>
 
     <MenuItem id="shelly-update-helper">
