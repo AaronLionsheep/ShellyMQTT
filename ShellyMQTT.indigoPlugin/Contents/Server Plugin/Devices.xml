@@ -32,6 +32,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="sw-input">
@@ -115,6 +121,13 @@
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -225,6 +238,13 @@
                     <Option value="C">Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -345,6 +365,13 @@
                     <Option value="2">Channel 3</Option>
                     <Option value="3">Channel 4</Option>
                 </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -472,6 +499,13 @@
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Enter a positive or negative number to offset the humidity by.</Label>
             </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="temperature">
@@ -583,6 +617,13 @@
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>The offset will be applied AFTER any unit conversions take place.</Label>
             </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="temperature">
@@ -658,6 +699,13 @@
                     <Option value="door">Show Door Icons</Option>
                     <Option value="window">Show Window Icons</Option>
                 </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -757,6 +805,13 @@
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="internal-temperature">
@@ -841,6 +896,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="overpower">
@@ -918,6 +979,13 @@
                     <Option value="3">Channel 4</Option>
                 </List>
             </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="overpower">
@@ -992,6 +1060,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="online">
@@ -1053,6 +1127,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="online">
@@ -1118,6 +1198,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="online">
@@ -1182,6 +1268,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="overpower">
@@ -1260,6 +1352,13 @@
                     <Option value="C">Show Celsius</Option>
                     <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -1365,6 +1464,13 @@
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>The offset will be applied AFTER any unit conversions take place.</Label>
             </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="online">
@@ -1450,6 +1556,13 @@
 
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Enter a positive or negative number to offset the humidity by.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -1541,6 +1654,13 @@
 
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Returned Energy: Energy usage will be shown as the total of Returned Energy.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
             </Field>
         </ConfigUI>
         <States>
@@ -1663,6 +1783,13 @@
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Returned Energy: Energy usage will be shown as the total of Returned Energy.</Label>
             </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="energy-consumed">
@@ -1760,6 +1887,12 @@
                 <Label>Announce Message Type:</Label>
             </Field>
 
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
         </ConfigUI>
         <States>
             <State id="overpower">

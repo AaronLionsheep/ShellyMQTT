@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
-import logging
 import json
+from ShellyLogger import ShellyLogger
 
 
 class Shelly:
@@ -11,7 +11,7 @@ class Shelly:
 
     def __init__(self, device):
         self.device = device
-        self.logger = logging.getLogger("Plugin.ShellyMQTT")
+        self.logger = ShellyLogger(self)
 
     def getSubscriptions(self):
         """
@@ -409,3 +409,22 @@ class Shelly:
             self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOn)
         else:
             self.device.updateStateImageOnServer(indigo.kStateImageSel.PowerOff)
+
+    def isMuted(self):
+        """
+        Helper method to determine if the device wants logging to be muted.
+
+        :return: True if the device wants logging muted.
+        """
+
+        return self.device.pluginProps.get("muted", False)
+
+    def getMutedLoggingMethods(self):
+        """
+        Getter for the default logging methods that should be muted when the device is
+        set to be muted.
+
+        :return: A list of function names that should not be executed when the device is muted.
+        """
+
+        return ["debug", "info"]
