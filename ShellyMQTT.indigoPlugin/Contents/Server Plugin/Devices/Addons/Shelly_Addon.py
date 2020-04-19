@@ -79,6 +79,18 @@ class Shelly_Addon(Shelly):
         else:
             return None
 
+    def getIpAddress(self):
+        """
+        Helper function to get the ip address of the device.
+
+        :return: The device ip address
+        """
+
+        if self.getHostDevice():
+            return self.getHostDevice().getIpAddress()
+        else:
+            return None
+
     def getMessageType(self):
         """
         Getter for the message type.
