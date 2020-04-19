@@ -704,12 +704,19 @@ class Plugin(indigo.PluginBase):
         :return: None
         """
 
+        if len(self.discoveredDevices.keys()) == 0:
+            self.logger.info(u"No announcement messages have been parsed yet. Run \"Discover Shellies\" to update device info.")
+            return
+
         for brokerId in self.discoveredDevices.keys():
             broker = indigo.devices[int(brokerId)]
-            self.logger.info(u"Discovered Devices on \"{}\"".format(broker.name))
-            for identifier in self.discoveredDevices[brokerId].keys():
-                ip = self.discoveredDevices[brokerId][identifier].get('ip', '')
-                self.logger.info(u"    {:25} ({})".format(identifier, ip))
+            if len(self.discoveredDevices[brokerId].keys()) == 0:
+                self.logger.info(u"No newly discovered devices on \"{}\"!".format(broker.name))
+            else:
+                self.logger.info(u"Newly discovered devices on \"{}\"".format(broker.name))
+                for identifier in self.discoveredDevices[brokerId].keys():
+                    ip = self.discoveredDevices[brokerId][identifier].get('ip', '')
+                    self.logger.info(u"    {:25} ({})".format(identifier, ip))
 
     def printShellyDevicesOverview(self, pluginAction=None, device=None, callerWaitingForResult=False):
         """
