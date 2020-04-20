@@ -179,26 +179,26 @@ class TestShelly(unittest.TestCase):
     def test_setTemperature(self):
         self.device.pluginProps['temp-units'] = "F"
         self.shelly.setTemperature(75)
-        self.assertEqual(75, self.device.states['temperature']['value'])
-        self.assertEqual("75.0 °F", self.device.states['temperature']['uiValue'])
-        self.assertEquals(1, self.device.states['temperature']['decimalPlaces'])
+        self.assertEqual(75, self.device.states['temperature'])
+        self.assertEqual("75.0 °F", self.device.states_meta['temperature']['uiValue'])
+        self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_setTemperature_custom(self):
         self.device.pluginProps['units'] = "C->F"
         self.device.pluginProps['offset'] = "1.2345"
         self.device.pluginProps['decimals'] = 3
         self.shelly.setTemperature(100, state="temp", unitsProps="units", decimalsProps="decimals", offsetProps="offset")
-        self.assertEqual(213.2345, self.device.states['temp']['value'])
-        self.assertEqual("213.234 °F", self.device.states['temp']['uiValue'])
-        self.assertEquals(3, self.device.states['temp']['decimalPlaces'])
+        self.assertEqual(213.2345, self.device.states['temp'])
+        self.assertEqual("213.234 °F", self.device.states_meta['temp']['uiValue'])
+        self.assertEquals(3, self.device.states_meta['temp']['decimalPlaces'])
 
     def test_setTemperature_with_valid_offset(self):
         self.device.pluginProps['temp-units'] = "F"
         self.device.pluginProps['temp-offset'] = "1.25"
         self.shelly.setTemperature(75)
-        self.assertEqual(76.25, self.device.states['temperature']['value'])
-        self.assertEqual("76.2 °F", self.device.states['temperature']['uiValue'])
-        self.assertEquals(1, self.device.states['temperature']['decimalPlaces'])
+        self.assertEqual(76.25, self.device.states['temperature'])
+        self.assertEqual("76.2 °F", self.device.states_meta['temperature']['uiValue'])
+        self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_setTemperature_with_invalid_offset(self):
         self.device.pluginProps['temp-units'] = "F"
@@ -208,30 +208,30 @@ class TestShelly(unittest.TestCase):
     def test_setTemperature_F(self):
         self.device.pluginProps['temp-units'] = "F"
         self.shelly.setTemperature(50)
-        self.assertEqual(50.0, self.device.states['temperature']['value'])
-        self.assertEqual("50.0 °F", self.device.states['temperature']['uiValue'])
-        self.assertEquals(1, self.device.states['temperature']['decimalPlaces'])
+        self.assertEqual(50.0, self.device.states['temperature'])
+        self.assertEqual("50.0 °F", self.device.states_meta['temperature']['uiValue'])
+        self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_setTemperature_C_to_F(self):
         self.device.pluginProps['temp-units'] = "C->F"
         self.shelly.setTemperature(0)
-        self.assertEqual(32.0, self.device.states['temperature']['value'])
-        self.assertEqual("32.0 °F", self.device.states['temperature']['uiValue'])
-        self.assertEquals(1, self.device.states['temperature']['decimalPlaces'])
+        self.assertEqual(32.0, self.device.states['temperature'])
+        self.assertEqual("32.0 °F", self.device.states_meta['temperature']['uiValue'])
+        self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_setTemperature_C(self):
         self.device.pluginProps['temp-units'] = "C"
         self.shelly.setTemperature(10)
-        self.assertEqual(10.0, self.device.states['temperature']['value'])
-        self.assertEqual("10.0 °C", self.device.states['temperature']['uiValue'])
-        self.assertEquals(1, self.device.states['temperature']['decimalPlaces'])
+        self.assertEqual(10.0, self.device.states['temperature'])
+        self.assertEqual("10.0 °C", self.device.states_meta['temperature']['uiValue'])
+        self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_setTemperature_F_to_C(self):
         self.device.pluginProps['temp-units'] = "F->C"
         self.shelly.setTemperature(212)
-        self.assertEqual(100.0, self.device.states['temperature']['value'])
-        self.assertEqual("100.0 °C", self.device.states['temperature']['uiValue'])
-        self.assertEquals(1, self.device.states['temperature']['decimalPlaces'])
+        self.assertEqual(100.0, self.device.states['temperature'])
+        self.assertEqual("100.0 °C", self.device.states_meta['temperature']['uiValue'])
+        self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_convertCtoF(self):
         """Convert from celsius to fahrenheit"""
@@ -253,10 +253,10 @@ class TestShelly(unittest.TestCase):
         announcement = '{"id": "test-shelly", "mac": "aa:bb:cc:dd", "ip": "192.168.1.100", "fw_ver": "0.0.0", "new_fw": false}'
 
         self.shelly.parseAnnouncement(announcement)
-        self.assertEqual("aa:bb:cc:dd", self.device.states['mac-address']['value'])
-        self.assertEqual("192.168.1.100", self.device.states['ip-address']['value'])
-        self.assertEqual("0.0.0", self.device.states['firmware-version']['value'])
-        self.assertFalse(self.device.states['has-firmware-update']['value'])
+        self.assertEqual("aa:bb:cc:dd", self.device.states['mac-address'])
+        self.assertEqual("192.168.1.100", self.device.states['ip-address'])
+        self.assertEqual("0.0.0", self.device.states['firmware-version'])
+        self.assertFalse(self.device.states['has-firmware-update'])
 
     def test_parseAnnouncement_with_firmware_updated(self):
         """Parse an announcement message that indicates firmware has changed"""
@@ -264,10 +264,10 @@ class TestShelly(unittest.TestCase):
         announcement = '{"id": "test-shelly", "mac": "aa:bb:cc:dd:ff", "ip": "192.168.1.101", "fw_ver": "0.0.0", "new_fw": true}'
 
         self.shelly.parseAnnouncement(announcement)
-        self.assertEqual("aa:bb:cc:dd:ff", self.device.states['mac-address']['value'])
-        self.assertEqual("192.168.1.101", self.device.states['ip-address']['value'])
-        self.assertEqual("0.0.0", self.device.states['firmware-version']['value'])
-        self.assertTrue(self.device.states['has-firmware-update']['value'])
+        self.assertEqual("aa:bb:cc:dd:ff", self.device.states['mac-address'])
+        self.assertEqual("192.168.1.101", self.device.states['ip-address'])
+        self.assertEqual("0.0.0", self.device.states['firmware-version'])
+        self.assertTrue(self.device.states['has-firmware-update'])
 
     def test_parseAnnouncement_invalid_device_data(self):
         """Parse an announcement message for the wrong device"""
@@ -291,44 +291,81 @@ class TestShelly(unittest.TestCase):
         self.device.updateStateOnServer('firmware-version', '3')
         self.device.updateStateOnServer('has-firmware-update', False)
 
-        self.assertEqual("1", self.device.states['mac-address']['value'])
-        self.assertEqual("2", self.device.states['ip-address']['value'])
-        self.assertEqual("3", self.device.states['firmware-version']['value'])
-        self.assertFalse(self.device.states['has-firmware-update']['value'])
+        self.assertEqual("1", self.device.states['mac-address'])
+        self.assertEqual("2", self.device.states['ip-address'])
+        self.assertEqual("3", self.device.states['firmware-version'])
+        self.assertFalse(self.device.states['has-firmware-update'])
 
         announcement = '{"id": "test-invalid-shelly", "mac": "aa:bb:cc:dd:ff", "ip": "192.168.1.101", "fw_ver": "0.0.0", "new_fw": true}'
         self.shelly.parseAnnouncement(announcement)
-        self.assertEqual("1", self.device.states['mac-address']['value'])
-        self.assertEqual("2", self.device.states['ip-address']['value'])
-        self.assertEqual("3", self.device.states['firmware-version']['value'])
-        self.assertFalse(self.device.states['has-firmware-update']['value'])
+        self.assertEqual("1", self.device.states['mac-address'])
+        self.assertEqual("2", self.device.states['ip-address'])
+        self.assertEqual("3", self.device.states['firmware-version'])
+        self.assertFalse(self.device.states['has-firmware-update'])
 
-    @skip("Todo")
-    def test_updateEnergy(self):
-        """Test updating the energy"""
-        pass
+    def test_updateEnergy_4_decimals(self):
+        self.device.pluginProps['resetEnergyOffset'] = 0
+        self.shelly.updateEnergy(50)
+        self.assertAlmostEqual(0.0008, self.shelly.device.states['accumEnergyTotal'], 4)
+        self.assertEqual("0.0008 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
+        self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
 
-    @skip("Todo")
+    def test_updateEnergy_3_decimals(self):
+        self.device.pluginProps['resetEnergyOffset'] = 0
+        self.shelly.updateEnergy(5000)
+        self.assertAlmostEqual(0.0833, self.shelly.device.states['accumEnergyTotal'], 3)
+        self.assertEqual("0.083 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
+        self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
+
+    def test_updateEnergy_2_decimals(self):
+        self.device.pluginProps['resetEnergyOffset'] = 0
+        self.shelly.updateEnergy(500000)
+        self.assertAlmostEqual(8.3333, self.shelly.device.states['accumEnergyTotal'], 4)
+        self.assertEqual("8.33 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
+        self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
+
+    def test_updateEnergy_1_decimal(self):
+        self.device.pluginProps['resetEnergyOffset'] = 0
+        self.shelly.updateEnergy(5000000)
+        self.assertAlmostEqual(83.3333, self.shelly.device.states['accumEnergyTotal'], 4)
+        self.assertEqual("83.3 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
+        self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
+
     def test_updateEnergy_after_reset(self):
         """Test updating energy after it has been reset"""
-        pass
+        self.device.pluginProps['resetEnergyOffset'] = 0
+        self.shelly.updateEnergy(30)
+        self.assertAlmostEqual(0.0005, self.shelly.device.states['accumEnergyTotal'], 4)
+        self.assertEqual("0.0005 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
 
-    @skip("Todo")
+        self.shelly.resetEnergy()
+        self.assertAlmostEqual(0.0000, self.shelly.device.states['accumEnergyTotal'], 4)
+
+        self.shelly.updateEnergy(60)
+        self.assertAlmostEqual(0.0005, self.shelly.device.states['accumEnergyTotal'], 4)
+        self.assertEqual("0.0005 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
+
     def test_resetEnergy(self):
         """Test resetting the energy data"""
-        pass
+        self.device.pluginProps['resetEnergyOffset'] = 0
+        self.shelly.updateEnergy(15)
+        self.assertAlmostEqual(0.00025, self.shelly.device.states['accumEnergyTotal'], 4)
+        self.assertEqual("0.0003 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
+
+        self.shelly.resetEnergy()
+        self.assertAlmostEqual(0.0000, self.shelly.device.states['accumEnergyTotal'], 4)
 
     def test_turnOn(self):
         """Test turning the device on in Indigo"""
         self.device.states['onOffState'] = False
         self.shelly.turnOn()
-        self.assertTrue(self.device.states['onOffState']['value'])
+        self.assertTrue(self.device.states['onOffState'])
 
     def test_turnOff(self):
         """Test turning the device off in Indigo"""
         self.device.states['onOffState'] = True
         self.shelly.turnOff()
-        self.assertFalse(self.device.states['onOffState']['value'])
+        self.assertFalse(self.device.states['onOffState'])
 
     def test_isOn(self):
         """Test determining if the device is on"""
