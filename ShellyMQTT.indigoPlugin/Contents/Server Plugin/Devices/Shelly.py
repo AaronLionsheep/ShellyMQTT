@@ -268,7 +268,7 @@ class Shelly:
         :return: The temperature in Fahrenheit.
         """
 
-        return (celsius * 9 / 5) + 32
+        return (celsius * 9 / 5.0) + 32
 
     def convertFtoC(self, fahrenheit):
         """
