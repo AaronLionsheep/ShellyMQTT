@@ -9,10 +9,6 @@ import logging
 from mocking.IndigoDevice import IndigoDevice
 from mocking.MQTTConnector import MQTTConnector
 
-sys.modules['indigo'] = MagicMock()
-from Devices.Relays.Shelly_1 import Shelly_1
-
-
 class indigo:
 
     def __init__(self):
@@ -36,6 +32,11 @@ class Action:
 
     def __init__(self):
         self.deviceAction = None
+
+
+sys.modules['indigo'] = MagicMock()
+# sys.modules['indigo'] = indigo
+from Devices.Relays.Shelly_1 import Shelly_1
 
 
 class TestShelly(unittest.TestCase):
@@ -124,8 +125,8 @@ class TestShelly(unittest.TestCase):
     def test_handleAction_turn_on(self):
         self.shelly.turnOff()
         self.assertTrue(self.shelly.isOff())
-        action = Action()
-        action.deviceAction = indigo.kDeviceAction.TurnOn
+        action = MagicMock()
+        action.value.deviceAction.value.kDeviceAction.value = indigo.kDeviceAction.TurnOn
         self.shelly.handleAction(action)
         self.assertTrue(self.shelly.isOn())
 

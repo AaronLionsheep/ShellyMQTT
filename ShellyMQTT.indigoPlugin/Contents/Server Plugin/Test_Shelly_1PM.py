@@ -20,45 +20,90 @@ class TestShelly(unittest.TestCase):
         self.shelly = Shelly_1PM(self.device)
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
-    @skip('ToDo')
+        self.device.pluginProps['address'] = "shellies/shelly1pm-test"
+        self.device.updateStateOnServer("sw-input", False)
+        self.device.updateStateOnServer("overpower", False)
+        self.device.updateStateOnServer("longpush", False)
+        self.device.updateStateOnServer("ip-address", None)
+        self.device.updateStateOnServer("mac-address", None)
+        self.device.updateStateOnServer("online", False)
+        self.device.updateStateOnServer("curEnergyLevel", 0)
+
     def test_getSubscriptions_no_address(self):
-        pass
+        """Test getting subscriptions with no address defined."""
+        self.device.pluginProps['address'] = None
+        self.assertListEqual([], self.shelly.getSubscriptions())
 
-    @skip('ToDo')
     def test_getSubscriptions(self):
-        pass
+        """Test getting subscriptions with a defined address."""
+        topics = [
+            "shellies/announce",
+            "shellies/shelly1pm-test/online",
+            "shellies/shelly1pm-test/relay/0",
+            "shellies/shelly1pm-test/input/0",
+            "shellies/shelly1pm-test/longpush/0",
+            "shellies/shelly1pm-test/relay/0/power",
+            "shellies/shelly1pm-test/relay/0/energy",
+            "shellies/shelly1pm-test/temperature",
+            "shellies/shelly1pm-test/overtemperature"
+        ]
+        self.assertListEqual(topics, self.shelly.getSubscriptions())
 
-    @skip('ToDo')
     def test_handleMessage_relay_on(self):
-        pass
+        """Test getting a relay on message."""
+        self.assertTrue(self.shelly.isOff())
+        self.shelly.handleMessage("shellies/shelly1pm-test/relay/0", "on")
+        self.assertTrue(self.shelly.isOn())
+        self.assertFalse(self.shelly.device.states['overpower'])
 
-    @skip('ToDo')
     def test_handleMessage_relay_off(self):
-        pass
+        """Test getting a relay off message."""
+        self.shelly.turnOn()
+        self.assertTrue(self.shelly.isOn())
+        self.shelly.handleMessage("shellies/shelly1pm-test/relay/0", "off")
+        self.assertTrue(self.shelly.isOff())
+        self.assertFalse(self.shelly.device.states['overpower'])
 
-    @skip('ToDo')
     def test_handleMessage_relay_overpower(self):
-        pass
+        """Test getting a relay overpower message."""
+        self.assertFalse(self.shelly.device.states['overpower'])
+        self.shelly.handleMessage("shellies/shelly1pm-test/relay/0", "overpower")
+        self.assertTrue(self.shelly.device.states['overpower'])
 
-    @skip('ToDo')
     def test_handleMessage_switch_on(self):
-        pass
+        """Test getting a switch on message."""
+        self.assertFalse(self.shelly.device.states['sw-input'])
+        self.shelly.handleMessage("shellies/shelly1pm-test/input/0", "1")
+        self.assertTrue(self.shelly.device.states['sw-input'])
 
-    @skip('ToDo')
     def test_handleMessage_switch_off(self):
-        pass
+        """Test getting a switch off message."""
+        self.shelly.device.states['sw-input'] = True
+        self.assertTrue(self.shelly.device.states['sw-input'])
+        self.shelly.handleMessage("shellies/shelly1pm-test/input/0", "0")
+        self.assertFalse(self.shelly.device.states['sw-input'])
 
-    @skip('ToDo')
-    def test_handleMessage_longpress_on(self):
-        pass
+    def test_handleMessage_longpush_on(self):
+        """Test getting a longpush on message."""
+        self.assertFalse(self.shelly.device.states['longpush'])
+        self.shelly.handleMessage("shellies/shelly1pm-test/longpush/0", "1")
+        self.assertTrue(self.shelly.device.states['longpush'])
 
-    @skip('ToDo')
-    def test_handleMessage_longpress_off(self):
-        pass
+    def test_handleMessage_longpush_off(self):
+        """Test getting a longpush off message."""
+        self.shelly.device.states['longpush'] = True
+        self.assertTrue(self.shelly.device.states['longpush'])
+        self.shelly.handleMessage("shellies/shelly1pm-test/longpush/0", "0")
+        self.assertFalse(self.shelly.device.states['longpush'])
 
-    @skip('ToDo')
     def test_handleMessage_power(self):
-        pass
+        self.shelly.handleMessage("shellies/shelly1pm-test/relay/0/power", "0")
+        self.assertEqual("0", self.shelly.device.states['curEnergyLevel'])
+        self.assertEqual("0 W", self.shelly.device.states_meta['curEnergyLevel']['uiValue'])
+
+        self.shelly.handleMessage("shellies/shelly1pm-test/relay/0/power", "101.123")
+        self.assertEqual("101.123", self.shelly.device.states['curEnergyLevel'])
+        self.assertEqual("101.123 W", self.shelly.device.states_meta['curEnergyLevel']['uiValue'])
 
     @skip('ToDo')
     def test_handleMessage_energy(self):
