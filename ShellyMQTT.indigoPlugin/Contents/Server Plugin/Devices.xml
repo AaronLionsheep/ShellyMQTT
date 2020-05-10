@@ -8,6 +8,22 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the address and broker.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -21,6 +37,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -85,7 +105,21 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
-            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the address and broker.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -99,6 +133,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -206,6 +244,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -346,6 +388,10 @@
                 <Label>Message Type:</Label>
             </Field>
 
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
                 <Label>Same Message Type for Announce:</Label>
                 <Description>Uses the same message type for announce messages</Description>
@@ -436,6 +482,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -575,6 +625,10 @@
                 <Label>Message Type:</Label>
             </Field>
 
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
                 <Label>Same Message Type for Announce:</Label>
                 <Description>Uses the same message type for announce messages</Description>
@@ -667,6 +721,22 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the address and broker.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -680,6 +750,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -782,6 +856,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -887,6 +965,10 @@
                 <Label>Message Type:</Label>
             </Field>
 
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
                 <Label>Same Message Type for Announce:</Label>
                 <Description>Uses the same message type for announce messages</Description>
@@ -957,6 +1039,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1051,6 +1137,10 @@
                 <Label>Message Type:</Label>
             </Field>
 
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
                 <Label>Same Message Type for Announce:</Label>
                 <Description>Uses the same message type for announce messages</Description>
@@ -1116,6 +1206,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1189,6 +1283,10 @@
                 <Label>Message Type:</Label>
             </Field>
 
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
                 <Label>Same Message Type for Announce:</Label>
                 <Description>Uses the same message type for announce messages</Description>
@@ -1257,6 +1355,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1330,6 +1432,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1614,6 +1720,10 @@
                 <Label>Message Type:</Label>
             </Field>
 
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
                 <Label>Same Message Type for Announce:</Label>
                 <Description>Uses the same message type for announce messages</Description>
@@ -1739,6 +1849,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1876,6 +1990,10 @@
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">

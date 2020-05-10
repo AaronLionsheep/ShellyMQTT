@@ -553,6 +553,26 @@ class Plugin(indigo.PluginBase):
         shellies.sort(key=lambda d: d[1])
         return shellies
 
+    def getDiscoveredDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
+        """
+        Gets a list of discovered devices
+
+        :return: A list of device tuples of the form (<broker-id>|<identifier>, displayName)
+        """
+
+        devices = []
+        for brokerId in self.discoveredDevices:
+            brokerName = indigo.devices[brokerId].name
+            brokerDevices = self.discoveredDevices[brokerId]
+            for identifier in brokerDevices:
+                devices.append((u"{}|{}".format(brokerId, identifier), u"{} on {}".format(identifier, brokerName)))
+
+        if len(devices) == 0:
+            # No devices found, add a disabled option to indicate this
+            devices.append((-1, u"%%disabled:No discovered devices%%"))
+
+        return devices
+
     def getUpdatableShellyDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
         """
         Gets a list of shelly devices that can be updated.
@@ -592,11 +612,35 @@ class Plugin(indigo.PluginBase):
         """
         Dummy function used to update a ConfigUI dynamic menu
 
-        :param valuesDict:
-        :param typeId:
-        :param devId:
         :return: the values currently in the ConfigUI
         """
+
+        return valuesDict
+
+    def populateFromChosenDevice(self, valuesDict, typeId, devId):
+        """
+        Reads the chosen device and automatically populates the device address and broker
+
+        :return: Populated ConfigUI values.
+        """
+
+        # Get the chosen device
+        key = valuesDict.get("discovered-device", None)
+
+        # Parse the identifier and broker id
+        if key is None:
+            return valuesDict
+
+        parts = key.split("|")
+        if len(parts) != 2:
+            return valuesDict
+
+        brokerId = parts[0]
+        identifier = parts[1]
+
+        # Set the data
+        valuesDict["broker-id"] = brokerId
+        valuesDict["address"] = u"shellies/{}".format(identifier)
 
         return valuesDict
 
