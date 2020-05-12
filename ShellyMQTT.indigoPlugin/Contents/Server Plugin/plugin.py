@@ -33,6 +33,7 @@ from Devices.Plugs.Shelly_Plug_S import Shelly_Plug_S
 # Import the add-on devices
 from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
 from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
+from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Switch
 
 from Queue import Queue
 
@@ -70,6 +71,7 @@ deviceClasses = {
     # Add-on devices
     "shelly-addon-ds1820": Shelly_Addon_DS1820,
     "shelly-addon-dht22": Shelly_Addon_DHT22,
+    "shelly-addon-detached-switch": Shelly_Addon_Detached_Switch,
 
     "shelly-dimmer-sl": Shelly_Dimmer_SL
 }
@@ -595,8 +597,23 @@ class Plugin(indigo.PluginBase):
         :return: A list of devices which are capable to hosting add-ons.
         """
 
+        hostable_model_categories = {  # Shelly models that can host an "addon"
+            "ds1820": ["shelly-1", "shelly-1pm"],
+            "dht22": ["shelly-1", "shelly-1pm"],
+            "detached-switch": ["shelly-1", "shelly-1pm", "shelly-2-5-relay", "shelly-4-pro", "shelly-dimmer-sl"]
+        }
+
+        hostable_models = set()
+        if filter:
+            categories = [cat.strip() for cat in filter.split(",")]
+            for category in categories:
+                models = hostable_model_categories.get(category, None)
+                if models:
+                    for model in models:
+                        hostable_models.add(model)
+
         shellies = self.getShellyDevices()
-        hostable_models = ["shelly-1", "shelly-1pm"]
+        # hostable_models = ["shelly-1", "shelly-1pm"]
         hostable = []
         for dev in shellies:
             shelly = self.shellyDevices.get(dev[0])
