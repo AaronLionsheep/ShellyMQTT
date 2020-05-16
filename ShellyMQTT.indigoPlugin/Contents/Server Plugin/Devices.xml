@@ -22,6 +22,10 @@
                 <Label>There is no harm in selecting incorrect devices.</Label>
             </Field>
 
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The address will be populated with the default data and will work with devices right out of the box.</Label>
+            </Field>
+
             <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
@@ -119,6 +123,10 @@
 
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The address will be populated with the default data and will work with devices right out of the box.</Label>
             </Field>
 
             <Field id="broker-id" type="menu">
@@ -733,6 +741,10 @@
 
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The address will be populated with the default data and will work with devices right out of the box.</Label>
             </Field>
 
             <Field id="manual-config-sep" type="separator"/>
