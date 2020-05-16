@@ -336,6 +336,30 @@ class Plugin(indigo.PluginBase):
 
         del self.shellyDevices[device.id]
 
+    def deviceUpdated(self, origDev, newDev):
+        """
+        Complementary to the deviceCreated() method described above, but signals device updates.
+        You'll get a copy of the old device object as well as the new device object. The default
+        implementation of this method will do a few things for you: if either the old or new
+        device are devices defined by you, and if the device type changed OR the
+        communication-related properties have changed (as defined by the
+        didDeviceCommPropertyChange() method - see above for details) then deviceStopComm()
+        and deviceStartComm() methods will be called as necessary (stop only if the device
+        changed to a type that isn't your device, start only if the device changed to a type
+        that belongs to you, or both if the props/type changed and they both both belong to you).
+
+        :param origDev: The device before updates.
+        :param newDev: The device after updates.
+        :return: None
+        """
+
+        # Get the corresponding shelly device
+        shelly = self.shellyDevices.get(origDev.id, None)
+
+        # Refresh the associated indigo device
+        if shelly:
+            shelly.refresh_device()
+
     def addDeviceSubscriptions(self, shelly):
         """
         Adds a Shelly device to the dictionary of device subscriptions.

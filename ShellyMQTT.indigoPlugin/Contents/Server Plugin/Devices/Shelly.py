@@ -13,6 +13,17 @@ class Shelly:
         self.device = device
         self.logger = ShellyLogger(self)
 
+    def refresh_device(self):
+        """
+        Gets an indigo device from the device identifier.
+
+        :return: The indigo device object.
+        """
+
+        if self.device:
+            self.device.refreshFromServer()
+            self.logger.debug(u"Refreshed device info for \"{}\"".format(self.device.name))
+
     def getSubscriptions(self):
         """
         Default method to return a list of topics that the device subscribes to.
@@ -48,7 +59,7 @@ class Shelly:
         These are messages that are handled by ANY Shelly device.
 
         :param topic: The topic of the incoming message.
-        :param payload: THe content of the massage.
+        :param payload: The content of the massage.
         :return:  None
         """
 
@@ -304,7 +315,7 @@ class Shelly:
 
         # id should appear in part of the device address
         if identifier and self.getAddress() and identifier in self.getAddress():
-            self.logger.info(u"\"%s\" refreshed meta-data from announcement message", self.device.name)
+            self.logger.debug(u"\"%s\" refreshed meta-data from announcement message", self.device.name)
             self.device.updateStateOnServer('mac-address', mac_address)
             self.device.updateStateOnServer('ip-address', ip_address)
 

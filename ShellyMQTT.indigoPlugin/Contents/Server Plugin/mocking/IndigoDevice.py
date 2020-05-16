@@ -17,3 +17,6 @@ class IndigoDevice:
 
     def updateStateImageOnServer(self, image):
         self.image = image
+
+    def refreshFromServer(self):
+        pass
