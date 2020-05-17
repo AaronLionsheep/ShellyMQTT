@@ -1,34 +1,30 @@
 # coding=utf-8
 import unittest
-from unittest import skip, expectedFailure
-from mock import MagicMock, call
 from mock import patch
 import sys
 import logging
 
 from mocking.IndigoDevice import IndigoDevice
-from mocking.MQTTConnector import MQTTConnector
+from mocking.IndigoServer import Indigo
 
-sys.modules['indigo'] = MagicMock()
-import Devices
+indigo = Indigo()
+sys.modules['indigo'] = indigo
+import Devices.Shelly
 
 
 class TestShelly(unittest.TestCase):
 
     def setUp(self):
+        indigo.__init__()
         self.device = IndigoDevice(id=123456, name="New Device")
         self.shelly = Devices.Shelly.Shelly(self.device)
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
-    @patch('indigo.activePlugin')
-    @patch('indigo.server.getPlugin')
-    @patch('Devices.Shelly.Shelly.getSubscriptions', return_value=["test/one", "test/two"])
-    @skip('failing')
-    def test_subscribe(self, getSubscriptions, getPlugin, activePlugin):
-        """Test subscribing to a topic"""
-        activePlugin.pluginPrefs.get.return_value = False
-        getPlugin.return_value = MQTTConnector()
+        self.device.pluginProps['resetEnergyOffset'] = 0
 
+    @patch('Devices.Shelly.Shelly.getSubscriptions', return_value=["test/one", "test/two"])
+    def test_subscribe(self, getSubscriptions):
+        """Test subscribing to a topic."""
         self.device.pluginProps['broker-id'] = "12345"
         self.shelly.subscribe()
 
@@ -36,16 +32,12 @@ class TestShelly(unittest.TestCase):
             {'topic': "test/one", 'qos': 0},
             {'topic': "test/two", 'qos': 0}
         ]
-        self.assertListEqual(subscriptions, getPlugin.return_value.getBrokerSubscriptions(12345))
+        self.assertListEqual(subscriptions, self.shelly.getMQTT().getBrokerSubscriptions(12345))
 
-    @patch('indigo.activePlugin')
-    @patch('indigo.server.getPlugin')
     @patch('Devices.Shelly.Shelly.getSubscriptions', return_value=["test/one", "test/two"])
-    @skip('failing')
-    def test_subscribe_with_connector_fix(self, getSubscriptions, getPlugin, activePlugin):
-        """Test subscribing to a topic"""
-        activePlugin.pluginPrefs.get.return_value = True
-        getPlugin.return_value = MQTTConnector()
+    def test_subscribe_with_connector_fix(self, getSubscriptions):
+        """Test subscribing to a topic."""
+        indigo.activePlugin.pluginPrefs['connector-fix'] = True
 
         self.device.pluginProps['broker-id'] = "12345"
         self.shelly.subscribe()
@@ -54,23 +46,17 @@ class TestShelly(unittest.TestCase):
             {'topic': "0:test/one", 'qos': 0},
             {'topic': "0:test/two", 'qos': 0}
         ]
-        self.assertListEqual(subscriptions, getPlugin.return_value.getBrokerSubscriptions(12345))
+        self.assertListEqual(subscriptions, self.shelly.getMQTT().getBrokerSubscriptions(12345))
 
-    @patch('indigo.activePlugin')
-    @patch('indigo.server.getPlugin')
-    @skip('failing')
-    def test_publish(self, getPlugin, activePlugin):
-        """Test publishing a payload to a topic"""
-        activePlugin.pluginPrefs.get.return_value = False
-        getPlugin.return_value = MQTTConnector()
-
+    def test_publish(self):
+        """Test publishing a payload to a topic."""
         self.device.pluginProps['broker-id'] = "12345"
         self.shelly.publish("some/topic", {'the': 'payload'})
 
         expected = [
             {'topic': 'some/topic', 'retain': 0, 'qos': 0, 'payload': {'the': 'payload'}}
         ]
-        self.assertListEqual(expected, getPlugin.return_value.getMessagesOut(12345))
+        self.assertListEqual(expected, self.shelly.getMQTT().getMessagesOut(12345))
 
     def test_getSubscriptions(self):
         self.assertEqual(0, len(self.shelly.getSubscriptions()))
@@ -103,17 +89,13 @@ class TestShelly(unittest.TestCase):
         self.assertFalse('firmware-version' in self.device.states.keys())
         self.assertIsNone(self.shelly.getFirmware())
 
-    @patch('indigo.server.getPlugin')
-    @skip('failing')
-    def test_getMQTT_enabled(self, getPlugin):
-        getPlugin.return_value = MQTTConnector()
+    def test_getMQTT_enabled(self):
+        indigo.server.plugins["com.flyingdiver.indigoplugin.mqtt"].enabled = True
         self.assertIsNotNone(self.shelly.getMQTT())
-        getPlugin.assert_called_with("com.flyingdiver.indigoplugin.mqtt")
+        self.assertTrue(self.shelly.getMQTT().isEnabled())
 
-    @patch('indigo.server.getPlugin')
-    @skip('failing')
-    def test_getMQTT_disabled(self, getPlugin):
-        getPlugin.return_value = type('', (object,), {'isEnabled': lambda x: False})()
+    def test_getMQTT_disabled(self):
+        indigo.server.plugins["com.flyingdiver.indigoplugin.mqtt"].enabled = False
         self.assertIsNone(self.shelly.getMQTT())
 
     def test_getBrokerId_valid(self):
@@ -240,21 +222,21 @@ class TestShelly(unittest.TestCase):
         self.assertEquals(1, self.device.states_meta['temperature']['decimalPlaces'])
 
     def test_convertCtoF(self):
-        """Convert from celsius to fahrenheit"""
+        """Convert from celsius to fahrenheit."""
         self.assertEqual(32, self.shelly.convertCtoF(0))
         self.assertEqual(122, self.shelly.convertCtoF(50))
         self.assertEqual(77, self.shelly.convertCtoF(25))
         self.assertAlmostEqual(82.4, self.shelly.convertCtoF(28), 4)
 
     def test_convertFtoC(self):
-        """Convert from fahrenheit to celsius"""
+        """Convert from fahrenheit to celsius."""
         self.assertEqual(0, self.shelly.convertFtoC(32))
         self.assertEqual(50, self.shelly.convertFtoC(122))
         self.assertEqual(25, self.shelly.convertFtoC(77))
         self.assertAlmostEqual(28, self.shelly.convertFtoC(82.4), 4)
 
     def test_pasrseAnnouncement_no_firmware_updated(self):
-        """Parse an announcement message that indicates no firmware change"""
+        """Parse an announcement message that indicates no firmware change."""
         self.device.pluginProps['address'] = "shellies/test-shelly"
         announcement = '{"id": "test-shelly", "mac": "aa:bb:cc:dd", "ip": "192.168.1.100", "fw_ver": "0.0.0", "new_fw": false}'
 
@@ -265,7 +247,7 @@ class TestShelly(unittest.TestCase):
         self.assertFalse(self.device.states['has-firmware-update'])
 
     def test_parseAnnouncement_with_firmware_updated(self):
-        """Parse an announcement message that indicates firmware has changed"""
+        """Parse an announcement message that indicates firmware has changed."""
         self.device.pluginProps['address'] = "shellies/test-shelly"
         announcement = '{"id": "test-shelly", "mac": "aa:bb:cc:dd:ff", "ip": "192.168.1.101", "fw_ver": "0.0.0", "new_fw": true}'
 
@@ -276,7 +258,7 @@ class TestShelly(unittest.TestCase):
         self.assertTrue(self.device.states['has-firmware-update'])
 
     def test_parseAnnouncement_invalid_device_data(self):
-        """Parse an announcement message for the wrong device"""
+        """Parse an announcement message for the wrong device."""
         self.device.pluginProps['address'] = "shellies/test-shelly"
         announcement = '{"identifier": "test-shelly", "mac": "aa:bb:cc:dd", "ip": "192.168.1.100", "fw_ver": "0.0.0", "new_fw": false}'
         self.shelly.parseAnnouncement(announcement)
@@ -290,7 +272,7 @@ class TestShelly(unittest.TestCase):
         self.assertFalse('has-firmware-update' in self.device.states.keys())
 
     def test_parseAnnouncement_invalid_announcement_for_device(self):
-        """Parse an invalid announcement message"""
+        """Parse an invalid announcement message."""
         self.device.pluginProps['address'] = "shellies/test-shelly"
         self.device.updateStateOnServer('mac-address', '1')
         self.device.updateStateOnServer('ip-address', '2')
@@ -310,36 +292,31 @@ class TestShelly(unittest.TestCase):
         self.assertFalse(self.device.states['has-firmware-update'])
 
     def test_updateEnergy_4_decimals(self):
-        self.device.pluginProps['resetEnergyOffset'] = 0
         self.shelly.updateEnergy(50)
         self.assertAlmostEqual(0.0008, self.shelly.device.states['accumEnergyTotal'], 4)
         self.assertEqual("0.0008 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
         self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
 
     def test_updateEnergy_3_decimals(self):
-        self.device.pluginProps['resetEnergyOffset'] = 0
         self.shelly.updateEnergy(5000)
         self.assertAlmostEqual(0.0833, self.shelly.device.states['accumEnergyTotal'], 3)
         self.assertEqual("0.083 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
         self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
 
     def test_updateEnergy_2_decimals(self):
-        self.device.pluginProps['resetEnergyOffset'] = 0
         self.shelly.updateEnergy(500000)
         self.assertAlmostEqual(8.3333, self.shelly.device.states['accumEnergyTotal'], 4)
         self.assertEqual("8.33 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
         self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
 
     def test_updateEnergy_1_decimal(self):
-        self.device.pluginProps['resetEnergyOffset'] = 0
         self.shelly.updateEnergy(5000000)
         self.assertAlmostEqual(83.3333, self.shelly.device.states['accumEnergyTotal'], 4)
         self.assertEqual("83.3 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
         self.assertEqual(4, self.shelly.device.states_meta['accumEnergyTotal']['decimalPlaces'])
 
     def test_updateEnergy_after_reset(self):
-        """Test updating energy after it has been reset"""
-        self.device.pluginProps['resetEnergyOffset'] = 0
+        """Test updating energy after it has been reset."""
         self.shelly.updateEnergy(30)
         self.assertAlmostEqual(0.0005, self.shelly.device.states['accumEnergyTotal'], 4)
         self.assertEqual("0.0005 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
@@ -352,8 +329,7 @@ class TestShelly(unittest.TestCase):
         self.assertEqual("0.0005 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
 
     def test_resetEnergy(self):
-        """Test resetting the energy data"""
-        self.device.pluginProps['resetEnergyOffset'] = 0
+        """Test resetting the energy data."""
         self.shelly.updateEnergy(15)
         self.assertAlmostEqual(0.00025, self.shelly.device.states['accumEnergyTotal'], 4)
         self.assertEqual("0.0003 kWh", self.shelly.device.states_meta['accumEnergyTotal']['uiValue'])
@@ -362,19 +338,19 @@ class TestShelly(unittest.TestCase):
         self.assertAlmostEqual(0.0000, self.shelly.device.states['accumEnergyTotal'], 4)
 
     def test_turnOn(self):
-        """Test turning the device on in Indigo"""
+        """Test turning the device on in Indigo."""
         self.device.states['onOffState'] = False
         self.shelly.turnOn()
         self.assertTrue(self.device.states['onOffState'])
 
     def test_turnOff(self):
-        """Test turning the device off in Indigo"""
+        """Test turning the device off in Indigo."""
         self.device.states['onOffState'] = True
         self.shelly.turnOff()
         self.assertFalse(self.device.states['onOffState'])
 
     def test_isOn(self):
-        """Test determining if the device is on"""
+        """Test determining if the device is on."""
         self.device.states['onOffState'] = True
         self.assertTrue(self.shelly.isOn())
 
@@ -382,7 +358,7 @@ class TestShelly(unittest.TestCase):
         self.assertFalse(self.shelly.isOn())
 
     def test_isOff(self):
-        """Test determining of the device is off"""
+        """Test determining of the device is off."""
         self.device.states['onOffState'] = False
         self.assertTrue(self.shelly.isOff())
 
@@ -390,41 +366,36 @@ class TestShelly(unittest.TestCase):
         self.assertFalse(self.shelly.isOff())
 
     def test_getChannel_default(self):
-        """Test getting the default channel"""
+        """Test getting the default channel."""
         self.assertEqual(0, self.shelly.getChannel())
 
     def test_getChannel_custom(self):
-        """Test getting a defined channel"""
+        """Test getting a defined channel."""
         self.device.pluginProps['channel'] = 1
         self.assertEqual(1, self.shelly.getChannel())
 
     def test_isAddon(self):
-        """Test determining of the device is an addon"""
+        """Test determining of the device is an addon."""
         self.assertFalse(self.shelly.isAddon())
 
-    @patch('indigo.kStateImageSel')
-    @skip('failing')
-    def test_updateStateImage_on(self, image):
-        """Test setting the state icon when the device is on"""
+    def test_updateStateImage_on(self):
+        """Test setting the state icon when the device is on."""
         self.device.states['onOffState'] = True
         self.shelly.updateStateImage()
-        image.PowerOn.assert_called()
-        self.assertEqual(image.PowerOn, self.device.image)
+        self.assertEqual(indigo.kStateImageSel.PowerOn, self.device.image)
 
-    @patch('indigo.kStateImageSel')
-    @skip('failing')
-    def test_updateStateImage_off(self, image):
-        """Test setting the state icon when the device is off"""
+    def test_updateStateImage_off(self):
+        """Test setting the state icon when the device is off."""
         self.device.states['onOffState'] = False
         self.shelly.updateStateImage()
-        self.assertEqual(image.PowerOff, self.device.image)
+        self.assertEqual(indigo.kStateImageSel.PowerOff, self.device.image)
 
     def test_isMuted(self):
-        """Test getting whether the device is set to be muted"""
+        """Test getting whether the device is set to be muted."""
         self.assertFalse(self.shelly.isMuted())
         self.device.pluginProps['muted'] = True
         self.assertTrue(self.shelly.isMuted())
 
     def test_getMutedLoggingMethods(self):
-        """Test getting the log levels to mute when the device is muted"""
+        """Test getting the log levels to mute when the device is muted."""
         self.assertListEqual(["debug", "info"], self.shelly.getMutedLoggingMethods())

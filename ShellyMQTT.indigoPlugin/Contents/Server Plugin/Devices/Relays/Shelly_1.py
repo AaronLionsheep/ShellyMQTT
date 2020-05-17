@@ -57,6 +57,7 @@ class Shelly_1(Shelly):
         :param action: The Indigo action.
         :return: None
         """
+
         if action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.turnOn()
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")

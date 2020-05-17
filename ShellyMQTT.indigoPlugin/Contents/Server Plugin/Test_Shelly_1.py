@@ -1,47 +1,22 @@
 # coding=utf-8
 import unittest
-from unittest import skip, expectedFailure
-from mock import MagicMock
 from mock import patch
 import sys
 import logging
 
 from mocking.IndigoDevice import IndigoDevice
-from mocking.MQTTConnector import MQTTConnector
+from mocking.IndigoServer import Indigo
+from mocking.IndigoAction import IndigoAction
 
-class indigo:
-
-    def __init__(self):
-        pass
-
-    class kDeviceAction:
-
-        def __init__(self):
-            pass
-
-        class TurnOn:
-            def __init__(self):
-                pass
-
-        class TurnOff:
-            def __init__(self):
-                pass
-
-
-class Action:
-
-    def __init__(self):
-        self.deviceAction = None
-
-
-sys.modules['indigo'] = MagicMock()
-# sys.modules['indigo'] = indigo
+indigo = Indigo()
+sys.modules['indigo'] = indigo
 from Devices.Relays.Shelly_1 import Shelly_1
 
 
 class TestShelly(unittest.TestCase):
 
     def setUp(self):
+        indigo.__init__()
         self.device = IndigoDevice(id=123456, name="New Device")
         self.shelly = Shelly_1(self.device)
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
@@ -121,30 +96,44 @@ class TestShelly(unittest.TestCase):
         self.shelly.handleMessage("shellies/shelly1-test/online", "false")
         self.assertFalse(self.shelly.device.states['online'])
 
-    @skip('Need a way to test kDeviceAction\'s')
-    def test_handleAction_turn_on(self):
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handleAction_turn_on(self, publish):
         self.shelly.turnOff()
         self.assertTrue(self.shelly.isOff())
-        action = MagicMock()
-        action.value.deviceAction.value.kDeviceAction.value = indigo.kDeviceAction.TurnOn
-        self.shelly.handleAction(action)
+        turnOn = IndigoAction(indigo.kDeviceAction.TurnOn)
+        self.shelly.handleAction(turnOn)
         self.assertTrue(self.shelly.isOn())
+        publish.assert_called_with("shellies/shelly1-test/relay/0/command", "on")
 
-    @skip('Need a way to test kDeviceAction\'s')
-    def test_handleAction_turn_off(self):
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handleAction_turn_off(self, publish):
         self.shelly.turnOn()
         self.assertTrue(self.shelly.isOn())
-        self.shelly.handleMessage("shellies/shelly1-test/relay/0", "0")
+        turnOff = IndigoAction(indigo.kDeviceAction.TurnOff)
+        self.shelly.handleAction(turnOff)
         self.assertTrue(self.shelly.isOff())
+        publish.assert_called_with("shellies/shelly1-test/relay/0/command", "off")
 
-    @skip('Need a way to test kDeviceAction\'s')
-    def test_handleAction_status_request(self):
-        pass
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handleAction_status_request(self, publish):
+        statusRequest = IndigoAction(indigo.kDeviceAction.RequestStatus)
+        self.shelly.handleAction(statusRequest)
+        publish.assert_called_with("shellies/shelly1-test/command", "update")
 
-    @skip('Need a way to test kDeviceAction\'s')
-    def test_handleAction_toggle_off_to_on(self):
-        pass
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handleAction_toggle_off_to_on(self, publish):
+        self.shelly.turnOff()
+        self.assertTrue(self.shelly.isOff())
+        toggle = IndigoAction(indigo.kDeviceAction.Toggle)
+        self.shelly.handleAction(toggle)
+        self.assertTrue(self.shelly.isOn())
+        publish.assert_called_with("shellies/shelly1-test/relay/0/command", "on")
 
-    @skip('Need a way to test kDeviceAction\'s')
-    def test_handleAction_toggle_on_to_off(self):
-        pass
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handleAction_toggle_on_to_off(self, publish):
+        self.shelly.turnOn()
+        self.assertTrue(self.shelly.isOn())
+        toggle = IndigoAction(indigo.kDeviceAction.Toggle)
+        self.shelly.handleAction(toggle)
+        self.assertTrue(self.shelly.isOff())
+        publish.assert_called_with("shellies/shelly1-test/relay/0/command", "off")
