@@ -5,7 +5,7 @@ from Shelly_1PM import Shelly_1PM
 
 class Shelly_2_5_Relay(Shelly_1PM):
     """
-    The Shelly 2.5 is a relay device that is pretty much two Shely 1PM's in the same enclosure.
+    The Shelly 2.5 is a relay device that is pretty much two Shelly 1PM's in the same enclosure.
     The each channel is represented by a single Indigo device, so they share internal temperature
     and the online status.
     """
@@ -18,7 +18,7 @@ class Shelly_2_5_Relay(Shelly_1PM):
         This method is called when a message comes in and matches one of this devices subscriptions.
 
         :param topic: The topic of the message.
-        :param payload: THe payload of the message.
+        :param payload: The payload of the message.
         :return: None
         """
 

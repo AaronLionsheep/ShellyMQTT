@@ -4,7 +4,7 @@ from Shelly_1 import Shelly_1
 
 class Shelly_EM_Relay(Shelly_1):
     """
-    The Shelly 1 is a simple on/off relay.
+    The Shelly Em Relay is an on/off relay attached to a Shelly Em or 3EM device.
     """
 
     def __init__(self, device):
