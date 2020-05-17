@@ -28,6 +28,8 @@ class StateImages:
     def __init__(self):
         self.PowerOn = "PowerOn"
         self.PowerOff = "PowerOff"
+        self.DimmerOn = "DimmerOn"
+        self.DimmerOff = "DimmerOff"
 
 
 class DeviceActions:
@@ -37,6 +39,9 @@ class DeviceActions:
         self.TurnOff = "TurnOff"
         self.Toggle = "Toggle"
         self.RequestStatus = "RequestStatus"
+        self.SetBrightness = "SetBrightness"
+        self.BrightenBy = "BrightenBy"
+        self.DimBy = "DimBy"
 
 
 class UniversalActions:
