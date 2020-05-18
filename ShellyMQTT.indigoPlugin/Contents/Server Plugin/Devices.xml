@@ -247,6 +247,26 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -393,6 +413,26 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -492,6 +532,26 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -637,6 +697,26 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -883,6 +963,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -1001,6 +1101,26 @@
 			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
 			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -1082,6 +1202,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field id="SupportsColor" type="checkbox"  defaultValue="false"  hidden ="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -1185,6 +1325,26 @@
 			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
 			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -1261,6 +1421,26 @@
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="false" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -1343,6 +1523,26 @@
             <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -1421,6 +1621,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -1503,6 +1723,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -1848,6 +2088,26 @@
             <Field type="textfield" id="resetEnergyConsumedOffset" defaultValue="0" hidden="true"/>
             <Field type="textfield" id="resetEnergyReturnedOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -1983,6 +2243,26 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyConsumedOffset" defaultValue="0" hidden="true"/>
             <Field type="textfield" id="resetEnergyReturnedOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
@@ -2128,6 +2408,26 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
