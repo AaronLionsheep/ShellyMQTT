@@ -15,7 +15,7 @@
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>Selecting a discovered device will pre-populate the address and broker.</Label>
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
             </Field>
 
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
@@ -23,7 +23,7 @@
             </Field>
 
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>The address will be populated with the default data and will work with devices right out of the box.</Label>
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
             </Field>
 
             <Field id="manual-config-sep" type="separator"/>
@@ -35,6 +35,10 @@
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -118,7 +122,7 @@
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>Selecting a discovered device will pre-populate the address and broker.</Label>
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
             </Field>
 
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
@@ -126,7 +130,7 @@
             </Field>
 
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>The address will be populated with the default data and will work with devices right out of the box.</Label>
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
             </Field>
 
             <Field id="broker-id" type="menu">
@@ -135,6 +139,10 @@
             </Field>
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -246,6 +254,10 @@
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -390,6 +402,10 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
@@ -484,6 +500,10 @@
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -627,6 +647,10 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
@@ -736,7 +760,7 @@
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>Selecting a discovered device will pre-populate the address and broker.</Label>
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
             </Field>
 
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
@@ -744,7 +768,7 @@
             </Field>
 
             <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
-                <Label>The address will be populated with the default data and will work with devices right out of the box.</Label>
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
             </Field>
 
             <Field id="manual-config-sep" type="separator"/>
@@ -756,6 +780,10 @@
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -862,6 +890,10 @@
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -973,8 +1005,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1050,8 +1087,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1147,8 +1189,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1219,8 +1266,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1295,8 +1347,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1369,8 +1426,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1446,8 +1508,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1785,8 +1852,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1916,8 +1988,13 @@
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -2059,6 +2136,10 @@
 
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
