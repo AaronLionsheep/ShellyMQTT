@@ -41,7 +41,10 @@ class Shelly_Addon_DHT22(Shelly_Addon):
         if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
             # For some reason, the shelly reports the temperature with a preceding colon...
             temperature = payload
-            self.setTemperature(float(temperature))
+            try:
+                self.setTemperature(float(temperature))
+            except ValueError:
+                self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
         elif topic == "{}/ext_humidity/{}".format(self.getAddress(), self.getProbeNumber()):
             decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
             offset = 0
@@ -50,8 +53,11 @@ class Shelly_Addon_DHT22(Shelly_Addon):
             except ValueError:
                 self.logger.error(u"Unable to convert offset of \"{}\" into a float!".format(self.device.pluginProps.get('humidity-offset', 0)))
 
-            humidity = float(payload) + offset
-            self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{:.{}f}%'.format(humidity, decimals), decimalPlaces=decimals)
+            try:
+                humidity = float(payload) + offset
+                self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{:.{}f}%'.format(humidity, decimals), decimalPlaces=decimals)
+            except ValueError:
+                self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 

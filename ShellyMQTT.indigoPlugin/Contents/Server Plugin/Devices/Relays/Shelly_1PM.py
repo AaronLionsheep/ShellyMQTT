@@ -46,9 +46,15 @@ class Shelly_1PM(Shelly_1):
         if topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
-            self.updateEnergy(int(payload))
+            try:
+                self.updateEnergy(int(payload))
+            except ValueError:
+                self.logger.error(u"Unable to convert value of \"{}\" into an int!".format(payload))
         elif topic == "{}/temperature".format(self.getAddress()):
-            self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
+            try:
+                self.setTemperature(float(payload), state='internal-temperature', unitsProps='int-temp-units')
+            except ValueError:
+                self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
         elif topic == "{}/overtemperature".format(self.getAddress()):
             self.device.updateStateOnServer('overtemperature', (payload == '1'))
         elif topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):

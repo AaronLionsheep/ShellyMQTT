@@ -637,7 +637,6 @@ class Plugin(indigo.PluginBase):
                         hostable_models.add(model)
 
         shellies = self.getShellyDevices()
-        # hostable_models = ["shelly-1", "shelly-1pm"]
         hostable = []
         for dev in shellies:
             shelly = self.shellyDevices.get(dev[0])

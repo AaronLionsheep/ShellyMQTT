@@ -39,8 +39,11 @@ class Shelly_Addon_DS1820(Shelly_Addon):
 
         if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
             # For some reason, the shelly reports the temperature with a preceding colon...
-            temperature = float(payload)
-            self.setTemperature(temperature)
+            try:
+                temperature = float(payload)
+                self.setTemperature(temperature)
+            except ValueError:
+                self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 

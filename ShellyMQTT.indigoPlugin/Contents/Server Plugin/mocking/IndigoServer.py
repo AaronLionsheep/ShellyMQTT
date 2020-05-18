@@ -1,5 +1,5 @@
 from MQTTConnector import MQTTConnector
-from IndigoPlugin import IndigoPlugin
+from IndigoPlugin import ShellyPlugin
 
 
 class Indigo:
@@ -9,7 +9,7 @@ class Indigo:
         self.kStateImageSel = StateImages()
         self.kDeviceAction = DeviceActions()
         self.kUniversalAction = UniversalActions()
-        self.activePlugin = IndigoPlugin()
+        self.activePlugin = ShellyPlugin()
 
 
 class IndigoServer:

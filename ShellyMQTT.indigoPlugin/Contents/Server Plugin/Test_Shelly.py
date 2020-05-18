@@ -115,7 +115,7 @@ class Test_Shelly(unittest.TestCase):
         self.device.pluginProps["message-type"] = "some-type"
         self.assertEquals("some-type", self.shelly.getMessageType())
 
-    def test_getMessaegType_empty(self):
+    def test_getMessageType_empty(self):
         self.assertEquals("", self.shelly.getMessageType())
 
     def test_getAnnounceMessageType_same(self):

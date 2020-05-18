@@ -116,9 +116,15 @@ class Test_Shelly_1PM(unittest.TestCase):
         self.shelly.handleMessage("shellies/shelly1pm-test/relay/0/energy", "50")
         self.assertAlmostEqual(0.0008, self.shelly.device.states['accumEnergyTotal'], 4)
 
+    def test_handleMessage_energy_invalid(self):
+        self.assertRaises(ValueError, self.shelly.handleMessage("shellies/shelly1pm-test/relay/0/energy", "0A"))
+
     def test_handleMessage_temperature(self):
         self.shelly.handleMessage("shellies/shelly1pm-test/temperature", "50")
         self.assertEqual(122, self.shelly.device.states['internal-temperature'])
+
+    def test_handleMessage_temperature_invalid(self):
+        self.assertRaises(ValueError, self.shelly.handleMessage("shellies/shelly1pm-test/temperature", "50A"))
 
     def test_handleMessage_overtemperature(self):
         self.assertFalse(self.device.states['overtemperature'])
