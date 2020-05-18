@@ -94,6 +94,8 @@ class Shelly_EM_Meter(Shelly):
         elif action.deviceAction == indigo.kUniversalAction.EnergyUpdate:
             # This will be handled by making a status request
             self.sendStatusRequestCommand()
+        elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
+            self.sendStatusRequestCommand()
         else:
             Shelly.handleAction(self, action)
 

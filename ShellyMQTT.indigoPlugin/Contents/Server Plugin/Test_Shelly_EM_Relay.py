@@ -13,7 +13,7 @@ sys.modules['indigo'] = indigo
 from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 
 
-class TestShelly(unittest.TestCase):
+class Test_Shelly_EM_Relay(unittest.TestCase):
 
     def setUp(self):
         indigo.__init__()

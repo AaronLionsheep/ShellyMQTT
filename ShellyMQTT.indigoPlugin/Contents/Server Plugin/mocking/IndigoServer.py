@@ -30,6 +30,16 @@ class StateImages:
         self.PowerOff = "PowerOff"
         self.DimmerOn = "DimmerOn"
         self.DimmerOff = "DimmerOff"
+        self.TemperatureSensor = "TemperatureSensor"
+        self.TemperatureSensorOn = "TemperatureSensorOn"
+        self.SensorTripped = "SensorTripped"
+        self.SensorOff = "SensorOff"
+        self.DoorSensorOpened = "DoorSensorOpened"
+        self.DoorSensorClosed = "DoorSensorClosed"
+        self.WindowSensorOpened = "WindowSensorOpened"
+        self.WindowSensorClosed = "WindowSensorClosed"
+        self.EnergyMeterOn = "EnergyMeterOn"
+        self.EnergyMeterOff = "EnergyMeterOff"
 
 
 class DeviceActions:

@@ -13,7 +13,7 @@ sys.modules['indigo'] = indigo
 from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
 
 
-class TestShelly(unittest.TestCase):
+class Test_Shelly_2_5_Relay(unittest.TestCase):
 
     def setUp(self):
         indigo.__init__()
@@ -33,6 +33,11 @@ class TestShelly(unittest.TestCase):
         self.device.updateStateOnServer("mac-address", None)
         self.device.updateStateOnServer("online", False)
         self.device.updateStateOnServer("curEnergyLevel", 0)
+
+    def test_getSubscriptions_no_address(self):
+        """Test getting subscriptions with no address defined."""
+        self.device.pluginProps['address'] = None
+        self.assertListEqual([], self.shelly.getSubscriptions())
 
     def test_getSubscriptions_channel_1(self):
         """Test getting subscriptions with a defined address on channel 1."""
