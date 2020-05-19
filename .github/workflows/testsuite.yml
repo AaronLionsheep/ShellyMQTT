@@ -17,6 +17,5 @@ jobs:
         pip install mock Twisted
     - name: Run test suite
       run: |
-        # python -m unittest discover ShellyMQTT.indigoPlugin/Contents/Server\ Plugin -p "Test*" -v
         cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin
-        python -m twisted.trial Test_*
+        python -m twisted.trial $(ls -1 tests/test_*.py | cut -f 1 -d '.' | sed "s/\//./g")

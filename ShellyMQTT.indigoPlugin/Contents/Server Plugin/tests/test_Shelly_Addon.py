@@ -1,12 +1,10 @@
 # coding=utf-8
 import unittest
-from mock import patch
 import sys
 import logging
 
 from mocking.IndigoDevice import IndigoDevice
 from mocking.IndigoServer import Indigo
-from mocking.IndigoAction import IndigoAction
 
 indigo = Indigo()
 sys.modules['indigo'] = indigo
