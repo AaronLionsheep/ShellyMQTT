@@ -53,6 +53,7 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
                     self.device.updateStateOnServer("whiteLevel", payload['white'])
                     self.device.updateStateOnServer("whiteTemperature", payload['temp'])
+                    self.turnOn()
                 else:
                     # The light should be off regardless of a reported brightness value
                     self.turnOff()

@@ -33,6 +33,7 @@ class StateImages:
         self.TemperatureSensor = "TemperatureSensor"
         self.TemperatureSensorOn = "TemperatureSensorOn"
         self.SensorTripped = "SensorTripped"
+        self.SensorOn = "SensorOn"
         self.SensorOff = "SensorOff"
         self.DoorSensorOpened = "DoorSensorOpened"
         self.DoorSensorClosed = "DoorSensorClosed"
@@ -52,6 +53,7 @@ class DeviceActions:
         self.SetBrightness = "SetBrightness"
         self.BrightenBy = "BrightenBy"
         self.DimBy = "DimBy"
+        self.SetColorLevels = "SetColorLevels"
 
 
 class UniversalActions:

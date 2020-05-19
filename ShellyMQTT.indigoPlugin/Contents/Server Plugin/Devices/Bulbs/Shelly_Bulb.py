@@ -61,7 +61,7 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
                 if payload['ison']:
                     # we will accept a brightness value and save it
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
-
+                    self.turnOn()
                 else:
                     # The light should be off regardless of a reported brightness value
                     self.turnOff()
