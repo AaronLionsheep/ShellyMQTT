@@ -265,6 +265,9 @@ class Plugin(indigo.PluginBase):
         if shelly.getAnnounceMessageType():
             self.messageTypes.append(shelly.getAnnounceMessageType())
 
+        # Force the device to announce itself to gather the latest device information
+        shelly.announce()
+
         #
         # Attempt to start any addon devices that this device hosts
         #
