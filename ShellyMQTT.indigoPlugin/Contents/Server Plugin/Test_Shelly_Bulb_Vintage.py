@@ -13,7 +13,7 @@ sys.modules['indigo'] = indigo
 from Devices.Bulbs.Shelly_Bulb_Vintage import Shelly_Bulb_Vintage
 
 
-class Test_Shelly_Dimmer_SL(unittest.TestCase):
+class Test_Shelly_Bulb_Vintage(unittest.TestCase):
 
     def setUp(self):
         indigo.__init__()

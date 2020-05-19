@@ -14,7 +14,7 @@ from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Sw
 from Devices.Relays.Shelly_1 import Shelly_1
 
 
-class Test_Shelly_Addon_DS1820(unittest.TestCase):
+class Test_Shelly_Addon_Detached_Switch(unittest.TestCase):
 
     def setUp(self):
         indigo.__init__()
