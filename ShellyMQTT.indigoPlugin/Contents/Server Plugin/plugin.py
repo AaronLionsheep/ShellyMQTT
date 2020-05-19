@@ -353,6 +353,11 @@ class Plugin(indigo.PluginBase):
         :return: None
         """
 
+        # Make sure we call the base implementation first.
+        # Without it, deviceStartComm and deviceStopComm might not get called
+        # Related to the bug #58: https://github.com/AaronLionsheep/ShellyMQTT/issues/58
+        super(Plugin, self).deviceUpdated(origDev, newDev)
+
         # Get the corresponding shelly device
         shelly = self.shellyDevices.get(origDev.id, None)
 
