@@ -1,2 +1,2 @@
 #!/bin/bash
-PYTHONPATH=${PWD} python -m twisted.trial $(ls -1 tests/test_*.py | cut -f 1 -d '.' | sed "s/\//./g")
+PYTHONPATH=${PWD}/tests python -m twisted.trial $(ls -1 tests/test_*.py | cut -f 1 -d '.' | sed "s/\//./g")
