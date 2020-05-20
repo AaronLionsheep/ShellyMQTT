@@ -17,6 +17,7 @@ jobs:
         pip install mock Twisted
     - name: Run test suite
       run: |
-        cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin
-        python -m twisted.trial tests.test_Shelly
-        PYTHONPATH=${PWD}/tests python -m twisted.trial $(ls -1 tests/test_*.py | cut -f 1 -d '.' | sed "s/\//./g")
+        # cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin
+        cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin/tests
+        PYTHONPATH=${PWD}/../ python -m twisted.trial tests.test_Shelly_Addon
+        # PYTHONPATH=${PWD}/tests python -m twisted.trial $(ls -1 tests/test_*.py | cut -f 1 -d '.' | sed "s/\//./g")
