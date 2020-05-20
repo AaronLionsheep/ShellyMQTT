@@ -1,0 +1,2504 @@
+<?xml version="1.0"?>
+<Devices>
+    <Device type="relay" id="shelly-1">
+        <Name>Shelly 1</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="longpush">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Long Push</TriggerLabel>
+                <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-1pm">
+        <Name>Shelly 1PM</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="longpush">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Long Push</TriggerLabel>
+                <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+            <State id="internal-temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-2-5-relay">
+        <Name>Shelly 2.5 (Relay)</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="channel-sep" type="separator"/>
+
+            <Field type="menu" id="channel" defaultValue="0">
+                <Label>Relay Channel:</Label>
+                <List>
+                    <Option value="0">Channel 1</Option>
+                    <Option value="1">Channel 2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Internal Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="longpush">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Long Push</TriggerLabel>
+                <ControlPageLabel>Long Push</ControlPageLabel>
+            </State>
+            <State id="internal-temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <!--
+    <Device type="relay" id="shelly-2-5-roller">
+        <Name>Shelly 2.5 (Roller)</Name>
+        <ConfigUI>
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+        </ConfigUI>
+
+    </Device>
+    -->
+
+    <Device type="relay" id="shelly-4-pro">
+        <Name>Shelly 4Pro</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="channel-sep" type="separator"/>
+
+            <Field type="menu" id="channel" defaultValue="0">
+                <Label>Relay Channel:</Label>
+                <List>
+                    <Option value="0">Channel 1</Option>
+                    <Option value="1">Channel 2</Option>
+                    <Option value="2">Channel 3</Option>
+                    <Option value="3">Channel 4</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <!--<Device id="sep-sensors" />-->
+
+    <Device type="custom" id="shelly-ht">
+        <Name>Shelly H&amp;T</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="humidity-sep" type="separator" />
+
+            <Field type="menu" id="humidity-decimals" defaultValue="1">
+                <Label>Humidity Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="humidity-offset" type="textfield" defaultValue="0">
+                <Label>Humidity Offset:</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the humidity by.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="humidity">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Relative Humidity</TriggerLabel>
+                <ControlPageLabel>Relative Humidity</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="sensor" id="shelly-flood">
+        <Name>Shelly Flood</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="custom" id="shelly-door-window">
+        <Name>Shelly Door Window</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="use-case-sep" type="separator"/>
+
+            <Field type="menu" id="useCase" defaultValue="door">
+                <Label>Use Case:</Label>
+                <List>
+                    <Option value="door">Show Door Icons</Option>
+                    <Option value="window">Show Window Icons</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="tilt">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Tilt</TriggerLabel>
+                <ControlPageLabel>Tilt</ControlPageLabel>
+            </State>
+            <State id="vibration">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Vibration Detected</TriggerLabel>
+                <ControlPageLabel>Vibration Detected</ControlPageLabel>
+            </State>
+            <State id="lux">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Lux</TriggerLabel>
+                <ControlPageLabel>Lux</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <!--<Device id="sep-dimmer" />-->
+
+    <Device type="dimmer" id="shelly-dimmer-sl">
+        <Name>Shelly Dimmer/SL</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Internal Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="internal-temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overload">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-rgbw2-color">
+        <Name>Shelly RGBW2 (Color)</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field id="SupportsColor" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsRGB" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhite" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhiteTemperature" 			 type="checkbox"  defaultValue="false" hidden ="true" />
+            <Field id="WhiteTemperatureMin"                  type="textfield" defaultValue="2700"  hidden="true" />
+            <Field id="WhiteTemperatureMax"                  type="textfield" defaultValue="6500"  hidden="true" />
+			<Field id="SupportsRGBandWhiteSimultaneously" 	 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
+			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-rgbw2-white">
+        <Name>Shelly RGBW2 (White)</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field id="SupportsColor" type="checkbox"  defaultValue="false"  hidden ="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="channel-sep" type="separator"/>
+
+            <Field type="menu" id="channel" defaultValue="0">
+                <Label>Output Channel:</Label>
+                <List>
+                    <Option value="0">Channel 1</Option>
+                    <Option value="1">Channel 2</Option>
+                    <Option value="2">Channel 3</Option>
+                    <Option value="3">Channel 4</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-bulb">
+        <Name>Shelly Bulb</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field id="SupportsColor" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsRGB" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhite" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsWhiteTemperature" 			 type="checkbox"  defaultValue="false" hidden ="true" />
+            <Field id="WhiteTemperatureMin"                  type="textfield" defaultValue="2700"  hidden="true" />
+            <Field id="WhiteTemperatureMax"                  type="textfield" defaultValue="6500"  hidden="true" />
+			<Field id="SupportsRGBandWhiteSimultaneously" 	 type="checkbox"  defaultValue="true"  hidden ="true" />
+			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
+			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-bulb-vintage">
+        <Name>Shelly Bulb Vintage</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="false" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="dimmer" id="shelly-bulb-duo">
+        <Name>Shelly Bulb Duo</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
+            <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
+            <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
+            <Field type="textfield" id="WhiteTemperatureMin" hidden="true" defaultValue="2700" />
+            <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <!--<Device id="sep-plugs" />-->
+
+    <Device type="relay" id="shelly-plug">
+        <Name>Shelly Plug</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-plug-s">
+        <Name>Shelly PlugS</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="int-temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Show Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Show Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="internal-temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Internal Temperature</TriggerLabel>
+                <ControlPageLabel>Internal Temperature</ControlPageLabel>
+            </State>
+            <State id="overtemperature">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <!--<Device id="sep-addons" />-->
+
+    <Device type="custom" id="shelly-addon-ds1820">
+        <Name>Shelly DS1820 Addon</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="ds1820" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field type="menu" id="probe-number" defaultValue="0">
+                <Label>Probe:</Label>
+                <List>
+                    <Option value="0">Probe 1</Option>
+                    <Option value="1">Probe 2</Option>
+                    <Option value="2">Probe 3</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="custom" id="shelly-addon-dht22">
+        <Name>Shelly DHT22 Addon</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="dht22" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="-1">%%separator%%</Option>
+                    <Option value="C">Celsius</Option>
+                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="humidity-sep" type="separator" />
+
+            <Field type="menu" id="humidity-decimals" defaultValue="1">
+                <Label>Humidity Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="humidity-offset" type="textfield" defaultValue="0">
+                <Label>Humidity Offset:</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the humidity by.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
+            </State>
+            <State id="humidity">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Relative Humidity</TriggerLabel>
+                <ControlPageLabel>Relative Humidity</ControlPageLabel>
+            </State>
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>status</UiDisplayStateId>
+    </Device>
+
+    <Device type="sensor" id="shelly-addon-detached-switch">
+        <Name>Shelly Detached Switch</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsOnState" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="AllowOnStateChange" defaultValue="false" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="detached-switch" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field type="checkbox" id="invert" defaultValue="false">
+                <Label>Invert:</Label>
+                <Description>Invert the reported value of the contact.</Description>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <!--
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            -->
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <!--
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+            -->
+        </States>
+        <!--
+        <UiDisplayStateId>status</UiDisplayStateId>
+        -->
+    </Device>
+
+    <Device type="custom" id="shelly-em-meter">
+        <Name>Shelly EM Meter</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyConsumedOffset" defaultValue="0" hidden="true"/>
+            <Field type="textfield" id="resetEnergyReturnedOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="channel-sep" type="separator"/>
+
+            <Field type="menu" id="channel" defaultValue="0">
+                <Label>Meter Channel:</Label>
+                <List>
+                    <Option value="0">Channel 1</Option>
+                    <Option value="1">Channel 2</Option>
+                </List>
+            </Field>
+
+            <Field id="display-sep" type="separator"/>
+
+            <Field type="menu" id="energy-display" defaultValue="net">
+                <Label>Display Energy As:</Label>
+                <List>
+                    <Option value="net">Net Energy</Option>
+                    <Option value="consumed">Consumed Energy</Option>
+                    <Option value="returned">Returned Energy</Option>
+                </List>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Net Energy: Energy usage will be shown as Energy Consumed - Energy Returned.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Consumed Energy: Energy usage will be shown as the total of Consumed Energy.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Returned Energy: Energy usage will be shown as the total of Returned Energy.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="energy-consumed">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Energy Consumed</TriggerLabel>
+                <ControlPageLabel>Energy Consumed</ControlPageLabel>
+            </State>
+            <State id="energy-returned">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Energy Returned</TriggerLabel>
+                <ControlPageLabel>Energy Returned</ControlPageLabel>
+            </State>
+            <State id="power">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Power</TriggerLabel>
+                <ControlPageLabel>Power</ControlPageLabel>
+            </State>
+            <State id="power-reactive">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Reactive Power</TriggerLabel>
+                <ControlPageLabel>Reactive Power</ControlPageLabel>
+            </State>
+            <State id="voltage">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Grid Voltage</TriggerLabel>
+                <ControlPageLabel>Grid Voltage</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="custom" id="shelly-3em-meter">
+        <Name>Shelly 3EM Meter</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyConsumedOffset" defaultValue="0" hidden="true"/>
+            <Field type="textfield" id="resetEnergyReturnedOffset" defaultValue="0" hidden="true"/>
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="channel-sep" type="separator"/>
+
+            <Field type="menu" id="channel" defaultValue="0">
+                <Label>Meter Channel:</Label>
+                <List>
+                    <Option value="0">Channel 1</Option>
+                    <Option value="1">Channel 2</Option>
+                    <Option value="2">Channel 3</Option>
+                </List>
+            </Field>
+
+            <Field id="display-sep" type="separator"/>
+
+            <Field type="menu" id="energy-display" defaultValue="net">
+                <Label>Display Energy As:</Label>
+                <List>
+                    <Option value="net">Net Energy</Option>
+                    <Option value="consumed">Consumed Energy</Option>
+                    <Option value="returned">Returned Energy</Option>
+                </List>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Net Energy: Energy usage will be shown as Energy Consumed - Energy Returned.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Consumed Energy: Energy usage will be shown as the total of Consumed Energy.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Returned Energy: Energy usage will be shown as the total of Returned Energy.</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="energy-consumed">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Energy Consumed</TriggerLabel>
+                <ControlPageLabel>Energy Consumed</ControlPageLabel>
+            </State>
+            <State id="energy-returned">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Energy Returned</TriggerLabel>
+                <ControlPageLabel>Energy Returned</ControlPageLabel>
+            </State>
+            <State id="power">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Power</TriggerLabel>
+                <ControlPageLabel>Power</ControlPageLabel>
+            </State>
+            <State id="power-reactive">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Reactive Power</TriggerLabel>
+                <ControlPageLabel>Reactive Power</ControlPageLabel>
+            </State>
+            <State id="voltage">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Grid Voltage</TriggerLabel>
+                <ControlPageLabel>Grid Voltage</ControlPageLabel>
+            </State>
+            <State id="current">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Current</TriggerLabel>
+                <ControlPageLabel>Current</ControlPageLabel>
+            </State>
+            <State id="power-factor">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Power Factor</TriggerLabel>
+                <ControlPageLabel>Power Factor</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+
+    <Device type="relay" id="shelly-em-relay">
+        <Name>Shelly EM/3EM Relay</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="overpower">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Overpower</TriggerLabel>
+                <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
+</Devices>
