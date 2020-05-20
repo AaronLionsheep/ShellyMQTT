@@ -33,6 +33,7 @@ from Devices.Plugs.Shelly_Plug_S import Shelly_Plug_S
 # Import the add-on devices
 from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
 from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
+from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Switch
 
 from Queue import Queue
 
@@ -70,6 +71,7 @@ deviceClasses = {
     # Add-on devices
     "shelly-addon-ds1820": Shelly_Addon_DS1820,
     "shelly-addon-dht22": Shelly_Addon_DHT22,
+    "shelly-addon-detached-switch": Shelly_Addon_Detached_Switch,
 
     "shelly-dimmer-sl": Shelly_Dimmer_SL
 }
@@ -263,6 +265,9 @@ class Plugin(indigo.PluginBase):
         if shelly.getAnnounceMessageType():
             self.messageTypes.append(shelly.getAnnounceMessageType())
 
+        # Force the device to announce itself to gather the latest device information
+        shelly.announce()
+
         #
         # Attempt to start any addon devices that this device hosts
         #
@@ -333,6 +338,35 @@ class Plugin(indigo.PluginBase):
                 del brokerSubscriptions[topic]
 
         del self.shellyDevices[device.id]
+
+    def deviceUpdated(self, origDev, newDev):
+        """
+        Complementary to the deviceCreated() method described above, but signals device updates.
+        You'll get a copy of the old device object as well as the new device object. The default
+        implementation of this method will do a few things for you: if either the old or new
+        device are devices defined by you, and if the device type changed OR the
+        communication-related properties have changed (as defined by the
+        didDeviceCommPropertyChange() method - see above for details) then deviceStopComm()
+        and deviceStartComm() methods will be called as necessary (stop only if the device
+        changed to a type that isn't your device, start only if the device changed to a type
+        that belongs to you, or both if the props/type changed and they both both belong to you).
+
+        :param origDev: The device before updates.
+        :param newDev: The device after updates.
+        :return: None
+        """
+
+        # Make sure we call the base implementation first.
+        # Without it, deviceStartComm and deviceStopComm might not get called
+        # Related to the bug #58: https://github.com/AaronLionsheep/ShellyMQTT/issues/58
+        super(Plugin, self).deviceUpdated(origDev, newDev)
+
+        # Get the corresponding shelly device
+        shelly = self.shellyDevices.get(origDev.id, None)
+
+        # Refresh the associated indigo device
+        if shelly:
+            shelly.refresh_device()
 
     def addDeviceSubscriptions(self, shelly):
         """
@@ -553,6 +587,26 @@ class Plugin(indigo.PluginBase):
         shellies.sort(key=lambda d: d[1])
         return shellies
 
+    def getDiscoveredDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
+        """
+        Gets a list of discovered devices
+
+        :return: A list of device tuples of the form (<broker-id>|<identifier>, displayName)
+        """
+
+        devices = []
+        for brokerId in self.discoveredDevices:
+            brokerName = indigo.devices[brokerId].name
+            brokerDevices = self.discoveredDevices[brokerId]
+            for identifier in brokerDevices:
+                devices.append((u"{}|{}".format(brokerId, identifier), u"{} on {}".format(identifier, brokerName)))
+
+        if len(devices) == 0:
+            # No devices found, add a disabled option to indicate this
+            devices.append((-1, u"%%disabled:No discovered devices%%"))
+
+        return devices
+
     def getUpdatableShellyDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
         """
         Gets a list of shelly devices that can be updated.
@@ -575,8 +629,22 @@ class Plugin(indigo.PluginBase):
         :return: A list of devices which are capable to hosting add-ons.
         """
 
+        hostable_model_categories = {  # Shelly models that can host an "addon"
+            "ds1820": ["shelly-1", "shelly-1pm"],
+            "dht22": ["shelly-1", "shelly-1pm"],
+            "detached-switch": ["shelly-1", "shelly-1pm", "shelly-2-5-relay", "shelly-4-pro", "shelly-dimmer-sl"]
+        }
+
+        hostable_models = set()
+        if filter:
+            categories = [cat.strip() for cat in filter.split(",")]
+            for category in categories:
+                models = hostable_model_categories.get(category, None)
+                if models:
+                    for model in models:
+                        hostable_models.add(model)
+
         shellies = self.getShellyDevices()
-        hostable_models = ["shelly-1", "shelly-1pm"]
         hostable = []
         for dev in shellies:
             shelly = self.shellyDevices.get(dev[0])
@@ -592,11 +660,35 @@ class Plugin(indigo.PluginBase):
         """
         Dummy function used to update a ConfigUI dynamic menu
 
-        :param valuesDict:
-        :param typeId:
-        :param devId:
         :return: the values currently in the ConfigUI
         """
+
+        return valuesDict
+
+    def populateFromChosenDevice(self, valuesDict, typeId, devId):
+        """
+        Reads the chosen device and automatically populates the device address and broker
+
+        :return: Populated ConfigUI values.
+        """
+
+        # Get the chosen device
+        key = valuesDict.get("discovered-device", None)
+
+        # Parse the identifier and broker id
+        if key is None:
+            return valuesDict
+
+        parts = key.split("|")
+        if len(parts) != 2:
+            return valuesDict
+
+        brokerId = parts[0]
+        identifier = parts[1]
+
+        # Set the data
+        valuesDict["broker-id"] = brokerId
+        valuesDict["address"] = u"shellies/{}".format(identifier)
 
         return valuesDict
 

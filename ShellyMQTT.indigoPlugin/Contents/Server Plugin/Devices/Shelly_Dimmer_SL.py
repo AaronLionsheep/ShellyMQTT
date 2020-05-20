@@ -21,6 +21,7 @@ class Shelly_Dimmer_SL(Shelly_1PM):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
+                "{}/input/{}".format(address, self.getChannel()),
                 "{}/light/{}/status".format(address, self.getChannel()),
                 "{}/light/{}/power".format(address, self.getChannel()),
                 "{}/light/{}/energy".format(address, self.getChannel()),

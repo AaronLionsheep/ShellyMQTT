@@ -13,6 +13,17 @@ class Shelly:
         self.device = device
         self.logger = ShellyLogger(self)
 
+    def refresh_device(self):
+        """
+        Gets an indigo device from the device identifier.
+
+        :return: The indigo device object.
+        """
+
+        if self.device:
+            self.device.refreshFromServer()
+            self.logger.debug(u"Refreshed device info for \"{}\"".format(self.device.name))
+
     def getSubscriptions(self):
         """
         Default method to return a list of topics that the device subscribes to.
@@ -48,7 +59,7 @@ class Shelly:
         These are messages that are handled by ANY Shelly device.
 
         :param topic: The topic of the incoming message.
-        :param payload: THe content of the massage.
+        :param payload: The content of the massage.
         :return:  None
         """
 
@@ -268,7 +279,7 @@ class Shelly:
         :return: The temperature in Fahrenheit.
         """
 
-        return (celsius * 9 / 5) + 32
+        return (celsius * 9 / 5.0) + 32
 
     def convertFtoC(self, fahrenheit):
         """
@@ -304,11 +315,11 @@ class Shelly:
 
         # id should appear in part of the device address
         if identifier and self.getAddress() and identifier in self.getAddress():
-            self.logger.info(u"\"%s\" refreshed meta-data from announcement message", self.device.name)
+            self.logger.info(u"Updated device details for \"{}\" via announcement message".format(self.device.name))
             self.device.updateStateOnServer('mac-address', mac_address)
             self.device.updateStateOnServer('ip-address', ip_address)
 
-            if self.device.states.get('firmware-version', '') != firmware_version:
+            if self.device.states.get('firmware-version', '') not in [firmware_version, None, '']:
                 self.logger.info(u"Detected a firmware change for \"{}\"".format(self.device.name))
             self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)

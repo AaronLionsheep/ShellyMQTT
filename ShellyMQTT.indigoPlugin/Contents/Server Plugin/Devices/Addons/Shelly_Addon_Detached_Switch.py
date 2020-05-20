@@ -3,7 +3,7 @@ import indigo
 from Shelly_Addon import Shelly_Addon
 
 
-class Shelly_Addon_DS1820(Shelly_Addon):
+class Shelly_Addon_Detached_Switch(Shelly_Addon):
     """
     The Shelly Temperature Add-on is a sensor tht attaches to a host device.
     The host devices can be a Shelly 1 or Shelly 1PM.
@@ -25,7 +25,7 @@ class Shelly_Addon_DS1820(Shelly_Addon):
         else:
             return [
                 "{}/online".format(address),
-                "{}/ext_temperature/{}".format(address, self.getProbeNumber()),
+                "{}/input/{}".format(address, self.getChannel()),
             ]
 
     def handleMessage(self, topic, payload):
@@ -37,21 +37,16 @@ class Shelly_Addon_DS1820(Shelly_Addon):
         :return: None
         """
 
-        if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
+        if topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
             # For some reason, the shelly reports the temperature with a preceding colon...
-            try:
-                temperature = float(payload)
-                self.setTemperature(temperature)
-            except ValueError:
-                self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
+            invert = self.device.pluginProps.get("invert", False)
+            state = (payload == '0') if invert else (payload == '1')
+            self.device.updateStateOnServer(key="onOffState", value=state)
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 
         # Update the display state after data changed
-        temp = self.device.states['temperature']
-        temp_decimals = int(self.device.pluginProps.get('temp-decimals', 1))
-        temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
-        self.device.updateStateOnServer(key="status", value='{:.{}f}°{}'.format(temp, temp_decimals, temp_units))
+        # self.device.updateStateOnServer(key="status", value='{}'.format("on" if self.device.states.get("sw-input", False) else "off"))
         self.updateStateImage()
 
     def handleAction(self, action):
@@ -64,23 +59,14 @@ class Shelly_Addon_DS1820(Shelly_Addon):
 
         Shelly_Addon.handleAction(self, action)
 
-    def getProbeNumber(self):
-        """
-        Getter for the identifier of the probe.
-
-        :return: The probe number to be used in the topic.
-        """
-
-        return self.device.pluginProps.get('probe-number', None)
-
     def updateStateImage(self):
         """
         Sets the state image based on device states.
 
-        :return:
+        :return: None
         """
 
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        if self.device.states.get('onOffState', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOn)
         else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)

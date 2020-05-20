@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Actions>
     <Action id="discover-shelly">
-        <Name>Discover Shelly...</Name>
+        <Name>Discover Single Shelly...</Name>
         <ConfigUI>
             <Field id="shelly-device-id" type="menu">
                 <Label>Shelly Device to "discover":</Label>
@@ -12,7 +12,7 @@
     </Action>
 
     <Action id="discover-shellies">
-        <Name>Discover Shellies</Name>
+        <Name>Discover All Shellies</Name>
         <CallbackMethod>discoverShellies</CallbackMethod>
     </Action>
 

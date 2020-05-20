@@ -8,6 +8,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -17,10 +37,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -87,6 +115,24 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -95,10 +141,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -193,6 +247,26 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -202,10 +276,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -331,6 +413,26 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -340,10 +442,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -423,6 +533,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -432,10 +562,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -560,6 +698,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -569,10 +727,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -667,6 +833,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -676,10 +862,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -769,6 +963,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -778,10 +992,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -814,6 +1036,11 @@
             </Field>
         </ConfigUI>
         <States>
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
             <State id="internal-temperature">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Internal Temperature</TriggerLabel>
@@ -863,6 +1090,7 @@
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field id="SupportsColor" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
 			<Field id="SupportsRGB" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
 			<Field id="SupportsWhite" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
@@ -873,18 +1101,47 @@
 			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
 			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -943,20 +1200,50 @@
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
-            <Field id="SupportsColor" 						 type="checkbox"  defaultValue="false"  hidden ="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field id="SupportsColor" type="checkbox"  defaultValue="false"  hidden ="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1026,6 +1313,7 @@
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field id="SupportsColor" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
 			<Field id="SupportsRGB" 						 type="checkbox"  defaultValue="true"  hidden ="true" />
@@ -1037,18 +1325,47 @@
 			<Field id="SupportsTwoWhiteLevels"			 	 type="checkbox"  defaultValue="false" hidden ="true" />
 			<Field id="SupportsTwoWhiteLevelsSimultaneously" type="checkbox"  defaultValue="false" hidden ="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1101,21 +1418,51 @@
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="false" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1168,6 +1515,7 @@
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhite" hidden="true" defaultValue="true" />
             <Field type="checkbox" id="SupportsWhiteTemperature" hidden="true" defaultValue="true" />
@@ -1175,18 +1523,47 @@
             <Field type="textfield" id="WhiteTemperatureMax" hidden="true" defaultValue="6500" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1245,18 +1622,47 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1318,18 +1724,47 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1417,7 +1852,7 @@
 
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
-                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
+                <List class="self" filter="ds1820" method="getAddonHostDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1502,7 +1937,7 @@
 
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
-                <List class="self" filter="" method="getAddonHostDevices" dynamicReload="true"/>
+                <List class="self" filter="dht22" method="getAddonHostDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -1590,6 +2025,59 @@
         <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
 
+    <Device type="sensor" id="shelly-addon-detached-switch">
+        <Name>Shelly Detached Switch</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsOnState" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="AllowOnStateChange" defaultValue="false" hidden="true" />
+
+            <Field id="host-id" type="menu">
+                <Label>Shelly Host Device:</Label>
+                <List class="self" filter="detached-switch" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field type="checkbox" id="invert" defaultValue="false">
+                <Label>Invert:</Label>
+                <Description>Invert the reported value of the contact.</Description>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <!--
+            <State id="sw-input">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>SW Input</TriggerLabel>
+                <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            -->
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <!--
+            <State id="status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Status</TriggerLabel>
+                <ControlPageLabel>Status</ControlPageLabel>
+            </State>
+            -->
+        </States>
+        <!--
+        <UiDisplayStateId>status</UiDisplayStateId>
+        -->
+    </Device>
+
     <Device type="custom" id="shelly-em-meter">
         <Name>Shelly EM Meter</Name>
         <ConfigUI>
@@ -1600,18 +2088,47 @@
             <Field type="textfield" id="resetEnergyConsumedOffset" defaultValue="0" hidden="true"/>
             <Field type="textfield" id="resetEnergyReturnedOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1727,18 +2244,47 @@
             <Field type="textfield" id="resetEnergyConsumedOffset" defaultValue="0" hidden="true"/>
             <Field type="textfield" id="resetEnergyReturnedOffset" defaultValue="0" hidden="true"/>
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
+
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
@@ -1863,6 +2409,26 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
 
+            <Field id="discovered-device" type="menu">
+                <Label>Add a Discovered Device:</Label>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+            </Field>
+
+            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a discovered device will pre-populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>There is no harm in selecting incorrect devices.</Label>
+            </Field>
+
+            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -1872,10 +2438,18 @@
                 <Label>MQTT Topic Root:</Label>
             </Field>
 
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
             <Field id="message-sep" type="separator"/>
 
             <Field id="message-type" type="textfield">
                 <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
             </Field>
 
             <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">

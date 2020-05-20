@@ -1,39 +1,41 @@
 <?xml version="1.0"?>
 <MenuItems>
     <MenuItem id="discover-shelly">
-        <Name>Discover Shelly...</Name>
+        <Name>Discover Single Shelly...</Name>
         <ConfigUI actionId="discover-shelly"/>
     </MenuItem>
 
     <MenuItem id="discover-shellies">
-        <Name>Discover Shellies</Name>
+        <Name>Discover All Shellies</Name>
         <CallbackMethod>discoverShellies</CallbackMethod>
     </MenuItem>
 
+    <MenuItem id="sep-1"/>
+
     <MenuItem id="print-discovered-shellies">
-        <Name>Print Discovered Shellies</Name>
+        <Name>Log Discovered Shellies</Name>
         <CallbackMethod>printDiscoveredShellies</CallbackMethod>
     </MenuItem>
 
     <MenuItem id="print-shelly-overview">
-        <Name>Print Shelly Devices Overview</Name>
+        <Name>Log Shelly Devices Overview</Name>
         <CallbackMethod>printShellyDevicesOverview</CallbackMethod>
     </MenuItem>
 
-    <MenuItem id="sep-1"/>
+    <MenuItem id="sep-2"/>
 
     <MenuItem id="shelly-update-helper">
         <Name>Firmware Update Helper</Name>
         <ConfigUI>
             <Field id="info" type="label">
-                <Label>You can only update a device if it actually has an update. Run the "Discover Shellies" action to refresh device information.</Label>
+                <Label>You can only update a device if it actually has an update. Run the "Discover All Shellies" action to refresh device information.</Label>
             </Field>
 
             <Field id="sep-1" type="separator"/>
 
             <Field id="run-discover-devices" type="button" tooltip="Click this button to start the automatic discovery process.">
                 <Label>Auto-discovery:</Label>
-                <Title>Discover Shellies</Title>
+                <Title>Discover All Shellies</Title>
                 <CallbackMethod>discoverShellies</CallbackMethod>
             </Field>
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
