@@ -72,7 +72,7 @@ class Shelly_RGBW2_White(Shelly_1PM):
 
                 # Record the current power
                 power = payload.get("power", None)
-                if power:
+                if power is not None:
                     self.device.updateStateOnServer('curEnergyLevel', power, uiValue='{} W'.format(power))
             except ValueError:
                 self.logger.error(u"Problem parsing JSON: {}".format(payload))
@@ -148,7 +148,7 @@ class Shelly_RGBW2_White(Shelly_1PM):
             "turn": turn,
             "brightness": brightness
         }
-        self.publish("{}/color/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))
+        self.publish("{}/white/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))
 
     def turnOn(self):
         """

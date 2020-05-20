@@ -68,7 +68,6 @@ class Shelly_RGBW2_Color(Shelly_1PM):
                         # Brightness will change
                         self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['gain']))
 
-                    self.turnOn()
                     self.applyBrightness(payload['gain'])
                 else:
                     # The light should be off regardless of a reported brightness value
