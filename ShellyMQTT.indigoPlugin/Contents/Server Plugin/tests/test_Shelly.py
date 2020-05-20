@@ -4,8 +4,8 @@ from mock import patch
 import sys
 import logging
 
-from .mocking.IndigoDevice import IndigoDevice
-from .mocking.IndigoServer import Indigo
+from mocking.IndigoDevice import IndigoDevice
+from mocking.IndigoServer import Indigo
 
 indigo = Indigo()
 sys.modules['indigo'] = indigo

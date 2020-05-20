@@ -20,5 +20,4 @@ jobs:
         cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin
         mv tests/mocking .
         mv tests/test_*.py .
-        ls -l
         python -m twisted.trial $(ls -1 test_*.py | cut -f 1 -d '.' | sed "s/\//./g")
