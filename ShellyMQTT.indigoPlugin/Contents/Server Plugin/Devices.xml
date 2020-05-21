@@ -611,11 +611,11 @@
                 <Label>Temperature Offset:</Label>
             </Field>
 
-            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="temp-notice-1" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Enter a positive or negative number to offset the temperature by.</Label>
             </Field>
 
-            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="temp-notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>The offset will be applied AFTER any unit conversions take place.</Label>
             </Field>
 
@@ -634,7 +634,7 @@
                 <Label>Humidity Offset:</Label>
             </Field>
 
-            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="humidity-notice-1" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Enter a positive or negative number to offset the humidity by.</Label>
             </Field>
 
@@ -776,11 +776,11 @@
                 <Label>Temperature Offset:</Label>
             </Field>
 
-            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="temp-notice-1" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Enter a positive or negative number to offset the temperature by.</Label>
             </Field>
 
-            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="temp-notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>The offset will be applied AFTER any unit conversions take place.</Label>
             </Field>
 
@@ -2161,15 +2161,15 @@
                 </List>
             </Field>
 
-            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="energy-notice-1" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Net Energy: Energy usage will be shown as Energy Consumed - Energy Returned.</Label>
             </Field>
 
-            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="energy-notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Consumed Energy: Energy usage will be shown as the total of Consumed Energy.</Label>
             </Field>
 
-            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="energy-notice-3" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Returned Energy: Energy usage will be shown as the total of Returned Energy.</Label>
             </Field>
 
@@ -2318,15 +2318,15 @@
                 </List>
             </Field>
 
-            <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="energy-notice-1" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Net Energy: Energy usage will be shown as Energy Consumed - Energy Returned.</Label>
             </Field>
 
-            <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="energy-notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Consumed Energy: Energy usage will be shown as the total of Consumed Energy.</Label>
             </Field>
 
-            <Field id="notice-3" type="label" fontSize="small" fontColor="darkGrey">
+            <Field id="energy-notice-3" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Returned Energy: Energy usage will be shown as the total of Returned Energy.</Label>
             </Field>
 
