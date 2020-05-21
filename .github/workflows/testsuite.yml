@@ -30,8 +30,15 @@ jobs:
     runs-on: [ubuntu-latest] # this action is linux only
     steps:
       - uses: actions/checkout@v2
+
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
           filename: 'ShellyMQTT.indigoPlugin.zip'
           exclusions: '*.git* '
+
+      - name: Upload Release as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ShellyMQTT.indigoPlugin.zip
+          path: ShellyMQTT.indigoPlugin.zip
