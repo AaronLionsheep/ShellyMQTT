@@ -27,7 +27,7 @@ jobs:
 
   package:
     needs: test
-    runs-on: [macos-latest]
+    runs-on: [ubuntu-latest] # this action is linux only
     steps:
       - uses: actions/checkout@v2
       - name: Archive Release
