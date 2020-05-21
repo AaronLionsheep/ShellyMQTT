@@ -34,7 +34,7 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          filename: 'ShellyMQTT.indigoPlugin.zip'
+          filename: 'ShellyMQTT.indigoPlugin'
           exclusions: '*.git* '
 
       - name: Upload Release as Artifact
