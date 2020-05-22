@@ -1203,6 +1203,20 @@
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field id="SupportsColor" type="checkbox"  defaultValue="false"  hidden ="true" />
 
+            <Field id="template-device" type="menu">
+                <Label>Use information from Device:</Label>
+                <List class="self" filter="self.shelly-rgbw2-white" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+            </Field>
+
+            <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a device will populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="template-notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Note: A discovered device will populate the MQTT Topic Root with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>

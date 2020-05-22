@@ -607,6 +607,49 @@ class Plugin(indigo.PluginBase):
 
         return devices
 
+    def getTemplateDevices(self, filter=None, valuesDict={}, typeId=None, targetId=0):
+        """
+        Builds a list of devices that have been discovered or that are related to the device being created.
+
+        :param filter: A comma separated list of device types
+        :return: A list of device tuples of the form (<broker-id>|<identifier>, displayName)
+        """
+
+        # Build the discovered devices section
+        discovered_devices = []
+        for brokerId in self.discoveredDevices:
+            brokerName = indigo.devices[brokerId].name
+            brokerDevices = self.discoveredDevices[brokerId]
+            for identifier in brokerDevices:
+                discovered_devices.append((u"{}|shellies/{}".format(brokerId, identifier), u"{} on {}".format(identifier, brokerName)))
+
+        # Build the related devices section
+        related_devices = []
+        types = [cat.strip() for cat in filter.split(",")]
+        for dev_type in types:
+            for device in indigo.devices.iter(dev_type):
+                if device.id != targetId:  # We don't want the current device to be used as a template for itself
+                    brokerId = device.pluginProps.get('broker-id', None)
+                    address = device.pluginProps.get('address', None)
+                    related_devices.append((u"{}|{}|{}".format(brokerId, address, device.name), u"{}".format(device.name)))
+
+        # Join the device lists and build the menu
+        devices = []
+        devices.append((u"-1", u"%%disabled:Discovered Devices:%%"))
+        if len(discovered_devices) == 0:
+            devices.append((u"-1", u"%%disabled:No Discovered Devices%%"))
+        else:
+            devices.extend(discovered_devices)
+
+        devices.append((u"-1", u"%%separator%%"))
+        devices.append((u"-1", u"%%disabled:Related Devices:%%"))
+        if len(related_devices) == 0:
+            devices.append((u"-1", u"%%disabled:No Related Devices%%"))
+        else:
+            devices.extend(related_devices)
+
+        return devices
+
     def getUpdatableShellyDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
         """
         Gets a list of shelly devices that can be updated.
@@ -667,7 +710,10 @@ class Plugin(indigo.PluginBase):
 
     def populateFromChosenDevice(self, valuesDict, typeId, devId):
         """
-        Reads the chosen device and automatically populates the device address and broker
+        Reads the chosen device and automatically populates the device address and broker.
+
+        The key for the selected item is expected to be of the form <broker-id>|<identifier>.
+        The values taken from this key will be populated if found.
 
         :return: Populated ConfigUI values.
         """
@@ -689,6 +735,36 @@ class Plugin(indigo.PluginBase):
         # Set the data
         valuesDict["broker-id"] = brokerId
         valuesDict["address"] = u"shellies/{}".format(identifier)
+
+        return valuesDict
+
+    def populateFromTemplateDevice(self, valuesDict, typeId, devId):
+        """
+        Reads the chosen device and automatically populates the device address and broker.
+
+        The key for the selected item is expected to be of the form <broker-id>|<identifier>.
+        The values taken from this key will be populated if found.
+
+        :return: Populated ConfigUI values.
+        """
+
+        # Get the chosen device
+        key = valuesDict.get("template-device", None)
+
+        # Parse the identifier and broker id
+        if key is None:
+            return valuesDict
+
+        parts = key.split("|")
+        if len(parts) < 2:  # Existing devices will have the name as a third "part" for uniqueness in the menu
+            return valuesDict
+
+        brokerId = parts[0]
+        address = parts[1]
+
+        # Set the data
+        valuesDict["broker-id"] = brokerId
+        valuesDict["address"] = u"{}".format(address)
 
         return valuesDict
 
