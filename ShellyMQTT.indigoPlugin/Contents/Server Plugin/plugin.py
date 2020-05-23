@@ -961,7 +961,7 @@ class Plugin(indigo.PluginBase):
             for topic in deviceSubscriptions:
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
 
-    def validateDeviceConfigUi(self, valuesDict, typeId, devId):
+    def validateDeviceConfigUi_OLD(self, valuesDict, typeId, devId):
         """
         Validates a device config.
 
@@ -1063,6 +1063,43 @@ class Plugin(indigo.PluginBase):
         else:
             # Errors were found, return the data back and the errors
             return False, valuesDict, errors
+
+    def validateDeviceConfigUi(self, valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: True if the config is valid.
+        """
+
+        deviceClass = deviceClasses.get(typeId, None)
+        if deviceClass:
+            errors = indigo.Dict()
+            isValid, valuesDict, errors = deviceClass.validateConfigUI(valuesDict, typeId, devId)
+
+            if len(errors) == 0:
+                # Get the address from the current valid properties
+                # No address present will cause the shelly device to get the address
+                shelly = self.shellyDevices.get(devId, None)
+                address = valuesDict.get('address', shelly.getAddress() if shelly else None)
+                if address and shelly:
+                    # See if we are now replacing an unknown device on the same broker
+                    devicesOnBroker = self.discoveredDevices.get(shelly.getBrokerId(), {})
+                    for identifier in devicesOnBroker.keys():
+                        if identifier in address:
+                            # This address will match with the unknown device
+                            del devicesOnBroker[identifier]
+
+                # No errors were found, must be valid
+                return True, valuesDict
+            else:
+                # Errors were found, return the data back and the errors
+                return False, valuesDict, errors
+        else:
+            # Not sure what device this is, just return True
+            return True, valuesDict
 
     def closedDeviceConfigUi(self, valuesDict, userCancelled, typeId, devId):
         # self.shellyDevices[devId].device = indigo.devices[devId]
