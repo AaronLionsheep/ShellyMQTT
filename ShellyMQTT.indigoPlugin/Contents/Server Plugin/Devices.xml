@@ -1274,10 +1274,10 @@
             <Field type="menu" id="channel" defaultValue="0">
                 <Label>Output Channel:</Label>
                 <List>
-                    <Option value="0">Channel 1</Option>
-                    <Option value="1">Channel 2</Option>
-                    <Option value="2">Channel 3</Option>
-                    <Option value="3">Channel 4</Option>
+                    <Option value="0">Channel 1 (R)</Option>
+                    <Option value="1">Channel 2 (G)</Option>
+                    <Option value="2">Channel 3 (B)</Option>
+                    <Option value="3">Channel 4 (W)</Option>
                 </List>
             </Field>
 
