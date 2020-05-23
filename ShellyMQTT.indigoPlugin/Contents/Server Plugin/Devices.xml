@@ -1885,11 +1885,9 @@
             <Field type="menu" id="temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
-                    <Option value="F">Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="C->F">Fahrenheit</Option>
                     <Option value="-1">%%separator%%</Option>
                     <Option value="C">Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
 
@@ -1959,11 +1957,9 @@
             <Field type="menu" id="temp-units" defaultValue="F">
                 <Label>Temperature Units:</Label>
                 <List>
-                    <Option value="F">Fahrenheit</Option>
-                    <Option value="C->F">Convert from Celsius to Fahrenheit</Option>
+                    <Option value="C->F">Fahrenheit</Option>
                     <Option value="-1">%%separator%%</Option>
                     <Option value="C">Celsius</Option>
-                    <Option value="F->C">Convert from Fahrenheit to Celsius</Option>
                 </List>
             </Field>
 
