@@ -54,35 +54,4 @@ class Shelly_4_Pro(Shelly_1PM):
         :return: Tuple of the form (valid, valuesDict, errors)
         """
 
-        errors = indigo.Dict()
-        isValid = True
-        # The Shelly 4Pro needs to ensure the user has selected a Broker device, supplied the address, and supplied the message type.
-        # If the user has indicated that announcement messages are separate, then they need to supply that message type as well.
-
-        # Validate the broker
-        brokerId = valuesDict.get('broker-id', None)
-        if not brokerId.strip():
-            isValid = False
-            errors['broker-id'] = u"You must select the broker to which the Shelly is connected to."
-
-        # Validate the address
-        address = valuesDict.get('address', None)
-        if not address.strip():
-            isValid = False
-            errors['address'] = u"You must enter the MQTT topic root for the Shelly."
-
-        # Validate the message type
-        messageType = valuesDict.get('message-type', None)
-        if not messageType.strip():
-            isValid = False
-            errors['message-type'] = u"You must enter the message type that this Shelly will be associated with."
-
-        # Validate the announcement message type
-        hasSameAnnounceMessageType = valuesDict.get('announce-message-type-same-as-message-type', True)
-        if not hasSameAnnounceMessageType:  # We would expect a supplied message type for announcement messages
-            announceMessageType = valuesDict.get('announce-message-type', None)
-            if not announceMessageType.strip():
-                isValid = False
-                errors['announce-message-type'] = u"You must supply the message type that will be associated with the announce messages."
-
-        return isValid, valuesDict, errors
+        return Shelly_1PM.validateConfigUI(valuesDict, typeId, devId)

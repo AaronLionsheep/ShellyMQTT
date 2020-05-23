@@ -137,3 +137,42 @@ class Test_Shelly_1(unittest.TestCase):
         self.shelly.handleAction(toggle)
         self.assertTrue(self.shelly.isOff())
         publish.assert_called_with("shellies/shelly1-test/relay/0/command", "off")
+
+    def test_validateConfigUI(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": True
+        }
+
+        isValid, valuesDict, errors = Shelly_1.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_announce_message_type(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": "another-type"
+        }
+
+        isValid, valuesDict, errors = Shelly_1.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_invalid(self):
+        values = {
+            "broker-id": "",
+            "address": "",
+            "message-type": "",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_1.validateConfigUI(values, None, None)
+        self.assertFalse(isValid)
+        self.assertTrue("broker-id" in errors)
+        self.assertTrue("address" in errors)
+        self.assertTrue("message-type" in errors)
+        self.assertTrue("announce-message-type" in errors)
