@@ -70,3 +70,16 @@ class Shelly_Addon_Detached_Switch(Shelly_Addon):
             self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOn)
         else:
             self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        return Shelly_Addon.validateConfigUI(valuesDict, typeId, devId)

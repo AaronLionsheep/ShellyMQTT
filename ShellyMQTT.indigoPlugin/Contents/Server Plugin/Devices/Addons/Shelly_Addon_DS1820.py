@@ -84,3 +84,27 @@ class Shelly_Addon_DS1820(Shelly_Addon):
             self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
         else:
             self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        isValid, valuesDict, errors = Shelly_Addon.validateConfigUI(valuesDict, typeId, devId)
+
+        # Validate that the temperature offset is a valid number
+        temperature_offset = valuesDict.get("temp-offset", None)
+        if temperature_offset != "":
+            try:
+                float(temperature_offset)
+            except ValueError:
+                isValid = False
+                errors["temp-offset"] = u"Unable to convert to a float."
+
+        return isValid, valuesDict, errors

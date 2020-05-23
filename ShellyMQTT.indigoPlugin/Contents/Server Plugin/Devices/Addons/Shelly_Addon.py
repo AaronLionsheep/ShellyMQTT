@@ -141,3 +141,27 @@ class Shelly_Addon(Shelly):
         """
 
         pass
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        errors = indigo.Dict()
+        isValid = True
+        # The Shelly 1 needs to ensure the user has selected a Broker device, supplied the address, and supplied the message type.
+        # If the user has indicated that announcement messages are separate, then they need to supply that message type as well.
+
+        # Validate the broker
+        brokerId = valuesDict.get('host-id', None)
+        if not brokerId.strip():
+            isValid = False
+            errors['host-id'] = u"You must select the broker to which the Shelly is connected to."
+
+        return isValid, valuesDict, errors
