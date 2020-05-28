@@ -93,7 +93,8 @@ class Test_Shelly_Flood(unittest.TestCase):
             "broker-id": "12345",
             "address": "some/address",
             "message-type": "a-type",
-            "announce-message-type-same-as-message-type": True
+            "announce-message-type-same-as-message-type": True,
+            "temp-offset": ""
         }
 
         isValid, valuesDict, errors = Shelly_Flood.validateConfigUI(values, None, None)
@@ -105,7 +106,8 @@ class Test_Shelly_Flood(unittest.TestCase):
             "address": "some/address",
             "message-type": "a-type",
             "announce-message-type-same-as-message-type": False,
-            "announce-message-type": "another-type"
+            "announce-message-type": "another-type",
+            "temp-offset": ""
         }
 
         isValid, valuesDict, errors = Shelly_Flood.validateConfigUI(values, None, None)
@@ -117,7 +119,8 @@ class Test_Shelly_Flood(unittest.TestCase):
             "address": "",
             "message-type": "",
             "announce-message-type-same-as-message-type": False,
-            "announce-message-type": ""
+            "announce-message-type": "",
+            "temp-offset": "a",
         }
 
         isValid, valuesDict, errors = Shelly_Flood.validateConfigUI(values, None, None)
@@ -126,3 +129,4 @@ class Test_Shelly_Flood(unittest.TestCase):
         self.assertTrue("address" in errors)
         self.assertTrue("message-type" in errors)
         self.assertTrue("announce-message-type" in errors)
+        self.assertTrue("temp-offset" in errors)
