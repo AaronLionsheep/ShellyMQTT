@@ -165,3 +165,25 @@ class Shelly_Addon(Shelly):
             errors['host-id'] = u"You must select the broker to which the Shelly is connected to."
 
         return isValid, valuesDict, errors
+
+    def refreshAddressColumn(self):
+        """
+        Properly formats the address column for this device.
+
+        :return: None
+        """
+
+        host = self.getHostDevice()
+        if host:
+            address_format = indigo.activePlugin.pluginPrefs.get('addon-address-format', None)
+            props = self.device.pluginProps
+            if address_format == "host_name":
+                props['address'] = host.device.name
+            elif address_format == "host_address":
+                props['address'] = host.getAddress()
+            elif address_format == "host_name_at_host_address":
+                props['address'] = u"{} @ {}".format(host.device.name, host.getAddress())
+            elif address_format == "none":
+                props['address'] = None
+
+            self.device.replacePluginPropsOnServer(props)

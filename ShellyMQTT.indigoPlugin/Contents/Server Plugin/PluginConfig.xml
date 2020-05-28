@@ -24,4 +24,16 @@
         <Label>Select Brokers to listen for announcement messages:</Label>
         <List class="self" method="getBrokerDevices" dynamicReload="true"/>
     </Field>
+
+    <Field id="sep-2" type="separator"/>
+
+    <Field type="menu" id="addon-address-format" defaultValue="host_name">
+        <Label>Format of the address column for addon devices:</Label>
+        <List>
+            <Option value="host_name">[HOST_NAME]</Option>
+            <Option value="host_address">[HOST_ADDRESS]</Option>
+            <Option value="host_name_at_host_address">[HOST_NAME]@[HOST_ADDRESS]</Option>
+            <Option value="none">Empty</Option>
+        </List>
+    </Field>
 </PluginConfig>

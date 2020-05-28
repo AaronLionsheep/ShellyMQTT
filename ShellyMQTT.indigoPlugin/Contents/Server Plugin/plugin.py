@@ -178,6 +178,10 @@ class Plugin(indigo.PluginBase):
         else:
             self.logger.info(u"Debugging off")
 
+        for shelly in self.shellyDevices.values():
+            if shelly.isAddon():
+                shelly.refreshAddressColumn()
+
     def createDeviceObject(self, device):
         """
         Helper function to generate a Shelly object from an indigo device
@@ -278,6 +282,10 @@ class Plugin(indigo.PluginBase):
                 del self.dependents[dependentId]
                 self.deviceStartComm(indigo.devices[dependentId])
 
+        # If this is an addon, get the latest data for the address column
+        if shelly.isAddon():
+            shelly.refreshAddressColumn()
+
     def deviceStopComm(self, device):
         """
         Handles processes for a device that has been told to stop communication.
@@ -367,6 +375,11 @@ class Plugin(indigo.PluginBase):
         # Refresh the associated indigo device
         if shelly:
             shelly.refresh_device()
+
+        # Refresh the address column of addon devices that this device hosts
+        for dev in self.shellyDevices.values():
+            if dev.isAddon() and dev.getHostDevice() == shelly:
+                dev.refreshAddressColumn()
 
     def addDeviceSubscriptions(self, shelly):
         """
