@@ -117,4 +117,13 @@ class Shelly_Flood(Shelly):
                 isValid = False
                 errors['announce-message-type'] = u"You must supply the message type that will be associated with the announce messages."
 
+        # Validate that the temperature offset is a valid number
+        temperature_offset = valuesDict.get("temp-offset", None)
+        if temperature_offset != "":
+            try:
+                float(temperature_offset)
+            except ValueError:
+                isValid = False
+                errors["temp-offset"] = u"Unable to convert to a float."
+
         return isValid, valuesDict, errors
