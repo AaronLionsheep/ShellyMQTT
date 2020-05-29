@@ -166,6 +166,25 @@ class Shelly_Addon(Shelly):
 
         return isValid, valuesDict, errors
 
+    @staticmethod
+    def didCommPropertyChange(origDev, newDev):
+        """
+        Determines whether changes to a device should result in the communications
+        needing to be restarted.
+
+        :param origDev: The device before changes.
+        :param newDev: The device after changes.
+        :return: True or false to indicate whether communication has been changed.
+        """
+
+        if origDev.pluginProps.get('host-id', None) != newDev.pluginProps.get('host-id', None):
+            return True
+
+        if origDev.pluginProps.get('probe-number', None) != newDev.pluginProps.get('probe-number', None):
+            return True
+
+        return False
+
     def refreshAddressColumn(self):
         """
         Properly formats the address column for this device.

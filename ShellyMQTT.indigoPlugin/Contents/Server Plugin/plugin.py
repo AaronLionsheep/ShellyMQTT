@@ -347,6 +347,25 @@ class Plugin(indigo.PluginBase):
 
         del self.shellyDevices[device.id]
 
+    def didDeviceCommPropertyChange(self, origDev, newDev):
+        """
+        This method gets called by the default implementation of deviceUpdated() to determine if
+        any of the properties needed for device communication (or any other change requires a
+        device to be stopped and restarted). The default implementation checks for any changes to
+        properties. You can implement your own to provide more granular results. For instance, if
+        your device requires 4 parameters, but only 2 of those parameters requires that you restart
+        the device, then you can check to see if either of those changed. If they didn't then you
+        can just return False and your device won't be restarted (via deviceStopComm()/deviceStartComm() calls).
+
+        :param origDev: The device before updates.
+        :param newDev: The device after updates.
+        :return: True or false whether the device had the communication properties changed.
+        """
+
+        deviceClass = deviceClasses.get(newDev.deviceTypeId, None)
+        if deviceClass:
+            return deviceClass.didCommPropertyChange(origDev, newDev)
+
     def deviceUpdated(self, origDev, newDev):
         """
         Complementary to the deviceCreated() method described above, but signals device updates.

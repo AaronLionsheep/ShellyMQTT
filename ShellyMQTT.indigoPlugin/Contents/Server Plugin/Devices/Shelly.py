@@ -480,3 +480,31 @@ class Shelly:
 
         # Default implementation declares all config UI's to be valid
         return True, valuesDict, None
+
+    @staticmethod
+    def didCommPropertyChange(origDev, newDev):
+        """
+        Determines whether changes to a device should result in the communications
+        needing to be restarted.
+
+        :param origDev: The device before changes.
+        :param newDev: The device after changes.
+        :return: True or false to indicate whether communication has been changed.
+        """
+
+        if origDev.pluginProps.get('broker-id', None) != newDev.pluginProps.get('broker-id', None):
+            return True
+
+        if origDev.pluginProps.get('address', None) != newDev.pluginProps.get('address', None):
+            return True
+
+        if origDev.pluginProps.get('message-type', None) != newDev.pluginProps.get('message-type', None):
+            return True
+
+        if origDev.pluginProps.get('announce-message-type', None) != newDev.pluginProps.get('announce-message-type', None):
+            return True
+
+        if origDev.pluginProps.get('channel', None) != newDev.pluginProps.get('channel', None):
+            return True
+
+        return False
