@@ -53,11 +53,11 @@ class Shelly_RGBW2_White(Shelly_1PM):
 
                 if payload.get("ison", False):
                     # we will accept a brightness value and save it
-                    if self.isOff():
-                        self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
-                    elif self.device.states['brightnessLevel'] != payload['brightness']:
-                        # Brightness will change
-                        self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
+                    # if self.isOff():
+                    #     self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
+                    # elif self.device.states['brightnessLevel'] != payload['brightness']:
+                    #     # Brightness will change
+                    #     self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
 
                     self.applyBrightness(payload['brightness'])
                 else:
