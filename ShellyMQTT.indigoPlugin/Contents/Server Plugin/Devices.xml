@@ -133,6 +133,8 @@
                 <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
             </Field>
 
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
