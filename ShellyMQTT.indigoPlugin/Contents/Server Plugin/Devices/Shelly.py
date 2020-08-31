@@ -466,3 +466,45 @@ class Shelly:
         """
 
         return ["debug", "info"]
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        # Default implementation declares all config UI's to be valid
+        return True, valuesDict, None
+
+    @staticmethod
+    def didCommPropertyChange(origDev, newDev):
+        """
+        Determines whether changes to a device should result in the communications
+        needing to be restarted.
+
+        :param origDev: The device before changes.
+        :param newDev: The device after changes.
+        :return: True or false to indicate whether communication has been changed.
+        """
+
+        if origDev.pluginProps.get('broker-id', None) != newDev.pluginProps.get('broker-id', None):
+            return True
+
+        if origDev.pluginProps.get('address', None) != newDev.pluginProps.get('address', None):
+            return True
+
+        if origDev.pluginProps.get('message-type', None) != newDev.pluginProps.get('message-type', None):
+            return True
+
+        if origDev.pluginProps.get('announce-message-type', None) != newDev.pluginProps.get('announce-message-type', None):
+            return True
+
+        if origDev.pluginProps.get('channel', None) != newDev.pluginProps.get('channel', None):
+            return True
+
+        return False

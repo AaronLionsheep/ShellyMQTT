@@ -11,6 +11,9 @@ class Indigo:
         self.kUniversalAction = UniversalActions()
         self.activePlugin = ShellyPlugin()
 
+    def Dict(self):
+        return {}
+
 
 class IndigoServer:
 

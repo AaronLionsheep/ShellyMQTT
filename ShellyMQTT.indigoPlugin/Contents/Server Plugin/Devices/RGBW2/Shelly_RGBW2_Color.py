@@ -62,11 +62,11 @@ class Shelly_RGBW2_Color(Shelly_1PM):
 
                 if payload.get("ison", False):
                     # we will accept a brightness value and save it
-                    if self.isOff():
-                        self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['gain']))
-                    elif self.device.states['brightnessLevel'] != payload['gain']:
-                        # Brightness will change
-                        self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['gain']))
+                    # if self.isOff():
+                    #     self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['gain']))
+                    # elif self.device.states['brightnessLevel'] != payload['gain']:
+                    #     # Brightness will change
+                    #     self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['gain']))
 
                     self.applyBrightness(payload['gain'])
                 else:
@@ -192,3 +192,16 @@ class Shelly_RGBW2_Color(Shelly_1PM):
             self.publish("{}/color/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))
         except ValueError:
             self.logger.error(u"Problem building JSON: {}".format(payload))
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        return Shelly_1PM.validateConfigUI(valuesDict, typeId, devId)

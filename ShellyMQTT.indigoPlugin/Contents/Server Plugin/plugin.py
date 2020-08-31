@@ -178,6 +178,10 @@ class Plugin(indigo.PluginBase):
         else:
             self.logger.info(u"Debugging off")
 
+        for shelly in self.shellyDevices.values():
+            if shelly.isAddon():
+                shelly.refreshAddressColumn()
+
     def createDeviceObject(self, device):
         """
         Helper function to generate a Shelly object from an indigo device
@@ -278,6 +282,10 @@ class Plugin(indigo.PluginBase):
                 del self.dependents[dependentId]
                 self.deviceStartComm(indigo.devices[dependentId])
 
+        # If this is an addon, get the latest data for the address column
+        if shelly.isAddon():
+            shelly.refreshAddressColumn()
+
     def deviceStopComm(self, device):
         """
         Handles processes for a device that has been told to stop communication.
@@ -300,6 +308,8 @@ class Plugin(indigo.PluginBase):
         for addonDev in self.shellyDevices.keys():
             addon_shelly = self.shellyDevices[addonDev]
             if addon_shelly.isAddon() and addon_shelly.getHostDevice().device.id == shelly.device.id:
+                # Save and stop dependents because these should be started when this device starts again
+                self.dependents[addon_shelly.device.id] = addon_shelly
                 self.deviceStopComm(addon_shelly.device)
 
         #
@@ -339,6 +349,25 @@ class Plugin(indigo.PluginBase):
 
         del self.shellyDevices[device.id]
 
+    def didDeviceCommPropertyChange(self, origDev, newDev):
+        """
+        This method gets called by the default implementation of deviceUpdated() to determine if
+        any of the properties needed for device communication (or any other change requires a
+        device to be stopped and restarted). The default implementation checks for any changes to
+        properties. You can implement your own to provide more granular results. For instance, if
+        your device requires 4 parameters, but only 2 of those parameters requires that you restart
+        the device, then you can check to see if either of those changed. If they didn't then you
+        can just return False and your device won't be restarted (via deviceStopComm()/deviceStartComm() calls).
+
+        :param origDev: The device before updates.
+        :param newDev: The device after updates.
+        :return: True or false whether the device had the communication properties changed.
+        """
+
+        deviceClass = deviceClasses.get(newDev.deviceTypeId, None)
+        if deviceClass:
+            return deviceClass.didCommPropertyChange(origDev, newDev)
+
     def deviceUpdated(self, origDev, newDev):
         """
         Complementary to the deviceCreated() method described above, but signals device updates.
@@ -367,6 +396,11 @@ class Plugin(indigo.PluginBase):
         # Refresh the associated indigo device
         if shelly:
             shelly.refresh_device()
+
+        # Refresh the address column of addon devices that this device hosts
+        for dev in self.shellyDevices.values():
+            if dev.isAddon() and dev.getHostDevice() == shelly:
+                dev.refreshAddressColumn()
 
     def addDeviceSubscriptions(self, shelly):
         """
@@ -607,6 +641,50 @@ class Plugin(indigo.PluginBase):
 
         return devices
 
+    def getTemplateDevices(self, filter=None, valuesDict={}, typeId=None, targetId=0):
+        """
+        Builds a list of devices that have been discovered or that are related to the device being created.
+
+        :param filter: A comma separated list of device types
+        :return: A list of device tuples of the form (<broker-id>|<identifier>, displayName)
+        """
+
+        # Build the discovered devices section
+        discovered_devices = []
+        for brokerId in self.discoveredDevices:
+            brokerName = indigo.devices[brokerId].name
+            brokerDevices = self.discoveredDevices[brokerId]
+            for identifier in brokerDevices:
+                discovered_devices.append((u"{}|shellies/{}".format(brokerId, identifier), u"{} on {}".format(identifier, brokerName)))
+
+        # Build the related devices section
+        related_devices = []
+        types = [cat.strip() for cat in filter.split(",")]
+        for dev_type in types:
+            for device in indigo.devices.iter(dev_type):
+                if device.id != targetId:  # We don't want the current device to be used as a template for itself
+                    brokerId = device.pluginProps.get('broker-id', None)
+                    address = device.pluginProps.get('address', None)
+                    message_type = device.pluginProps.get('message-type', None)
+                    related_devices.append((u"{}|{}|{}|{}".format(brokerId, address, message_type, device.name), u"{}".format(device.name)))
+
+        # Join the device lists and build the menu
+        devices = []
+        devices.append((u"-1", u"%%disabled:Discovered Devices:%%"))
+        if len(discovered_devices) == 0:
+            devices.append((u"-1", u"%%disabled:No Discovered Devices%%"))
+        else:
+            devices.extend(discovered_devices)
+
+        devices.append((u"-1", u"%%separator%%"))
+        devices.append((u"-1", u"%%disabled:Related Devices:%%"))
+        if len(related_devices) == 0:
+            devices.append((u"-1", u"%%disabled:No Related Devices%%"))
+        else:
+            devices.extend(related_devices)
+
+        return devices
+
     def getUpdatableShellyDevices(self, filter=None, valuesDict={}, typeId=None, targetId=None):
         """
         Gets a list of shelly devices that can be updated.
@@ -667,7 +745,10 @@ class Plugin(indigo.PluginBase):
 
     def populateFromChosenDevice(self, valuesDict, typeId, devId):
         """
-        Reads the chosen device and automatically populates the device address and broker
+        Reads the chosen device and automatically populates the device address and broker.
+
+        The key for the selected item is expected to be of the form <broker-id>|<identifier>.
+        The values taken from this key will be populated if found.
 
         :return: Populated ConfigUI values.
         """
@@ -689,6 +770,41 @@ class Plugin(indigo.PluginBase):
         # Set the data
         valuesDict["broker-id"] = brokerId
         valuesDict["address"] = u"shellies/{}".format(identifier)
+
+        return valuesDict
+
+    def populateFromTemplateDevice(self, valuesDict, typeId, devId):
+        """
+        Reads the chosen device and automatically populates the device address and broker.
+
+        The key for the selected item is expected to be of the form <broker-id>|<identifier>.
+        The values taken from this key will be populated if found.
+
+        :return: Populated ConfigUI values.
+        """
+
+        # Get the chosen device
+        key = valuesDict.get("template-device", None)
+
+        # Parse the identifier and broker id
+        if key is None:
+            return valuesDict
+
+        parts = key.split("|")
+        if len(parts) < 2:  # Existing devices will have the name as a third "part" for uniqueness in the menu
+            return valuesDict
+
+        brokerId = parts[0]
+        address = parts[1]
+
+        # Set the data
+        valuesDict["broker-id"] = brokerId
+        valuesDict["address"] = u"{}".format(address)
+
+        # A message-type is included in the data
+        if len(parts) == 4:
+            message_type = parts[2]
+            valuesDict["message-type"] = u"{}".format(message_type)
 
         return valuesDict
 
@@ -885,7 +1001,7 @@ class Plugin(indigo.PluginBase):
             for topic in deviceSubscriptions:
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
 
-    def validateDeviceConfigUi(self, valuesDict, typeId, devId):
+    def validateDeviceConfigUi_OLD(self, valuesDict, typeId, devId):
         """
         Validates a device config.
 
@@ -987,6 +1103,43 @@ class Plugin(indigo.PluginBase):
         else:
             # Errors were found, return the data back and the errors
             return False, valuesDict, errors
+
+    def validateDeviceConfigUi(self, valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: True if the config is valid.
+        """
+
+        deviceClass = deviceClasses.get(typeId, None)
+        if deviceClass:
+            errors = indigo.Dict()
+            isValid, valuesDict, errors = deviceClass.validateConfigUI(valuesDict, typeId, devId)
+
+            if len(errors) == 0:
+                # Get the address from the current valid properties
+                # No address present will cause the shelly device to get the address
+                shelly = self.shellyDevices.get(devId, None)
+                address = valuesDict.get('address', shelly.getAddress() if shelly else None)
+                if address and shelly:
+                    # See if we are now replacing an unknown device on the same broker
+                    devicesOnBroker = self.discoveredDevices.get(shelly.getBrokerId(), {})
+                    for identifier in devicesOnBroker.keys():
+                        if identifier in address:
+                            # This address will match with the unknown device
+                            del devicesOnBroker[identifier]
+
+                # No errors were found, must be valid
+                return True, valuesDict
+            else:
+                # Errors were found, return the data back and the errors
+                return False, valuesDict, errors
+        else:
+            # Not sure what device this is, just return True
+            return True, valuesDict
 
     def closedDeviceConfigUi(self, valuesDict, userCancelled, typeId, devId):
         # self.shellyDevices[devId].device = indigo.devices[devId]

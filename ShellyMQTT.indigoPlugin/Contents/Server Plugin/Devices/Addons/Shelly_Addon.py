@@ -141,3 +141,68 @@ class Shelly_Addon(Shelly):
         """
 
         pass
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        errors = indigo.Dict()
+        isValid = True
+        # The Shelly 1 needs to ensure the user has selected a Broker device, supplied the address, and supplied the message type.
+        # If the user has indicated that announcement messages are separate, then they need to supply that message type as well.
+
+        # Validate the broker
+        brokerId = valuesDict.get('host-id', None)
+        if not brokerId.strip():
+            isValid = False
+            errors['host-id'] = u"You must select the broker to which the Shelly is connected to."
+
+        return isValid, valuesDict, errors
+
+    @staticmethod
+    def didCommPropertyChange(origDev, newDev):
+        """
+        Determines whether changes to a device should result in the communications
+        needing to be restarted.
+
+        :param origDev: The device before changes.
+        :param newDev: The device after changes.
+        :return: True or false to indicate whether communication has been changed.
+        """
+
+        if origDev.pluginProps.get('host-id', None) != newDev.pluginProps.get('host-id', None):
+            return True
+
+        if origDev.pluginProps.get('probe-number', None) != newDev.pluginProps.get('probe-number', None):
+            return True
+
+        return False
+
+    def refreshAddressColumn(self):
+        """
+        Properly formats the address column for this device.
+
+        :return: None
+        """
+
+        host = self.getHostDevice()
+        if host:
+            address_format = indigo.activePlugin.pluginPrefs.get('addon-address-format', None)
+            props = self.device.pluginProps
+            if address_format == "host_name":
+                props['address'] = host.device.name
+            elif address_format == "host_address":
+                props['address'] = host.getAddress()
+            elif address_format == "host_name_at_host_address":
+                props['address'] = u"{} @ {}".format(host.device.name, host.getAddress())
+            elif address_format == "none":
+                props['address'] = None
+
+            self.device.replacePluginPropsOnServer(props)

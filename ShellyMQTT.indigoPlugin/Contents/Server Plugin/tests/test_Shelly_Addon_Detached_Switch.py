@@ -89,3 +89,20 @@ class Test_Shelly_Addon_Detached_Switch(unittest.TestCase):
         statusRequest = IndigoAction(indigo.kDeviceAction.RequestStatus)
         self.shelly.handleAction(statusRequest)
         publish.assert_called_with("shellies/shelly-addon-test/command", "update")
+
+    def test_validateConfigUI(self):
+        values = {
+            "host-id": "12345"
+        }
+
+        isValid, valuesDict, errors = Shelly_Addon_Detached_Switch.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_invalid(self):
+        values = {
+            "host-id": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_Addon_Detached_Switch.validateConfigUI(values, None, None)
+        self.assertFalse(isValid)
+        self.assertTrue("host-id" in errors)

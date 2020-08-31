@@ -83,3 +83,50 @@ class Test_Shelly_HT(unittest.TestCase):
         self.shelly.device.states['online'] = False
         self.shelly.updateStateImage()
         self.assertEqual(indigo.kStateImageSel.TemperatureSensor, self.shelly.device.image)
+
+    def test_validateConfigUI(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": True,
+            "temp-offset": "",
+            "humidity-offset": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_HT.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_announce_message_type(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": "another-type",
+            "temp-offset": "",
+            "humidity-offset": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_HT.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_invalid(self):
+        values = {
+            "broker-id": "",
+            "address": "",
+            "message-type": "",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": "",
+            "temp-offset": "a",
+            "humidity-offset": "b"
+        }
+
+        isValid, valuesDict, errors = Shelly_HT.validateConfigUI(values, None, None)
+        self.assertFalse(isValid)
+        self.assertTrue("broker-id" in errors)
+        self.assertTrue("address" in errors)
+        self.assertTrue("message-type" in errors)
+        self.assertTrue("announce-message-type" in errors)
+        self.assertTrue("temp-offset" in errors)
+        self.assertTrue("humidity-offset" in errors)

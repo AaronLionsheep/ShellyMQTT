@@ -304,3 +304,42 @@ class Test_Shelly_RGBW2_Color(unittest.TestCase):
         self.shelly.turnOff()
         self.assertTrue(self.shelly.isOff())
         self.assertEqual(indigo.kStateImageSel.PowerOff, self.shelly.device.image)
+
+    def test_validateConfigUI(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": True
+        }
+
+        isValid, valuesDict, errors = Shelly_RGBW2_Color.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_announce_message_type(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": "another-type"
+        }
+
+        isValid, valuesDict, errors = Shelly_RGBW2_Color.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_invalid(self):
+        values = {
+            "broker-id": "",
+            "address": "",
+            "message-type": "",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_RGBW2_Color.validateConfigUI(values, None, None)
+        self.assertFalse(isValid)
+        self.assertTrue("broker-id" in errors)
+        self.assertTrue("address" in errors)
+        self.assertTrue("message-type" in errors)
+        self.assertTrue("announce-message-type" in errors)

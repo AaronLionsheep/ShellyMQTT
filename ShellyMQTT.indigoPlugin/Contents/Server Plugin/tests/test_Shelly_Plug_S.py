@@ -179,3 +179,42 @@ class Test_Shelly_Plug_s(unittest.TestCase):
         updateEnergy = IndigoAction(indigo.kDeviceAction.RequestStatus)
         self.shelly.handleAction(updateEnergy)
         publish.assert_called_with("shellies/shelly-plug-s-test/command", "update")
+
+    def test_validateConfigUI(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": True
+        }
+
+        isValid, valuesDict, errors = Shelly_Plug_S.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_announce_message_type(self):
+        values = {
+            "broker-id": "12345",
+            "address": "some/address",
+            "message-type": "a-type",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": "another-type"
+        }
+
+        isValid, valuesDict, errors = Shelly_Plug_S.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_invalid(self):
+        values = {
+            "broker-id": "",
+            "address": "",
+            "message-type": "",
+            "announce-message-type-same-as-message-type": False,
+            "announce-message-type": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_Plug_S.validateConfigUI(values, None, None)
+        self.assertFalse(isValid)
+        self.assertTrue("broker-id" in errors)
+        self.assertTrue("address" in errors)
+        self.assertTrue("message-type" in errors)
+        self.assertTrue("announce-message-type" in errors)

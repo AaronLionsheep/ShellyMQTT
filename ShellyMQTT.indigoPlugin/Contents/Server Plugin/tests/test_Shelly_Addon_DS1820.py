@@ -91,3 +91,32 @@ class Test_Shelly_Addon_DS1820(unittest.TestCase):
     def test_status_field(self):
         self.shelly.handleMessage("shellies/shelly-addon-test/ext_temperature/0", "50")
         self.assertEqual("124.0°F", self.shelly.device.states['status'])
+
+    def test_validateConfigUI(self):
+        values = {
+            "host-id": "12345",
+            "temp-offset": ""
+        }
+
+        isValid, valuesDict, errors = Shelly_Addon_DS1820.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_temp_offset(self):
+        values = {
+            "host-id": "12345",
+            "temp-offset": "5"
+        }
+
+        isValid, valuesDict, errors = Shelly_Addon_DS1820.validateConfigUI(values, None, None)
+        self.assertTrue(isValid)
+
+    def test_validateConfigUI_invalid(self):
+        values = {
+            "host-id": "",
+            "temp-offset": "a"
+        }
+
+        isValid, valuesDict, errors = Shelly_Addon_DS1820.validateConfigUI(values, None, None)
+        self.assertFalse(isValid)
+        self.assertTrue("host-id" in errors)
+        self.assertTrue("temp-offset" in errors)

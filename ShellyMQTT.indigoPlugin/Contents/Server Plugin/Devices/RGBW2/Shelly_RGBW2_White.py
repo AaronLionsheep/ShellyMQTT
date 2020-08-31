@@ -53,11 +53,11 @@ class Shelly_RGBW2_White(Shelly_1PM):
 
                 if payload.get("ison", False):
                     # we will accept a brightness value and save it
-                    if self.isOff():
-                        self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
-                    elif self.device.states['brightnessLevel'] != payload['brightness']:
-                        # Brightness will change
-                        self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
+                    # if self.isOff():
+                    #     self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
+                    # elif self.device.states['brightnessLevel'] != payload['brightness']:
+                    #     # Brightness will change
+                    #     self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
 
                     self.applyBrightness(payload['brightness'])
                 else:
@@ -171,3 +171,16 @@ class Shelly_RGBW2_White(Shelly_1PM):
             self.device.updateStateImageOnServer(indigo.kStateImageSel.DimmerOn)
         else:
             self.device.updateStateImageOnServer(indigo.kStateImageSel.DimmerOff)
+
+    @staticmethod
+    def validateConfigUI(valuesDict, typeId, devId):
+        """
+        Validates a device config.
+
+        :param valuesDict: The values in the Config UI.
+        :param typeId: the device type as specified in the type attribute.
+        :param devId: The id of the device (0 if a new device).
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        return Shelly_1PM.validateConfigUI(valuesDict, typeId, devId)
