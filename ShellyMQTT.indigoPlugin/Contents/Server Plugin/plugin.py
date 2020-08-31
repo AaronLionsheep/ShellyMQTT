@@ -665,7 +665,8 @@ class Plugin(indigo.PluginBase):
                 if device.id != targetId:  # We don't want the current device to be used as a template for itself
                     brokerId = device.pluginProps.get('broker-id', None)
                     address = device.pluginProps.get('address', None)
-                    related_devices.append((u"{}|{}|{}".format(brokerId, address, device.name), u"{}".format(device.name)))
+                    message_type = device.pluginProps.get('message-type', None)
+                    related_devices.append((u"{}|{}|{}|{}".format(brokerId, address, message_type, device.name), u"{}".format(device.name)))
 
         # Join the device lists and build the menu
         devices = []
@@ -799,6 +800,11 @@ class Plugin(indigo.PluginBase):
         # Set the data
         valuesDict["broker-id"] = brokerId
         valuesDict["address"] = u"{}".format(address)
+
+        # A message-type is included in the data
+        if len(parts) == 4:
+            message_type = parts[2]
+            valuesDict["message-type"] = u"{}".format(message_type)
 
         return valuesDict
 
