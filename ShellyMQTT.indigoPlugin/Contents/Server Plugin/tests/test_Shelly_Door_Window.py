@@ -63,14 +63,16 @@ class Test_Shelly_Door_Window(unittest.TestCase):
         self.assertFalse(self.shelly.device.states['online'])
 
     def test_handleMessage_state_open(self):
-        self.shelly.device.states['status'] = "closed"
+        self.shelly.device.states['onOffState'] = True
         self.shelly.handleMessage("shellies/shelly-dw-test/sensor/state", "open")
-        self.assertEqual("open", self.shelly.device.states['status'])
+        self.assertEqual(False, self.shelly.device.states['onOffState'])
+        self.assertEqual("open", self.shelly.device.states_meta['onOffState']['uiValue'])
 
     def test_handleMessage_state_closed(self):
-        self.shelly.device.states['status'] = "open"
-        self.shelly.handleMessage("shellies/shelly-dw-test/sensor/state", "closed")
-        self.assertEqual("closed", self.shelly.device.states['status'])
+        self.shelly.device.states['onOffState'] = False
+        self.shelly.handleMessage("shellies/shelly-dw-test/sensor/state", "close")
+        self.assertEqual(True, self.shelly.device.states['onOffState'])
+        self.assertEqual("close", self.shelly.device.states_meta['onOffState']['uiValue'])
 
     def test_handleMessage_lux(self):
         self.shelly.handleMessage("shellies/shelly-dw-test/sensor/lux", "55")
@@ -96,25 +98,25 @@ class Test_Shelly_Door_Window(unittest.TestCase):
 
     def test_update_state_image_door_open(self):
         self.device.pluginProps['useCase'] = "door"
-        self.shelly.device.states['status'] = "open"
+        self.shelly.device.states['onOffState'] = False
         self.shelly.updateStateImage()
         self.assertEqual(indigo.kStateImageSel.DoorSensorOpened, self.shelly.device.image)
 
     def test_update_state_image_door_close(self):
         self.device.pluginProps['useCase'] = "door"
-        self.shelly.device.states['status'] = "closed"
+        self.shelly.device.states['onOffState'] = True
         self.shelly.updateStateImage()
         self.assertEqual(indigo.kStateImageSel.DoorSensorClosed, self.shelly.device.image)
 
     def test_update_state_image_window_open(self):
         self.device.pluginProps['useCase'] = "window"
-        self.shelly.device.states['status'] = "open"
+        self.shelly.device.states['onOffState'] = False
         self.shelly.updateStateImage()
         self.assertEqual(indigo.kStateImageSel.WindowSensorOpened, self.shelly.device.image)
 
     def test_update_state_image_window_close(self):
         self.device.pluginProps['useCase'] = "window"
-        self.shelly.device.states['status'] = "closed"
+        self.shelly.device.states['onOffState'] = True
         self.shelly.updateStateImage()
         self.assertEqual(indigo.kStateImageSel.WindowSensorClosed, self.shelly.device.image)
 

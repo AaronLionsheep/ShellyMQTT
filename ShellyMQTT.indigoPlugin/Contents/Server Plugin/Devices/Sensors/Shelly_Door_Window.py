@@ -42,9 +42,10 @@ class Shelly_Door_Window(Shelly):
         """
 
         if topic == "{}/sensor/state".format(self.getAddress()):
-            if self.device.states['status'] != payload:
+            newState = (payload == "close")
+            if self.device.states.get('onOffState', False) != newState:
                 self.logger.info("\"{}\" {}".format(self.device.name, payload))
-            self.device.updateStateOnServer(key='status', value=payload)
+            self.device.updateStateOnServer(key='onOffState', value=newState, uiValue=payload)
             self.updateStateImage()
         elif topic == "{}/sensor/lux".format(self.getAddress()):
             self.device.updateStateOnServer(key="lux", value=payload)
@@ -74,16 +75,16 @@ class Shelly_Door_Window(Shelly):
         :return: None
         """
 
-        if self.device.states['status'] == "open":
-            if self.device.pluginProps['useCase'] == "door":
-                self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorOpened)
-            elif self.device.pluginProps['useCase'] == "window":
-                self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorOpened)
-        else:
+        if self.device.states.get('onOffState', False):
             if self.device.pluginProps['useCase'] == "door":
                 self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorClosed)
             elif self.device.pluginProps['useCase'] == "window":
                 self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorClosed)
+        else:
+            if self.device.pluginProps['useCase'] == "door":
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.DoorSensorOpened)
+            elif self.device.pluginProps['useCase'] == "window":
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.WindowSensorOpened)
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):

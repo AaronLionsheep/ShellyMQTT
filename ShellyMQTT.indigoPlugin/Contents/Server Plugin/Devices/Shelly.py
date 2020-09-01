@@ -22,7 +22,7 @@ class Shelly:
         """
 
         if self.device:
-            self.device.refreshFromServer()
+            indigo.devices[self.device.id].refreshFromServer()
             self.logger.debug(u"Refreshed device info for \"{}\"".format(self.device.name))
 
     def getSubscriptions(self):

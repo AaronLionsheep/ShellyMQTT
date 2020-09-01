@@ -208,6 +208,8 @@ class Plugin(indigo.PluginBase):
 
         instanceVers = int(device.pluginProps.get('devVersCount', 0))
         if instanceVers < kCurDevVersion or kCurDevVersion == 0:
+            device = indigo.device.changeDeviceTypeId(device, device.deviceTypeId)
+            device.replaceOnServer()
             newProps = device.pluginProps
             newProps["devVersCount"] = kCurDevVersion
             device.replacePluginPropsOnServer(newProps)
