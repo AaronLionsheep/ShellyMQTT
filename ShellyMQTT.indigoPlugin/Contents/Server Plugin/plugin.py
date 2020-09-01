@@ -116,7 +116,7 @@ class Plugin(indigo.PluginBase):
         # This is used to store the latest announcement message for each device that
         # has broadcast on a broker
         self.discoveredDevices = {}
-
+        self.triggers = {}
         self.messageTypes = []
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
@@ -402,6 +402,38 @@ class Plugin(indigo.PluginBase):
             if dev.isAddon() and dev.getHostDevice() == shelly:
                 dev.refreshAddressColumn()
 
+    def triggerStartProcessing(self, trigger):
+        """
+        Called when a new trigger should be processed by the plugin.
+
+        :param trigger: The trigger reference
+        :return:
+        """
+
+        self.triggers[trigger.id] = trigger
+
+    def triggerStopProcessing(self, trigger):
+        """
+        Called when a new trigger should stop being processed by the plugin.
+
+        :param trigger: The trigger reference
+        :return:
+        """
+
+        del self.triggers[trigger.id]
+
+    def triggerUpdated(self, origTrigger, newTrigger):
+        """
+        Called when a new trigger is updated
+
+        :param origTrigger: The original trigger reference
+        :param newTrigger: The new trigger reference
+        :return:
+        """
+
+        del self.triggers[origTrigger.id]
+        self.triggers[newTrigger.id] = newTrigger
+
     def addDeviceSubscriptions(self, shelly):
         """
         Adds a Shelly device to the dictionary of device subscriptions.
@@ -615,8 +647,14 @@ class Plugin(indigo.PluginBase):
         """
 
         shellies = []
-        for dev in indigo.devices.iter("self"):
-            shellies.append((dev.id, dev.name))
+        if filter:
+            types = [cat.strip() for cat in filter.split(",")]
+            for dev_type in types:
+                for dev in indigo.devices.iter(dev_type):
+                    shellies.append((dev.id, dev.name))
+        else:
+            for dev in indigo.devices.iter("self"):
+                shellies.append((dev.id, dev.name))
 
         shellies.sort(key=lambda d: d[1])
         return shellies

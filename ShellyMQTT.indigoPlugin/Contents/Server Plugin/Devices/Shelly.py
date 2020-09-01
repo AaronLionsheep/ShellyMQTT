@@ -12,6 +12,7 @@ class Shelly:
     def __init__(self, device):
         self.device = device
         self.logger = ShellyLogger(self)
+        self.triggers = []
 
     def refresh_device(self):
         """

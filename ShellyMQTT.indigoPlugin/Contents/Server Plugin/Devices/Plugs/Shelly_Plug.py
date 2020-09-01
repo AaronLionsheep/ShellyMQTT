@@ -27,6 +27,7 @@ class Shelly_Plug(Shelly_1PM):
                 "{}/online".format(address),
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/relay/{}/power".format(address, self.getChannel()),
+                "{}/relay/{}/overpower_value".format(address, self.getChannel()),
                 "{}/relay/{}/energy".format(address, self.getChannel())
             ]
 
@@ -39,14 +40,7 @@ class Shelly_Plug(Shelly_1PM):
         :return: None
         """
 
-        if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
-            if payload == "overpower":
-                self.device.updateStateOnServer('overpower', True)
-            else:
-                self.device.updateStateOnServer('overpower', False)
-                Shelly_1PM.handleMessage(self, topic, payload)
-        else:
-            Shelly_1PM.handleMessage(self, topic, payload)
+        Shelly_1PM.handleMessage(self, topic, payload)
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):

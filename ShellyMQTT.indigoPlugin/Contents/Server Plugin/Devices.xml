@@ -212,6 +212,11 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
+            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -352,6 +357,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
             </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
@@ -1677,6 +1687,11 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
+            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -1801,6 +1816,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
             </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
