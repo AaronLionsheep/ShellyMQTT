@@ -9,3 +9,4 @@ class ShellyPlugin(IndigoPlugin):
     def __init__(self):
         IndigoPlugin.__init__(self)
         self.shellyDevices = {}
+        self.triggers = {}

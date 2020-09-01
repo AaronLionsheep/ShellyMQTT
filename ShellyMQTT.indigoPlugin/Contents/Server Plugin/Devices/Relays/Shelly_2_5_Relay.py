@@ -22,14 +22,7 @@ class Shelly_2_5_Relay(Shelly_1PM):
         :return: None
         """
 
-        if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
-            if payload == "overpower":
-                self.device.updateStateOnServer('overpower', True)
-            else:
-                self.device.updateStateOnServer('overpower', False)
-                Shelly_1PM.handleMessage(self, topic, payload)
-        else:
-            Shelly_1PM.handleMessage(self, topic, payload)
+        Shelly_1PM.handleMessage(self, topic, payload)
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):
