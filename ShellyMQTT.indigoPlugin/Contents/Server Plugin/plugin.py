@@ -1217,3 +1217,25 @@ class Plugin(indigo.PluginBase):
             return True
         else:
             return False, valuesDict, errors
+
+    def validateEventConfigUi(self, valuesDict, typeId, eventId):
+        """
+        Validates an event config UI.
+
+        :param valuesDict: the dictionary of values currently specified in the dialog
+        :param typeId: event type specified in the type attribute
+        :param eventId: the unique event ID for the event being edited (or 0 of it's a new event)
+        :return: True or false based on the validity of the data
+        """
+
+        errors = indigo.Dict()
+
+        if typeId == "overpower-device":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for an overpower event!"
+
+        if len(errors) == 0:
+            return True
+        else:
+            return False, valuesDict, errors
+
