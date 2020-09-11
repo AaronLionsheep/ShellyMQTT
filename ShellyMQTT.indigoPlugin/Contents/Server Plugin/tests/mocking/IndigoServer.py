@@ -10,6 +10,7 @@ class Indigo:
         self.kDeviceAction = DeviceActions()
         self.kUniversalAction = UniversalActions()
         self.activePlugin = ShellyPlugin()
+        self.device = IndigoDevice()
 
     def Dict(self):
         return {}
@@ -24,6 +25,15 @@ class IndigoServer:
 
     def getPlugin(self, identifier):
         return self.plugins.get(identifier, None)
+
+
+class IndigoDevice:
+
+    def turnOn(self, deviceId):
+        pass
+
+    def turnOff(self, deviceId):
+        pass
 
 
 class StateImages:

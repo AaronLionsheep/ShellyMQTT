@@ -116,7 +116,7 @@ class Plugin(indigo.PluginBase):
         # This is used to store the latest announcement message for each device that
         # has broadcast on a broker
         self.discoveredDevices = {}
-
+        self.triggers = {}
         self.messageTypes = []
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
@@ -208,6 +208,8 @@ class Plugin(indigo.PluginBase):
 
         instanceVers = int(device.pluginProps.get('devVersCount', 0))
         if instanceVers < kCurDevVersion or kCurDevVersion == 0:
+            device = indigo.device.changeDeviceTypeId(device, device.deviceTypeId)
+            device.replaceOnServer()
             newProps = device.pluginProps
             newProps["devVersCount"] = kCurDevVersion
             device.replacePluginPropsOnServer(newProps)
@@ -401,6 +403,38 @@ class Plugin(indigo.PluginBase):
         for dev in self.shellyDevices.values():
             if dev.isAddon() and dev.getHostDevice() == shelly:
                 dev.refreshAddressColumn()
+
+    def triggerStartProcessing(self, trigger):
+        """
+        Called when a new trigger should be processed by the plugin.
+
+        :param trigger: The trigger reference
+        :return:
+        """
+
+        self.triggers[trigger.id] = trigger
+
+    def triggerStopProcessing(self, trigger):
+        """
+        Called when a new trigger should stop being processed by the plugin.
+
+        :param trigger: The trigger reference
+        :return:
+        """
+
+        del self.triggers[trigger.id]
+
+    def triggerUpdated(self, origTrigger, newTrigger):
+        """
+        Called when a new trigger is updated
+
+        :param origTrigger: The original trigger reference
+        :param newTrigger: The new trigger reference
+        :return:
+        """
+
+        del self.triggers[origTrigger.id]
+        self.triggers[newTrigger.id] = newTrigger
 
     def addDeviceSubscriptions(self, shelly):
         """
@@ -615,8 +649,14 @@ class Plugin(indigo.PluginBase):
         """
 
         shellies = []
-        for dev in indigo.devices.iter("self"):
-            shellies.append((dev.id, dev.name))
+        if filter:
+            types = [cat.strip() for cat in filter.split(",")]
+            for dev_type in types:
+                for dev in indigo.devices.iter(dev_type):
+                    shellies.append((dev.id, dev.name))
+        else:
+            for dev in indigo.devices.iter("self"):
+                shellies.append((dev.id, dev.name))
 
         shellies.sort(key=lambda d: d[1])
         return shellies
@@ -1177,3 +1217,25 @@ class Plugin(indigo.PluginBase):
             return True
         else:
             return False, valuesDict, errors
+
+    def validateEventConfigUi(self, valuesDict, typeId, eventId):
+        """
+        Validates an event config UI.
+
+        :param valuesDict: the dictionary of values currently specified in the dialog
+        :param typeId: event type specified in the type attribute
+        :param eventId: the unique event ID for the event being edited (or 0 of it's a new event)
+        :return: True or false based on the validity of the data
+        """
+
+        errors = indigo.Dict()
+
+        if typeId == "overpower-device":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for an overpower event!"
+
+        if len(errors) == 0:
+            return True
+        else:
+            return False, valuesDict, errors
+

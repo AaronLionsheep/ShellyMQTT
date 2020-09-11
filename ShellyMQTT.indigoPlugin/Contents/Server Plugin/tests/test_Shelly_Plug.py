@@ -41,6 +41,7 @@ class Test_Shelly_Plug(unittest.TestCase):
             "shellies/shelly-plug-test/online",
             "shellies/shelly-plug-test/relay/0",
             "shellies/shelly-plug-test/relay/0/power",
+            "shellies/shelly-plug-test/relay/0/overpower_value",
             "shellies/shelly-plug-test/relay/0/energy"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
@@ -65,6 +66,12 @@ class Test_Shelly_Plug(unittest.TestCase):
         self.assertFalse(self.shelly.device.states['overpower'])
         self.shelly.handleMessage("shellies/shelly-plug-test/relay/0", "overpower")
         self.assertTrue(self.shelly.device.states['overpower'])
+
+    def test_handleMessage_relay_overpower_value(self):
+        """Test getting a relay overpower message."""
+        self.shelly.handleMessage("shellies/shelly-plug-test/relay/0/overpower_value", "100.12")
+        self.assertEqual("100.12", self.shelly.device.states['overpower-value'])
+        self.assertEqual("100.12 W", self.shelly.device.states_meta['overpower-value']['uiValue'])
 
     def test_handleMessage_power(self):
         self.shelly.handleMessage("shellies/shelly-plug-test/relay/0/power", "0")

@@ -48,6 +48,7 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
             "shellies/shelly25relay-test/input/0",
             "shellies/shelly25relay-test/longpush/0",
             "shellies/shelly25relay-test/relay/0/power",
+            "shellies/shelly25relay-test/relay/0/overpower_value",
             "shellies/shelly25relay-test/relay/0/energy",
             "shellies/shelly25relay-test/temperature",
             "shellies/shelly25relay-test/overtemperature"
@@ -64,6 +65,7 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
             "shellies/shelly25relay-test/input/1",
             "shellies/shelly25relay-test/longpush/1",
             "shellies/shelly25relay-test/relay/1/power",
+            "shellies/shelly25relay-test/relay/1/overpower_value",
             "shellies/shelly25relay-test/relay/1/energy",
             "shellies/shelly25relay-test/temperature",
             "shellies/shelly25relay-test/overtemperature"
@@ -101,6 +103,12 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
         self.assertFalse(self.shelly.device.states['overpower'])
         self.shelly.handleMessage("shellies/shelly25relay-test/relay/0", "overpower")
         self.assertTrue(self.shelly.device.states['overpower'])
+
+    def test_handleMessage_relay_overpower_value(self):
+        """Test getting a relay overpower message."""
+        self.shelly.handleMessage("shellies/shelly25relay-test/relay/0/overpower_value", "100.12")
+        self.assertEqual("100.12", self.shelly.device.states['overpower-value'])
+        self.assertEqual("100.12 W", self.shelly.device.states_meta['overpower-value']['uiValue'])
 
     def test_handleMessage_switch_on(self):
         """Test getting a switch on message."""

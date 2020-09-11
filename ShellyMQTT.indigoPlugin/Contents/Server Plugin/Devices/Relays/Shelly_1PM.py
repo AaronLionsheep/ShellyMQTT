@@ -29,6 +29,7 @@ class Shelly_1PM(Shelly_1):
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/longpush/{}".format(address, self.getChannel()),
                 "{}/relay/{}/power".format(address, self.getChannel()),
+                "{}/relay/{}/overpower_value".format(address, self.getChannel()),
                 "{}/relay/{}/energy".format(address, self.getChannel()),
                 "{}/temperature".format(address),
                 "{}/overtemperature".format(address)
@@ -45,6 +46,14 @@ class Shelly_1PM(Shelly_1):
 
         if topic == "{}/relay/{}/power".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer('curEnergyLevel', payload, uiValue='{} W'.format(payload))
+        elif topic == "{}/relay/{}/overpower_value".format(self.getAddress(), self.getChannel()):
+            self.device.updateStateOnServer('overpower-value', payload, uiValue='{} W'.format(payload))
+            # Fire all triggers watching for an overpower event
+            for trigger in indigo.activePlugin.triggers.values():
+                if trigger.pluginTypeId == "overpower-any":
+                    indigo.trigger.execute(trigger)
+                elif trigger.pluginTypeId == "overpower-device" and int(trigger.pluginProps['device-id']) == self.device.id:
+                    indigo.trigger.execute(trigger)
         elif topic == "{}/relay/{}/energy".format(self.getAddress(), self.getChannel()):
             try:
                 self.updateEnergy(int(payload))
@@ -63,7 +72,9 @@ class Shelly_1PM(Shelly_1):
             overpower = (payload == 'overpower')
             # Set overpower in any case since on/off should clear the overpower state
             self.device.updateStateOnServer('overpower', (payload == 'overpower'))
-            if not overpower:
+            if overpower:
+                indigo.device.turnOff(self.device.id)
+            else:
                 Shelly_1.handleMessage(self, topic, payload)
         else:
             Shelly_1.handleMessage(self, topic, payload)

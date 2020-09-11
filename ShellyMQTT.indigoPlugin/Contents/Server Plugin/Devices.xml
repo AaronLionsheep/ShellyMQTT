@@ -133,6 +133,8 @@
                 <Label>The MQTT Topic Root will be populated with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
             </Field>
 
+            <Field id="manual-config-sep" type="separator"/>
+
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
                 <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
@@ -209,6 +211,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
             </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
@@ -350,6 +357,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
             </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
@@ -817,13 +829,15 @@
         </States>
     </Device>
 
-    <Device type="custom" id="shelly-door-window">
+    <Device type="sensor" id="shelly-door-window">
         <Name>Shelly Door Window</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
-            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsOnState" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="AllowOnStateChange" defaultValue="false" hidden="true" />
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
@@ -910,11 +924,6 @@
                 <TriggerLabel>Lux</TriggerLabel>
                 <ControlPageLabel>Lux</ControlPageLabel>
             </State>
-            <State id="status">
-                <ValueType>String</ValueType>
-                <TriggerLabel>Status</TriggerLabel>
-                <ControlPageLabel>Status</ControlPageLabel>
-            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -941,7 +950,6 @@
                 <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
         </States>
-        <UiDisplayStateId>status</UiDisplayStateId>
     </Device>
 
     <!--<Device id="sep-dimmer" />-->
@@ -1675,6 +1683,11 @@
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
             </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
+            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
@@ -1799,6 +1812,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
                 <ControlPageLabel>Overpower</ControlPageLabel>
+            </State>
+            <State id="overpower-value">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Overpower Value</TriggerLabel>
+                <ControlPageLabel>Overpower Value</ControlPageLabel>
             </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>

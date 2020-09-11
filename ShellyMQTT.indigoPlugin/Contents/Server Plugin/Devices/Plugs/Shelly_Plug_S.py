@@ -27,6 +27,7 @@ class Shelly_Plug_S(Shelly_Plug):
                 "{}/online".format(address),
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/relay/{}/power".format(address, self.getChannel()),
+                "{}/relay/{}/overpower_value".format(address, self.getChannel()),
                 "{}/relay/{}/energy".format(address, self.getChannel()),
                 "{}/temperature".format(address),
                 "{}/overtemperature".format(address)

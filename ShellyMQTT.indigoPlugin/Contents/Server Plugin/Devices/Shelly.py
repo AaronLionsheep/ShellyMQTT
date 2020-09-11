@@ -12,6 +12,7 @@ class Shelly:
     def __init__(self, device):
         self.device = device
         self.logger = ShellyLogger(self)
+        self.triggers = []
 
     def refresh_device(self):
         """
@@ -21,7 +22,7 @@ class Shelly:
         """
 
         if self.device:
-            self.device.refreshFromServer()
+            indigo.devices[self.device.id].refreshFromServer()
             self.logger.debug(u"Refreshed device info for \"{}\"".format(self.device.name))
 
     def getSubscriptions(self):

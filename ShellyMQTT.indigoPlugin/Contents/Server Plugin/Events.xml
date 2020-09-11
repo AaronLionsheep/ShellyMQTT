@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Events>
+    <Event id="overpower-any">
+        <Name>Any Overpower</Name>
+    </Event>
+
+    <Event id="overpower-device">
+        <Name>Device Overpower</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1pm,self.shelly-2-5-relay,self.shelly-plug,self.shelly-plug-s" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+</Events>
