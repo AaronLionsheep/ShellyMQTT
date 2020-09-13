@@ -1230,9 +1230,30 @@ class Plugin(indigo.PluginBase):
 
         errors = indigo.Dict()
 
+        #
+        # Overpower Events
+        #
         if typeId == "overpower-device":
             if valuesDict['device-id'] == "":
                 errors['device-id'] = "You must select a device to listen for an overpower event!"
+        #
+        # Input Events
+        #
+        elif typeId == "input-event-s":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for the input event!"
+        elif typeId == "input-event-ss":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for the input event!"
+        elif typeId == "input-event-sss":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for the input event!"
+        elif typeId == "input-event-sl":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for the input event!"
+        elif typeId == "input-event-ls":
+            if valuesDict['device-id'] == "":
+                errors['device-id'] = "You must select a device to listen for the input event!"
 
         if len(errors) == 0:
             return True

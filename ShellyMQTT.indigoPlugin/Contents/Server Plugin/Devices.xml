@@ -7,6 +7,7 @@
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="textfield" id="last-input-event-id" defaultValue="-1" hidden="true" />
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
@@ -114,6 +115,7 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="textfield" id="last-input-event-id" defaultValue="-1" hidden="true" />
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
@@ -253,6 +255,7 @@
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="textfield" id="last-input-event-id" defaultValue="-1" hidden="true" />
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
@@ -962,6 +965,7 @@
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
+            <Field type="textfield" id="last-input-event-id" defaultValue="-1" hidden="true" />
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>

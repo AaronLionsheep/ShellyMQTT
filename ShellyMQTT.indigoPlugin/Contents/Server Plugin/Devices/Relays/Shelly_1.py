@@ -26,7 +26,8 @@ class Shelly_1(Shelly):
                 "{}/online".format(address),
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/input/{}".format(address, self.getChannel()),
-                "{}/longpush/{}".format(address, self.getChannel())
+                "{}/longpush/{}".format(address, self.getChannel()),
+                "{}/input_event/{}".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
@@ -34,7 +35,7 @@ class Shelly_1(Shelly):
         This method is called when a message comes in and matches one of this devices subscriptions.
 
         :param topic: The topic of the message.
-        :param payload: THe payload of the message.
+        :param payload: The payload of the message.
         :return: None
         """
 

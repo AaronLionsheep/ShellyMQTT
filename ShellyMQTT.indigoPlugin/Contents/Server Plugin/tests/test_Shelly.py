@@ -6,6 +6,7 @@ import logging
 
 from mocking.IndigoDevice import IndigoDevice
 from mocking.IndigoServer import Indigo
+from mocking.IndigoTrigger import IndigoTrigger
 
 indigo = Indigo()
 sys.modules['indigo'] = indigo
@@ -21,6 +22,7 @@ class Test_Shelly(unittest.TestCase):
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
         self.device.pluginProps['resetEnergyOffset'] = 0
+        self.device.pluginProps['last-input-event-id'] = -1
 
     @patch('Devices.Shelly.Shelly.getSubscriptions', return_value=["test/one", "test/two"])
     def test_subscribe(self, getSubscriptions):
@@ -399,3 +401,61 @@ class Test_Shelly(unittest.TestCase):
     def test_getMutedLoggingMethods(self):
         """Test getting the log levels to mute when the device is muted."""
         self.assertListEqual(["debug", "info"], self.shelly.getMutedLoggingMethods())
+
+    def test_get_last_input_event_id(self):
+        """Test getting the last input event id"""
+        self.assertEqual(-1, self.shelly.getLastInputEventId())
+        self.device.pluginProps['last-input-event-id'] = "5"
+        self.assertEqual(5, self.shelly.getLastInputEventId())
+
+    def test_get_last_input_event_id_default_to_negative_one(self):
+        """Test getting the last input event id when there is no value"""
+        del self.device.pluginProps['last-input-event-id']
+        self.assertFalse('last-input-event-id' in self.device.pluginProps.keys())
+        self.assertEqual(-1, self.shelly.getLastInputEventId())
+
+    def test_process_input_event_invalid_event_type_returns_None(self):
+        """Test processing an event message with an invalid event type"""
+        message = '{"event": null, "event_cnt": 0}'
+
+        self.assertIsNone(self.shelly.processInputEvent(message))
+
+    def test_process_input_event_invalid_event_count_returns_None(self):
+        """Test processing an event message with an invalid event count"""
+        message = '{"event": "", "event_cnt": null}'
+
+        self.assertIsNone(self.shelly.processInputEvent(message))
+
+    def test_process_input_event_new_event_id_stored(self):
+        """Test processing an event message stores the new event id"""
+        message = '{"event": "S", "event_cnt": 1}'
+
+        self.shelly.processInputEvent(message)
+        self.assertEqual(1, self.shelly.getLastInputEventId())
+
+    def test_process_input_event_duplicate_event_not_processed(self):
+        """Test processing an event message that has been previously processed is not reprocessed"""
+        message = '{"event": "S", "event_cnt": 1}'
+
+        self.shelly.processInputEvent(message)
+        self.assertEqual(1, self.shelly.getLastInputEventId())
+        # Duplicate message processed...
+        self.shelly.processInputEvent(message)
+        self.assertEqual(1, self.shelly.getLastInputEventId())
+
+    def test_process_input_event_trigger_executed(self):
+        """Test processing an event message and a trigger was executed"""
+        trigger_S = IndigoTrigger("input-event-s", {'device-id': self.device.id})
+        trigger_S_other = IndigoTrigger("input-event-s", {'device-id': self.device.id + 1})
+        trigger_L = IndigoTrigger("input-event-l", {'device-id': self.device.id})
+
+        indigo.activePlugin.triggers['1'] = trigger_S
+        indigo.activePlugin.triggers['2'] = trigger_L
+        indigo.activePlugin.triggers['3'] = trigger_S_other
+
+        message = '{"event": "S", "event_cnt": 1}'
+
+        self.shelly.processInputEvent(message)
+        self.assertTrue(trigger_S.executed)
+        self.assertFalse(trigger_L.executed)
+        self.assertFalse(trigger_S_other.executed)
