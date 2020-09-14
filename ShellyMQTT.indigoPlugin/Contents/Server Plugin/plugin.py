@@ -20,6 +20,7 @@ from Devices.Sensors.Shelly_Flood import Shelly_Flood
 from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
 from Devices.Sensors.Shelly_EM_Meter import Shelly_EM_Meter
 from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
+from Devices.Sensors.Shelly_i3 import Shelly_i3
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -58,6 +59,7 @@ deviceClasses = {
     "shelly-door-window": Shelly_Door_Window,
     "shelly-em-meter": Shelly_EM_Meter,
     "shelly-3em-meter": Shelly_3EM_Meter,
+    "shelly-i3": Shelly_i3,
 
     # Bulb devices
     "shelly-bulb": Shelly_Bulb,
@@ -92,7 +94,7 @@ class Plugin(indigo.PluginBase):
         #   devId: <Indigo device id>,
         #   anotherDevId: <Shelly object>
         # }
-        # This is used to store devices that had unresolved depenedeneices
+        # This is used to store devices that had unresolved dependencies
         # For example, a temperature addon being started before its host device
         self.dependents = {}
 
