@@ -364,10 +364,8 @@ class Shelly:
 
         # Process all triggers for this input event
         eventName = u"input-event-{}".format(eventType.lower())
-        print(u"Looking through {} triggers: {}".format(len(indigo.activePlugin.triggers.values()), indigo.activePlugin.triggers))
         for trigger in indigo.activePlugin.triggers.values():
-            print(u"Looking at trigger {} with device-id: {}".format(trigger.pluginTypeId, trigger.pluginProps['device-id']))
-            if trigger.pluginTypeId == eventName and int(trigger.pluginProps['device-id']) == self.device.id:
+            if trigger.pluginTypeId == eventName and int(trigger.pluginProps.get('device-id', -1)) == self.device.id:
                 indigo.trigger.execute(trigger)
 
     def getLastInputEventId(self):

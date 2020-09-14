@@ -184,6 +184,5 @@ class Test_Shelly_1(unittest.TestCase):
     @patch('Devices.Shelly.Shelly.processInputEvent')
     def test_input_event_is_processed(self, processInputEvent):
         """Test that an input_event message is processed"""
-        print(u"Triggers {}".format(indigo.activePlugin.triggers))
         self.shelly.handleMessage("shellies/shelly1-test/input_event/0", '{"event": "S", "event_cnt": 1}')
         processInputEvent.assert_called_with('{"event": "S", "event_cnt": 1}')
