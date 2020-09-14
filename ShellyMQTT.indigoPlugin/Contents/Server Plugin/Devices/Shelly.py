@@ -23,6 +23,7 @@ class Shelly:
 
         if self.device:
             indigo.devices[self.device.id].refreshFromServer()
+            self.device = indigo.devices[self.device.id]
             self.logger.debug(u"Refreshed device info for \"{}\"".format(self.device.name))
 
     def getSubscriptions(self):
@@ -572,4 +573,8 @@ class Shelly:
         if origDev.pluginProps.get('channel', None) != newDev.pluginProps.get('channel', None):
             return True
 
+        # If we are here then the device is not restarting, so we should update the device to pull in any chanegs
+        shelly = indigo.activePlugin.shellyDevices.get(newDev.id)
+        if shelly:
+            shelly.refresh_device()
         return False
