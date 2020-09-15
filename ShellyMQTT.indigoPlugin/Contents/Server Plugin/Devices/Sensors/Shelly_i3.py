@@ -23,6 +23,7 @@ class Shelly_i3(Shelly):
             return []
         else:
             return [
+                "shellies/announce",
                 "{}/online".format(address),
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/input_event/{}".format(address, self.getChannel())

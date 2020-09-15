@@ -30,6 +30,7 @@ class Test_Shelly_Addon_Detached_Switch(unittest.TestCase):
 
     def test_getSubscriptions(self):
         subscriptions = [
+            "shellies/announce",
             "shellies/shelly-i3-test/online",
             "shellies/shelly-i3-test/input/0",
             "shellies/shelly-i3-test/input_event/0"
