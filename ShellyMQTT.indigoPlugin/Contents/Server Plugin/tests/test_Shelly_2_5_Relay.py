@@ -22,6 +22,7 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
         self.device.pluginProps['address'] = "shellies/shelly25relay-test"
+        self.device.pluginProps['last-input-event-id'] = -1
         self.device.pluginProps['int-temp-units'] = "C->F"
         self.device.pluginProps['channel'] = 0
 
@@ -51,7 +52,8 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
             "shellies/shelly25relay-test/relay/0/overpower_value",
             "shellies/shelly25relay-test/relay/0/energy",
             "shellies/shelly25relay-test/temperature",
-            "shellies/shelly25relay-test/overtemperature"
+            "shellies/shelly25relay-test/overtemperature",
+            "shellies/shelly25relay-test/input_event/0"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
@@ -68,7 +70,8 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
             "shellies/shelly25relay-test/relay/1/overpower_value",
             "shellies/shelly25relay-test/relay/1/energy",
             "shellies/shelly25relay-test/temperature",
-            "shellies/shelly25relay-test/overtemperature"
+            "shellies/shelly25relay-test/overtemperature",
+            "shellies/shelly25relay-test/input_event/1"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
@@ -278,4 +281,12 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
         self.assertTrue("address" in errors)
         self.assertTrue("message-type" in errors)
         self.assertTrue("announce-message-type" in errors)
+
+    @patch('Devices.Shelly.Shelly.processInputEvent')
+    def test_input_event_is_processed(self, processInputEvent):
+        """Test that an input_event message is processed"""
+        print(u"Triggers {}".format(indigo.activePlugin.triggers))
+        self.shelly.handleMessage("shellies/shelly25relay-test/input_event/0", '{"event": "S", "event_cnt": 1}')
+        processInputEvent.assert_called_with('{"event": "S", "event_cnt": 1}')
+
 

@@ -27,7 +27,8 @@ class Shelly_Dimmer_SL(Shelly_1PM):
                 "{}/light/{}/energy".format(address, self.getChannel()),
                 "{}/temperature".format(address),
                 "{}/overtemperature".format(address),
-                "{}/overload".format(address)
+                "{}/overload".format(address),
+                "{}/input_event/{}".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):

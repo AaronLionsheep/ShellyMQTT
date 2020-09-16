@@ -11,6 +11,7 @@ class Indigo:
         self.kUniversalAction = UniversalActions()
         self.activePlugin = ShellyPlugin()
         self.device = IndigoDevice()
+        self.trigger = TriggerExecutor()
 
     def Dict(self):
         return {}
@@ -75,3 +76,12 @@ class UniversalActions:
         self.EnergyReset = "EnergyReset"
         self.EnergyUpdate = "EnergyUpdate"
 
+
+class TriggerExecutor:
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def execute(trigger):
+        trigger.executed = True

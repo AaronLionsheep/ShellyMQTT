@@ -22,6 +22,7 @@ class Test_Shelly_Dimmer_SL(unittest.TestCase):
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
         self.device.pluginProps['address'] = "shellies/shelly-dimmer-sl-test"
+        self.device.pluginProps['last-input-event-id'] = -1
         self.device.pluginProps['int-temp-units'] = "C->F"
 
         self.device.updateStateOnServer("sw-input", False)
@@ -49,7 +50,8 @@ class Test_Shelly_Dimmer_SL(unittest.TestCase):
             "shellies/shelly-dimmer-sl-test/light/0/energy",
             "shellies/shelly-dimmer-sl-test/temperature",
             "shellies/shelly-dimmer-sl-test/overtemperature",
-            "shellies/shelly-dimmer-sl-test/overload"
+            "shellies/shelly-dimmer-sl-test/overload",
+            "shellies/shelly-dimmer-sl-test/input_event/0"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
@@ -321,3 +323,11 @@ class Test_Shelly_Dimmer_SL(unittest.TestCase):
         self.assertTrue("address" in errors)
         self.assertTrue("message-type" in errors)
         self.assertTrue("announce-message-type" in errors)
+
+    @patch('Devices.Shelly.Shelly.processInputEvent')
+    def test_input_event_is_processed(self, processInputEvent):
+        """Test that an input_event message is processed"""
+        print(u"Triggers {}".format(indigo.activePlugin.triggers))
+        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/input_event/0", '{"event": "S", "event_cnt": 1}')
+        processInputEvent.assert_called_with('{"event": "S", "event_cnt": 1}')
+

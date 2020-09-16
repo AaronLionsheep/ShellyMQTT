@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <Events>
+    <!-- Overpower Events -->
+
     <Event id="overpower-any">
         <Name>Any Overpower</Name>
     </Event>
@@ -10,6 +12,68 @@
             <Field id="device-id" type="menu">
                 <Label>Device:</Label>
                 <List class="self" filter="self.shelly-1pm,self.shelly-2-5-relay,self.shelly-plug,self.shelly-plug-s" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+
+    <!-- Input Events -->
+
+    <Event id="input-event-s">
+        <Name>Input Event - S (Short push)</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+
+    <Event id="input-event-l">
+        <Name>Input Event - L (Long push)</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+
+    <Event id="input-event-ss">
+        <Name>Input Event - SS (double short push)</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+
+    <Event id="input-event-sss">
+        <Name>Input Event - SSS (triple short push)</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+
+    <Event id="input-event-sl">
+        <Name>Input Event - SL (short push + long push)</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
+
+    <Event id="input-event-ls">
+        <Name>Input Event - LS (long push + short push)</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
             </Field>
         </ConfigUI>
     </Event>

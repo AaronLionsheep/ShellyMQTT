@@ -23,6 +23,7 @@ class Shelly:
 
         if self.device:
             indigo.devices[self.device.id].refreshFromServer()
+            self.device = indigo.devices[self.device.id]
             self.logger.debug(u"Refreshed device info for \"{}\"".format(self.device.name))
 
     def getSubscriptions(self):
@@ -69,6 +70,8 @@ class Shelly:
         elif topic == "{}/online".format(self.getAddress()):
             self.device.updateStateOnServer(key='online', value=(payload == "true"))
             self.updateStateImage()
+        elif topic == "{}/input_event/{}".format(self.getAddress(), self.getChannel()):
+            self.processInputEvent(payload)
         return None
 
     def handleAction(self, action):
@@ -325,6 +328,68 @@ class Shelly:
             self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
+    def processInputEvent(self, eventMessage):
+        """
+        Parses an input event message and fires triggers if this is a new input event.
+
+        Events are formed as: {"event":"string","event_cnt":number}
+        Where the event key holds the event type and event_cnt holds the event identifier.
+
+        Expected events are:
+        - S: Short
+        - L: Long
+        - SS: Short + Short
+        - SSS: Short + Short + Short
+        - SL: Short + Long
+        - LS: Long + Short
+
+        The event identifier will increment with each input event and will start off as 0.
+
+        :param eventMessage: The event message
+        :return:
+        """
+
+        # Parse the event message
+        event = json.loads(eventMessage)
+        eventType = event.get('event', None)
+        eventId = event.get('event_cnt', None)
+        if eventType is None or eventId is None:
+            self.logger.error(u"Unable to parse event message: {}".format(eventMessage))
+            return
+
+        # Determine if this is a new event
+        if eventId == self.getLastInputEventId():
+            # We have already processed this event message, do to process it again
+            return
+        self.setLastInputEventId(eventId)
+
+        # Process all triggers for this input event
+        eventName = u"input-event-{}".format(eventType.lower())
+        for trigger in indigo.activePlugin.triggers.values():
+            if trigger.pluginTypeId == eventName and int(trigger.pluginProps.get('device-id', -1)) == self.device.id:
+                indigo.trigger.execute(trigger)
+
+    def getLastInputEventId(self):
+        """
+        Getter for the last processed input event identifier.
+
+        :return: an integer of the last input event identifier.
+        """
+
+        return int(self.device.pluginProps.get('last-input-event-id', -1))
+
+    def setLastInputEventId(self, eventId):
+        """
+        Sets the internal last input event count for the device.
+
+        :param eventId: The event id
+        :return: None
+        """
+
+        props = self.device.pluginProps
+        props["last-input-event-id"] = int(eventId)
+        self.device.replacePluginPropsOnServer(props)
+
     def updateEnergy(self, energy, offsetProp='resetEnergyOffset', energyState='accumEnergyTotal'):
         """
         pluginProps['resetEnergyOffset'] stores the energy reported the last time a reset was requested
@@ -508,4 +573,8 @@ class Shelly:
         if origDev.pluginProps.get('channel', None) != newDev.pluginProps.get('channel', None):
             return True
 
+        # If we are here then the device is not restarting, so we should update the device to pull in any chanegs
+        shelly = indigo.activePlugin.shellyDevices.get(newDev.id)
+        if shelly:
+            shelly.refresh_device()
         return False

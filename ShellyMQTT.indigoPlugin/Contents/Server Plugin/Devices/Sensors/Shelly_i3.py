@@ -1,10 +1,11 @@
+# coding=utf-8
 import indigo
 from ..Shelly import Shelly
 
 
-class Shelly_1(Shelly):
+class Shelly_i3(Shelly):
     """
-    The Shelly 1 is a simple on/off relay.
+
     """
 
     def __init__(self, device):
@@ -24,9 +25,7 @@ class Shelly_1(Shelly):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
-                "{}/relay/{}".format(address, self.getChannel()),
                 "{}/input/{}".format(address, self.getChannel()),
-                "{}/longpush/{}".format(address, self.getChannel()),
                 "{}/input_event/{}".format(address, self.getChannel())
             ]
 
@@ -39,17 +38,15 @@ class Shelly_1(Shelly):
         :return: None
         """
 
-        if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
-            if payload == "on":
-                self.turnOn()
-            elif payload == "off":
-                self.turnOff()
-        elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
-        elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
+        if topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
+            invert = self.device.pluginProps.get("invert", False)
+            state = (payload == '0') if invert else (payload == '1')
+            self.device.updateStateOnServer(key="onOffState", value=state)
         else:
             Shelly.handleMessage(self, topic, payload)
+
+        # Update the display state after data changed
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -59,21 +56,20 @@ class Shelly_1(Shelly):
         :return: None
         """
 
-        if action.deviceAction == indigo.kDeviceAction.TurnOn:
-            self.turnOn()
-            self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
-        elif action.deviceAction == indigo.kDeviceAction.TurnOff:
-            self.turnOff()
-            self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
-        elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
+        if action.deviceAction == indigo.kDeviceAction.RequestStatus:
             self.sendStatusRequestCommand()
-        elif action.deviceAction == indigo.kDeviceAction.Toggle:
-            if self.isOn():
-                self.turnOff()
-                self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
-            elif self.isOff():
-                self.turnOn()
-                self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return: None
+        """
+
+        if self.device.states.get('onOffState', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOn)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):

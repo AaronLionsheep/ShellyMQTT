@@ -32,7 +32,8 @@ class Shelly_1PM(Shelly_1):
                 "{}/relay/{}/overpower_value".format(address, self.getChannel()),
                 "{}/relay/{}/energy".format(address, self.getChannel()),
                 "{}/temperature".format(address),
-                "{}/overtemperature".format(address)
+                "{}/overtemperature".format(address),
+                "{}/input_event/{}".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
