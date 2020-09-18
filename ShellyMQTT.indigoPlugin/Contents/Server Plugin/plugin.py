@@ -21,6 +21,7 @@ from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
 from Devices.Sensors.Shelly_EM_Meter import Shelly_EM_Meter
 from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
 from Devices.Sensors.Shelly_i3 import Shelly_i3
+from Devices.Sensors.Shelly_Button1 import Shelly_Button1
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -60,6 +61,7 @@ deviceClasses = {
     "shelly-em-meter": Shelly_EM_Meter,
     "shelly-3em-meter": Shelly_3EM_Meter,
     "shelly-i3": Shelly_i3,
+    "shelly-button1": Shelly_Button1,
 
     # Bulb devices
     "shelly-bulb": Shelly_Bulb,
