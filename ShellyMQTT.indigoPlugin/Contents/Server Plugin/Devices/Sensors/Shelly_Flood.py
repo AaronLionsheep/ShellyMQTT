@@ -49,7 +49,7 @@ class Shelly_Flood(Shelly):
 
             self.updateStateImage()
         elif topic == "{}/sensor/battery".format(self.getAddress()):
-            self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+            Shelly.updateBatteryLevel(self, payload)
         else:
             Shelly.handleMessage(self, topic, payload)
 

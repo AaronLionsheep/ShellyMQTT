@@ -77,4 +77,20 @@
             </Field>
         </ConfigUI>
     </Event>
+
+    <!-- Low Battery Events -->
+
+    <Event id="low-battery-any">
+        <Name>Any Low Battery</Name>
+    </Event>
+
+    <Event id="low-battery-device">
+        <Name>Device Low Battery</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Device:</Label>
+                <List class="self" filter="self.shelly-ht,self.shelly-flood,self.shelly-door-window,self.shelly-button1" method="getShellyDevices"/>
+            </Field>
+        </ConfigUI>
+    </Event>
 </Events>

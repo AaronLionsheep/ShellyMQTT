@@ -52,7 +52,7 @@ class Shelly_HT(Shelly):
             humidity = float(payload) + offset
             self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{:.{}f}%'.format(humidity, decimals), decimalPlaces=decimals)
         elif topic == "{}/sensor/battery".format(self.getAddress()):
-            self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+            Shelly.updateBatteryLevel(self, payload)
         else:
             Shelly.handleMessage(self, topic, payload)
 

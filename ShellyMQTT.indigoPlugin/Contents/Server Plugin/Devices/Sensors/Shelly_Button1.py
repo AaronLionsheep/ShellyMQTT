@@ -39,7 +39,7 @@ class Shelly_Button1(Shelly):
         """
 
         if topic == "{}/sensor/battery".format(self.getAddress()):
-            self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+            Shelly.updateBatteryLevel(self, payload)
             self.device.updateStateOnServer(key="sensorValue", value=payload, uiValue='{}%'.format(payload))
         else:
             Shelly.handleMessage(self, topic, payload)

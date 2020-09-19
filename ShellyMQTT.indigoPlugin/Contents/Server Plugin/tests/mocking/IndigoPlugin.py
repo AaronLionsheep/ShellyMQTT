@@ -10,3 +10,4 @@ class ShellyPlugin(IndigoPlugin):
         IndigoPlugin.__init__(self)
         self.shellyDevices = {}
         self.triggers = {}
+        self.lowBatteryThreshold = 20

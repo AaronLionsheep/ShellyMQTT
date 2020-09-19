@@ -85,6 +85,7 @@ class Plugin(indigo.PluginBase):
     def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
         indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
         self.debug = pluginPrefs.get("debugMode", False)
+        self.lowBatteryThreshold = pluginPrefs.get("low-battery-threshold", 20)
 
         # {
         #   devId: <Indigo device id>,
@@ -165,17 +166,42 @@ class Plugin(indigo.PluginBase):
         except self.StopThread:
             pass
 
+    def validatePrefsConfigUi(self, valuesDict):
+        """
+        Validates the plugin preferences Config UI.
+
+        :param valuesDict:
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        errors = indigo.Dict()
+        isValid = True
+
+        # Validate the low battery threshold
+        threshold = valuesDict.get('low-battery-threshold', None)
+        if not threshold:
+            valuesDict['low-battery-threshold'] = 20
+        else:
+            try:
+                int(threshold)
+            except ValueError:
+                isValid = False
+                errors['low-battery-threshold'] = u"You must enter an integer value."
+
+        return isValid, valuesDict, errors
+
     def closedPrefsConfigUi(self, valuesDict, userCancelled):
         """
         Handler for the closing of a configuration UI.
 
         :param valuesDict: The values in the config.
         :param userCancelled: True or false to indicate if the config was cancelled.
-        :return: True or false to indicate if the config is valid.
+        :return:
         """
 
         if userCancelled is False:
             self.debug = valuesDict.get('debugMode', False)
+            self.lowBatteryThreshold = int(valuesDict.get('low-battery-threshold', 20))
 
         if self.debug is True:
             self.logger.info(u"Debugging on")

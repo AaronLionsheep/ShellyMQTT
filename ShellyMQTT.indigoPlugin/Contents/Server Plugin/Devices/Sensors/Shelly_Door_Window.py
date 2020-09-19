@@ -54,7 +54,7 @@ class Shelly_Door_Window(Shelly):
         elif topic == "{}/sensor/vibration".format(self.getAddress()):
             self.device.updateStateOnServer(key="vibration", value=(payload == "1"))
         elif topic == "{}/sensor/battery".format(self.getAddress()):
-            self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+            Shelly.updateBatteryLevel(self, payload)
         else:
             Shelly.handleMessage(self, topic, payload)
 
