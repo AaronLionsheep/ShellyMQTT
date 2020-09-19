@@ -904,6 +904,41 @@
                 </List>
             </Field>
 
+            <Field id="temp-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="C->F">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="C->F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
+                </List>
+            </Field>
+
+            <Field type="menu" id="temp-decimals" defaultValue="1">
+                <Label>Temperature Decimal Places:</Label>
+                <List>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                    <Option value="2">2</Option>
+                </List>
+            </Field>
+
+            <Field id="temp-offset" type="textfield" defaultValue="0">
+                <Label>Temperature Offset:</Label>
+            </Field>
+
+            <Field id="temp-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Enter a positive or negative number to offset the temperature by.</Label>
+            </Field>
+
+            <Field id="temp-notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>The offset will be applied AFTER any unit conversions take place.</Label>
+            </Field>
+
+            <Field id="temp-notice-3" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>NOTE: Temperature values will only populate for the Shelly Door/Window 2 models. Original Door/Window devices do not record temperature.</Label>
+            </Field>
+
             <Field id="mute-sep" type="separator"/>
 
             <Field type="checkbox" id="muted" defaultValue="false">
@@ -926,6 +961,11 @@
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Lux</TriggerLabel>
                 <ControlPageLabel>Lux</ControlPageLabel>
+            </State>
+            <State id="temperature">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Temperature</TriggerLabel>
+                <ControlPageLabel>Temperature</ControlPageLabel>
             </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
