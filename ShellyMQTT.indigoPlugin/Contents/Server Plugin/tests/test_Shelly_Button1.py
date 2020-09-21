@@ -13,7 +13,7 @@ sys.modules['indigo'] = indigo
 from Devices.Sensors.Shelly_Button1 import Shelly_Button1
 
 
-class Test_Shelly_Addon_Detached_Switch(unittest.TestCase):
+class Test_Shelly_Button1(unittest.TestCase):
 
     def setUp(self):
         indigo.__init__()
@@ -73,3 +73,17 @@ class Test_Shelly_Addon_Detached_Switch(unittest.TestCase):
         """Test that an input_event message is processed"""
         self.shelly.handleMessage("shellies/shelly-button1-test/input_event/0", '{"event": "S", "event_cnt": 1}')
         processInputEvent.assert_called_with('{"event": "S", "event_cnt": 1}')
+
+    def test_input_event_cnt_is_reset_on_coming_online(self):
+        """Test that the device transitioning from offline to online causes the last input event count to be reset to 0"""
+        self.device.pluginProps['last-input-event-id'] = 3
+        self.device.states['online'] = False
+        self.shelly.handleMessage("shellies/shelly-button1-test/online", "true")
+        self.assertEqual(0, self.device.pluginProps['last-input-event-id'])
+
+    def test_input_event_cnt_is_not_reset_on_duplicate_online(self):
+        """Test that the device transitioning from offline to online causes the last input event count to be reset to 0"""
+        self.device.pluginProps['last-input-event-id'] = 3
+        self.device.states['online'] = True
+        self.shelly.handleMessage("shellies/shelly-button1-test/online", "true")
+        self.assertEqual(3, self.device.pluginProps['last-input-event-id'])

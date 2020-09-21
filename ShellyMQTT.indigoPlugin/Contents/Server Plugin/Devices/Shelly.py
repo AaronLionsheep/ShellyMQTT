@@ -68,8 +68,11 @@ class Shelly:
         if topic == "shellies/announce":
             self.parseAnnouncement(payload)
         elif topic == "{}/online".format(self.getAddress()):
+            wasOnline = self.device.states.get('online', False)
             self.device.updateStateOnServer(key='online', value=(payload == "true"))
             self.updateStateImage()
+            if not wasOnline:
+                self.setLastInputEventId(0)
         elif topic == "{}/input_event/{}".format(self.getAddress(), self.getChannel()):
             self.processInputEvent(payload)
         return None
