@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <MenuItems>
+    <MenuItem id="log-build-code">
+        <Name>Log Build-code</Name>
+        <CallbackMethod>logBuildCode</CallbackMethod>
+    </MenuItem>
+
+    <MenuItem id="sep-1"/>
+
     <MenuItem id="discover-shelly">
         <Name>Discover Single Shelly...</Name>
         <ConfigUI actionId="discover-shelly"/>
@@ -10,7 +17,7 @@
         <CallbackMethod>discoverShellies</CallbackMethod>
     </MenuItem>
 
-    <MenuItem id="sep-1"/>
+    <MenuItem id="sep-2"/>
 
     <MenuItem id="print-discovered-shellies">
         <Name>Log Discovered Shellies</Name>
@@ -22,7 +29,7 @@
         <CallbackMethod>printShellyDevicesOverview</CallbackMethod>
     </MenuItem>
 
-    <MenuItem id="sep-2"/>
+    <MenuItem id="sep-3"/>
 
     <MenuItem id="shelly-update-helper">
         <Name>Firmware Update Helper</Name>

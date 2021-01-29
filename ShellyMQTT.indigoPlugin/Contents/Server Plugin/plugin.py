@@ -1,5 +1,6 @@
 import indigo
 import json
+import os
 
 # Import the relay devices
 from Devices.Relays.Shelly_1 import Shelly_1
@@ -877,6 +878,11 @@ class Plugin(indigo.PluginBase):
             valuesDict["message-type"] = u"{}".format(message_type)
 
         return valuesDict
+
+    def logBuildCode(self, pluginAction=None, device=None, callerWaitingForResult=False):
+        build_code_file = open("{}/build_code.txt".format(os.getcwd()))
+        self.logger.info(u"Build code: {}".format(build_code_file.read()))
+        build_code_file.close()
 
     def discoverShelly(self, pluginAction, device, callerWaitingForResult):
         """
