@@ -68,8 +68,11 @@ class Shelly:
         if topic == "shellies/announce":
             self.parseAnnouncement(payload)
         elif topic == "{}/online".format(self.getAddress()):
+            wasOnline = self.device.states.get('online', False)
             self.device.updateStateOnServer(key='online', value=(payload == "true"))
             self.updateStateImage()
+            if not wasOnline:
+                self.setLastInputEventId(0)
         elif topic == "{}/input_event/{}".format(self.getAddress(), self.getChannel()):
             self.processInputEvent(payload)
         return None
@@ -532,6 +535,31 @@ class Shelly:
         """
 
         return ["debug", "info"]
+
+    def updateBatteryLevel(self, batteryLevel):
+        """
+        Helper method to update the battery level. Low battery triggers are fired from this point if present.
+
+        :param batteryLevel: The new battery level
+        :return: None
+        """
+
+        # Get the old battery level to determine if there was a change
+        oldBatteryLevel = self.device.states.get('batteryLevel', None)
+        # Save the current battery level
+        self.device.updateStateOnServer(key="batteryLevel", value=batteryLevel, uiValue='{}%'.format(batteryLevel))
+
+        try:
+            if indigo.activePlugin.lowBatteryThreshold >= int(batteryLevel) != int(oldBatteryLevel) and oldBatteryLevel:
+                # Battery level has changed
+                # Fire all triggers watching for a low battery event
+                for trigger in indigo.activePlugin.triggers.values():
+                    if trigger.pluginTypeId == "low-battery-any":
+                        indigo.trigger.execute(trigger)
+                    elif trigger.pluginTypeId == "low-battery-device" and int(trigger.pluginProps['device-id']) == self.device.id:
+                        indigo.trigger.execute(trigger)
+        except ValueError:
+            pass
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):

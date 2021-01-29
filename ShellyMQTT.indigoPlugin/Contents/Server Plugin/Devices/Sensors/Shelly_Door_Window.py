@@ -29,6 +29,7 @@ class Shelly_Door_Window(Shelly):
                 "{}/sensor/lux".format(address),
                 "{}/sensor/tilt".format(address),
                 "{}/sensor/vibration".format(address),
+                "{}/sensor/temperature".format(address),
                 "{}/sensor/battery".format(address)
             ]
 
@@ -54,7 +55,13 @@ class Shelly_Door_Window(Shelly):
         elif topic == "{}/sensor/vibration".format(self.getAddress()):
             self.device.updateStateOnServer(key="vibration", value=(payload == "1"))
         elif topic == "{}/sensor/battery".format(self.getAddress()):
-            self.device.updateStateOnServer(key="batteryLevel", value=payload, uiValue='{}%'.format(payload))
+            Shelly.updateBatteryLevel(self, payload)
+        elif topic == "{}/sensor/temperature".format(self.getAddress()):
+            temperature = payload
+            try:
+                self.setTemperature(float(temperature))
+            except ValueError:
+                self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
 
@@ -127,5 +134,14 @@ class Shelly_Door_Window(Shelly):
             if not announceMessageType.strip():
                 isValid = False
                 errors['announce-message-type'] = u"You must supply the message type that will be associated with the announce messages."
+
+        # Validate that the temperature offset is a valid number
+        temperature_offset = valuesDict.get("temp-offset", None)
+        if temperature_offset != "":
+            try:
+                float(temperature_offset)
+            except ValueError:
+                isValid = False
+                errors["temp-offset"] = u"Unable to convert to a float."
 
         return isValid, valuesDict, errors

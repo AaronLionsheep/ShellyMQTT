@@ -1,5 +1,6 @@
 import indigo
 import json
+import os
 
 # Import the relay devices
 from Devices.Relays.Shelly_1 import Shelly_1
@@ -21,6 +22,7 @@ from Devices.Sensors.Shelly_Door_Window import Shelly_Door_Window
 from Devices.Sensors.Shelly_EM_Meter import Shelly_EM_Meter
 from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
 from Devices.Sensors.Shelly_i3 import Shelly_i3
+from Devices.Sensors.Shelly_Button1 import Shelly_Button1
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -60,6 +62,7 @@ deviceClasses = {
     "shelly-em-meter": Shelly_EM_Meter,
     "shelly-3em-meter": Shelly_3EM_Meter,
     "shelly-i3": Shelly_i3,
+    "shelly-button1": Shelly_Button1,
 
     # Bulb devices
     "shelly-bulb": Shelly_Bulb,
@@ -83,6 +86,7 @@ class Plugin(indigo.PluginBase):
     def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
         indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
         self.debug = pluginPrefs.get("debugMode", False)
+        self.lowBatteryThreshold = pluginPrefs.get("low-battery-threshold", 20)
 
         # {
         #   devId: <Indigo device id>,
@@ -163,17 +167,42 @@ class Plugin(indigo.PluginBase):
         except self.StopThread:
             pass
 
+    def validatePrefsConfigUi(self, valuesDict):
+        """
+        Validates the plugin preferences Config UI.
+
+        :param valuesDict:
+        :return: Tuple of the form (valid, valuesDict, errors)
+        """
+
+        errors = indigo.Dict()
+        isValid = True
+
+        # Validate the low battery threshold
+        threshold = valuesDict.get('low-battery-threshold', None)
+        if not threshold:
+            valuesDict['low-battery-threshold'] = 20
+        else:
+            try:
+                int(threshold)
+            except ValueError:
+                isValid = False
+                errors['low-battery-threshold'] = u"You must enter an integer value."
+
+        return isValid, valuesDict, errors
+
     def closedPrefsConfigUi(self, valuesDict, userCancelled):
         """
         Handler for the closing of a configuration UI.
 
         :param valuesDict: The values in the config.
         :param userCancelled: True or false to indicate if the config was cancelled.
-        :return: True or false to indicate if the config is valid.
+        :return:
         """
 
         if userCancelled is False:
             self.debug = valuesDict.get('debugMode', False)
+            self.lowBatteryThreshold = int(valuesDict.get('low-battery-threshold', 20))
 
         if self.debug is True:
             self.logger.info(u"Debugging on")
@@ -849,6 +878,11 @@ class Plugin(indigo.PluginBase):
             valuesDict["message-type"] = u"{}".format(message_type)
 
         return valuesDict
+
+    def logBuildCode(self, pluginAction=None, device=None, callerWaitingForResult=False):
+        build_code_file = open("{}/build_code.txt".format(os.getcwd()))
+        self.logger.info(u"Build code: {}".format(build_code_file.read()))
+        build_code_file.close()
 
     def discoverShelly(self, pluginAction, device, callerWaitingForResult):
         """

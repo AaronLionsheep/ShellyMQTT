@@ -17,7 +17,10 @@
 
     <Field type="checkbox" id="all-brokers-subscribe-to-announce" defaultValue="true">
 	    <Label>Subscribe to announcements on all Brokers:</Label>
-	    <Description>Turn on to have all Brokers listening for announcement messages.</Description>
+	    <!--<Description>Turn on to have all Brokers listening for announcement messages.</Description>-->
+    </Field>
+    <Field id="brokers-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+        <Label>Turn on to have all Brokers listening for announcement messages.</Label>
     </Field>
 
     <Field id="brokers-subscribing-to-announce" type="list" visibleBindingId="all-brokers-subscribe-to-announce" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
@@ -35,5 +38,15 @@
             <Option value="host_name_at_host_address">[HOST_NAME]@[HOST_ADDRESS]</Option>
             <Option value="none">Empty</Option>
         </List>
+    </Field>
+
+    <Field id="sep-3" type="separator"/>
+
+    <Field id="low-battery-threshold" type="textfield" defaultValue="20">
+        <Label>Low battery threshold (%):</Label>
+    </Field>
+
+    <Field id="battery-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+        <Label>When devices report battery levels below the threshold, events will cause any triggers to fire.</Label>
     </Field>
 </PluginConfig>

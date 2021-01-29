@@ -22,6 +22,10 @@ class Test_Shelly_Door_Window(unittest.TestCase):
         self.device.pluginProps['address'] = "shellies/shelly-dw-test"
         self.device.pluginProps['useCase'] = "door"
 
+        self.device.pluginProps['temp-units'] = "C->F"
+        self.device.pluginProps['temp-offset'] = "2"
+        self.device.pluginProps['temp-decimals'] = "1"
+
         self.device.updateStateOnServer("ip-address", None)
         self.device.updateStateOnServer("mac-address", None)
         self.device.updateStateOnServer("online", False)
@@ -46,9 +50,18 @@ class Test_Shelly_Door_Window(unittest.TestCase):
             "shellies/shelly-dw-test/sensor/lux",
             "shellies/shelly-dw-test/sensor/tilt",
             "shellies/shelly-dw-test/sensor/vibration",
+            "shellies/shelly-dw-test/sensor/temperature",
             "shellies/shelly-dw-test/sensor/battery"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
+
+    def test_handleMessage_temperature(self):
+        self.shelly.handleMessage("shellies/shelly-dw-test/sensor/temperature", "50")
+        self.assertEqual(124, self.shelly.device.states['temperature'])
+        self.assertEqual("124.0 °F", self.shelly.device.states_meta['temperature']['uiValue'])
+
+    def test_handleMessage_temperature_invalid(self):
+        self.assertRaises(ValueError, self.shelly.handleMessage("shellies/shelly-dw-test/sensor/temperature", "A"))
 
     def test_handleMessage_online_true(self):
         self.shelly.device.states['online'] = False
@@ -125,7 +138,8 @@ class Test_Shelly_Door_Window(unittest.TestCase):
             "broker-id": "12345",
             "address": "some/address",
             "message-type": "a-type",
-            "announce-message-type-same-as-message-type": True
+            "announce-message-type-same-as-message-type": True,
+            "temp-offset": ""
         }
 
         isValid, valuesDict, errors = Shelly_Door_Window.validateConfigUI(values, None, None)
@@ -137,7 +151,8 @@ class Test_Shelly_Door_Window(unittest.TestCase):
             "address": "some/address",
             "message-type": "a-type",
             "announce-message-type-same-as-message-type": False,
-            "announce-message-type": "another-type"
+            "announce-message-type": "another-type",
+            "temp-offset": ""
         }
 
         isValid, valuesDict, errors = Shelly_Door_Window.validateConfigUI(values, None, None)
@@ -149,7 +164,8 @@ class Test_Shelly_Door_Window(unittest.TestCase):
             "address": "",
             "message-type": "",
             "announce-message-type-same-as-message-type": False,
-            "announce-message-type": ""
+            "announce-message-type": "",
+            "temp-offset": "a"
         }
 
         isValid, valuesDict, errors = Shelly_Door_Window.validateConfigUI(values, None, None)
@@ -158,3 +174,4 @@ class Test_Shelly_Door_Window(unittest.TestCase):
         self.assertTrue("address" in errors)
         self.assertTrue("message-type" in errors)
         self.assertTrue("announce-message-type" in errors)
+        self.assertTrue("temp-offset" in errors)

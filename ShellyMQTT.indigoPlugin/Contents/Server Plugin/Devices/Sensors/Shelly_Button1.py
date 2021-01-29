@@ -3,9 +3,9 @@ import indigo
 from ..Shelly import Shelly
 
 
-class Shelly_HT(Shelly):
+class Shelly_Button1(Shelly):
     """
-    The Shelly H&T is a small temperature and humidity sensor.
+
     """
 
     def __init__(self, device):
@@ -25,9 +25,8 @@ class Shelly_HT(Shelly):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
-                "{}/sensor/temperature".format(address),
-                "{}/sensor/humidity".format(address),
-                "{}/sensor/battery".format(address)
+                "{}/sensor/battery".format(address),
+                "{}/input_event/{}".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
@@ -39,29 +38,13 @@ class Shelly_HT(Shelly):
         :return: None
         """
 
-        if topic == "{}/sensor/temperature".format(self.getAddress()):
-            self.setTemperature(float(payload))
-        elif topic == "{}/sensor/humidity".format(self.getAddress()):
-            decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
-            offset = 0
-            try:
-                offset = float(self.device.pluginProps.get('humidity-offset', 0))
-            except ValueError:
-                self.logger.error(u"Unable to convert offset of \"{}\" into a float!".format(self.device.pluginProps.get('humidity-offset', 0)))
-
-            humidity = float(payload) + offset
-            self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{:.{}f}%'.format(humidity, decimals), decimalPlaces=decimals)
-        elif topic == "{}/sensor/battery".format(self.getAddress()):
+        if topic == "{}/sensor/battery".format(self.getAddress()):
             Shelly.updateBatteryLevel(self, payload)
+            self.device.updateStateOnServer(key="sensorValue", value=payload, uiValue='{}%'.format(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
 
-        temp = self.device.states['temperature']
-        temp_decimals = int(self.device.pluginProps.get('temp-decimals', 1))
-        temp_units = self.device.pluginProps.get('temp-units', 'F')[-1]
-        humidity = self.device.states['humidity']
-        humidity_decimals = int(self.device.pluginProps.get('humidity-decimals', 1))
-        self.device.updateStateOnServer(key="status", value='{:.{}f}°{} / {:.{}f}%'.format(temp, temp_decimals, temp_units, humidity, humidity_decimals))
+        # Update the display state after data changed
         self.updateStateImage()
 
     def handleAction(self, action):
@@ -72,19 +55,23 @@ class Shelly_HT(Shelly):
         :return: None
         """
 
-        Shelly.handleAction(self, action)
+        if action.deviceAction == indigo.kDeviceAction.RequestStatus:
+            self.sendStatusRequestCommand()
 
     def updateStateImage(self):
         """
         Sets the state image based on device states.
 
-        :return:
+        :return: None
         """
 
-        if self.device.states.get('online', True):
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
+        """
+        if self.device.states.get('onOffState', True):
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOn)
         else:
-            self.device.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensor)
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
+        """
+        self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOff)
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):
@@ -127,23 +114,5 @@ class Shelly_HT(Shelly):
             if not announceMessageType.strip():
                 isValid = False
                 errors['announce-message-type'] = u"You must supply the message type that will be associated with the announce messages."
-
-        # Validate that the temperature offset is a valid number
-        temperature_offset = valuesDict.get("temp-offset", None)
-        if temperature_offset != "":
-            try:
-                float(temperature_offset)
-            except ValueError:
-                isValid = False
-                errors["temp-offset"] = u"Unable to convert to a float."
-
-        # Validate that the humidity offset is a valid number
-        humidity_offset = valuesDict.get("humidity-offset", None)
-        if humidity_offset != "":
-            try:
-                float(humidity_offset)
-            except ValueError:
-                isValid = False
-                errors["humidity-offset"] = u"Unable to convert to a float."
 
         return isValid, valuesDict, errors
