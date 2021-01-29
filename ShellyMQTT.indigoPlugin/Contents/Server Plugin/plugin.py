@@ -39,6 +39,7 @@ from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
 from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Switch
 
 from Queue import Queue
+import logging
 
 kCurDevVersion = 0  # current version of plugin devices
 
@@ -85,7 +86,8 @@ deviceClasses = {
 class Plugin(indigo.PluginBase):
     def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
         indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
-        self.debug = pluginPrefs.get("debugMode", False)
+        # self.debug = pluginPrefs.get("debugMode", False)
+        self.setLogLevel(pluginPrefs.get('log-level', "info"))
         self.lowBatteryThreshold = pluginPrefs.get("low-battery-threshold", 20)
 
         # {
@@ -167,6 +169,28 @@ class Plugin(indigo.PluginBase):
         except self.StopThread:
             pass
 
+    def setLogLevel(self, level):
+        """
+        Helper method to set the logging level.
+
+        :param level: Expected to be a string with a valid log level.
+        :return: None
+        """
+
+        valid_log_levels = ["debug", "info", "warning"]
+        if level not in valid_log_levels:
+            self.logger.error(u"Attempted to set the log level to an unhandled value: {}".format(level))
+
+        if level == "debug":
+            self.indigo_log_handler.setLevel(logging.DEBUG)
+            self.logger.debug(u"Log level set to debug")
+        elif level == "info":
+            self.indigo_log_handler.setLevel(logging.INFO)
+            self.logger.info(u"Log level set to info")
+        elif level == "warning":
+            self.indigo_log_handler.setLevel(logging.WARNING)
+            self.logger.warning(u"Log level set to warning")
+
     def validatePrefsConfigUi(self, valuesDict):
         """
         Validates the plugin preferences Config UI.
@@ -201,13 +225,14 @@ class Plugin(indigo.PluginBase):
         """
 
         if userCancelled is False:
-            self.debug = valuesDict.get('debugMode', False)
+            # self.debug = valuesDict.get('debugMode', False)
+            self.setLogLevel(valuesDict.get('log-level', "info"))
             self.lowBatteryThreshold = int(valuesDict.get('low-battery-threshold', 20))
 
-        if self.debug is True:
-            self.logger.info(u"Debugging on")
-        else:
-            self.logger.info(u"Debugging off")
+        # if self.debug is True:
+        #     self.logger.info(u"Debugging on")
+        # else:
+        #     self.logger.info(u"Debugging off")
 
         for shelly in self.shellyDevices.values():
             if shelly.isAddon():

@@ -1,8 +1,19 @@
 <?xml version="1.0"?>
 <PluginConfig>
+    <!--
     <Field type="checkbox" id="debugMode" defaultValue="false">
 	    <Label>Debug Mode:</Label>
 	    <Description>Turn on to show debug messages in the log</Description>
+    </Field>
+    -->
+
+    <Field type="menu" id="log-level" defaultValue="info">
+        <Label>The level of detail to include in the log</Label>
+        <List>
+            <Option value="debug">Debug (the most logging)</Option>
+            <Option value="info">Info (standard logging)</Option>
+            <Option value="warning">Warning (reduced logging)</Option>
+        </List>
     </Field>
 
     <Field type="checkbox" id="connector-fix" defaultValue="false">
