@@ -320,7 +320,8 @@ class Plugin(indigo.PluginBase):
         #
         # Add the device id to our internal list of devices
         #
-        shelly.subscribe()
+        # NOTE: Stopped subscribing to individual topics in 0.2.4
+        # shelly.subscribe()
         self.addDeviceSubscriptions(shelly)
         self.shellyDevices[device.id] = shelly
         self.messageTypes.append(shelly.getMessageType())
@@ -393,7 +394,8 @@ class Plugin(indigo.PluginBase):
                         'topic': topic
                     }
                     # Unsubscribe the broker from this topic and remove the record of the topic
-                    self.mqttPlugin.executeAction("del_subscription", deviceId=shelly.getBrokerId(), props=props)
+                    # NOTE: Stopped subscribing to individual topics in 0.2.4
+                    # self.mqttPlugin.executeAction("del_subscription", deviceId=shelly.getBrokerId(), props=props)
                     topicsToRemove.append(topic)
 
             #
