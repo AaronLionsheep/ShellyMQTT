@@ -303,7 +303,7 @@ class Plugin(indigo.PluginBase):
                     # Add it to the known device list and stop attempting startup
                     # The host will attempt to start any of its addons
                     self.dependents[device.id] = shelly
-                    self.logger.info(u"{} is queued to be started after the host starts".format(shelly.device.name))
+                    self.logger.debug(u"{} is queued to be started after the host starts".format(shelly.device.name))
                     return False
 
         self.logger.info(u"Starting \"%s\"...", device.name)
@@ -953,7 +953,7 @@ class Plugin(indigo.PluginBase):
                         'retain': 0,
                     }
                     self.mqttPlugin.executeAction("publish", deviceId=brokerId, props=props, waitUntilDone=False)
-                    self.logger.info(u"published \"announce\" to \"shellies/command\" on broker \"%s\"", indigo.devices[brokerId].name)
+                    self.logger.debug(u"published \"announce\" to \"shellies/command\" on broker \"%s\"", indigo.devices[brokerId].name)
 
     def updateShelly(self, valuesDict, typeId):
         """

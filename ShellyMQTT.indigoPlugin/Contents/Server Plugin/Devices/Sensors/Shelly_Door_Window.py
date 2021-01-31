@@ -45,7 +45,8 @@ class Shelly_Door_Window(Shelly):
         if topic == "{}/sensor/state".format(self.getAddress()):
             newState = (payload == "close")
             if self.device.states.get('onOffState', False) != newState:
-                self.logger.info("\"{}\" {}".format(self.device.name, payload))
+                # self.logger.info("\"{}\" {}".format(self.device.name, payload))
+                self.logCommandReceived(payload)
             self.device.updateStateOnServer(key='onOffState', value=newState, uiValue=payload)
             self.updateStateImage()
         elif topic == "{}/sensor/lux".format(self.getAddress()):

@@ -41,6 +41,8 @@ class Shelly_i3(Shelly):
         if topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
             invert = self.device.pluginProps.get("invert", False)
             state = (payload == '0') if invert else (payload == '1')
+            if self.device.states['onOffState'] != state:
+                self.logCommandReceived("on" if state else "off")
             self.device.updateStateOnServer(key="onOffState", value=state)
         else:
             Shelly.handleMessage(self, topic, payload)

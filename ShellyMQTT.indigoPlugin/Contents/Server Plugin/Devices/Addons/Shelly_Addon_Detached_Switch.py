@@ -41,6 +41,8 @@ class Shelly_Addon_Detached_Switch(Shelly_Addon):
             # For some reason, the shelly reports the temperature with a preceding colon...
             invert = self.device.pluginProps.get("invert", False)
             state = (payload == '0') if invert else (payload == '1')
+            if self.device.states['onOffState'] != state:
+                self.logCommandReceived("{}".format("on" if state else "off"))
             self.device.updateStateOnServer(key="onOffState", value=state)
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)

@@ -62,16 +62,19 @@ class Shelly_RGBW2_Color(Shelly_1PM):
 
                 if payload.get("ison", False):
                     # we will accept a brightness value and save it
-                    # if self.isOff():
-                    #     self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['gain']))
-                    # elif self.device.states['brightnessLevel'] != payload['gain']:
-                    #     # Brightness will change
-                    #     self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['gain']))
+                    if self.isOff():
+                        # self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['gain']))
+                        self.logCommandReceived("brightness to {}%".format(payload['gain']))
+                    elif self.device.states['brightnessLevel'] != payload['gain']:
+                        # Brightness will change
+                        # self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['gain']))
+                        self.logCommandReceived("brightness to {}%".format(payload['gain']))
 
                     self.applyBrightness(payload['gain'])
                 else:
                     # The light should be off regardless of a reported brightness value
                     self.turnOff()
+                    self.logCommandReceived("off")
 
                 # Record the color data
                 self.device.updateStateOnServer("redLevel", payload.get("red", 0))
@@ -113,31 +116,39 @@ class Shelly_RGBW2_Color(Shelly_1PM):
             if 'blueLevel' in action.actionValue:
                 self.device.updateStateOnServer("blueLevel", int(action.actionValue['blueLevel']))
             self.set()
+            self.logCommandSent(u"color values RGBW to {}, {}, {}, {}".format(self.device.states['redLevel'], self.device.states['greenLevel'], self.device.states['blueLevel'], self.device.states['whiteLevel']))
         elif action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.applyBrightness(100)
             self.set()
+            self.logCommandSent("brightness to 100%")
         elif action.deviceAction == indigo.kDeviceAction.TurnOff:
             self.applyBrightness(0)
             self.set()
+            self.logCommandSent("off")
         elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
             self.applyBrightness(action.actionValue)
             self.set()
+            self.logCommandSent(u"brightness to {}%".format(action.actionValue))
         elif action.deviceAction == indigo.kDeviceAction.BrightenBy:
             newBrightness = min(100, self.device.brightness + action.actionValue)
             self.applyBrightness(newBrightness)
             self.set()
+            self.logCommandSent(u"brightness to {}%".format(newBrightness))
         elif action.deviceAction == indigo.kDeviceAction.DimBy:
             newBrightness = max(0, self.device.brightness - action.actionValue)
             self.applyBrightness(newBrightness)
             self.set()
+            self.logCommandSent(u"brightness to {}%".format(newBrightness))
         elif action.deviceAction == indigo.kDeviceAction.Toggle:
             # Override the toggle since dimmer's need their brightness set.
             if self.isOn():
                 self.applyBrightness(0)
                 self.set()
+                self.logCommandSent("off")
             elif self.isOff():
                 self.applyBrightness(100)
                 self.set()
+                self.logCommandSent("brightness to 100%")
         else:
             Shelly_1PM.handleAction(self, action)
 
@@ -150,11 +161,11 @@ class Shelly_RGBW2_Color(Shelly_1PM):
         """
 
         if brightness > 0:
-            if self.device.states['brightnessLevel'] != brightness:
-                if self.isOn():
-                    self.logger.info(u"\"{}\" set to {}%".format(self.device.name, brightness))
-                else:
-                    self.logger.info(u"\"{}\" on to {}%".format(self.device.name, brightness))
+            # if self.device.states['brightnessLevel'] != brightness:
+            #     if self.isOn():
+            #         self.logger.info(u"\"{}\" set to {}%".format(self.device.name, brightness))
+            #     else:
+            #         self.logger.info(u"\"{}\" on to {}%".format(self.device.name, brightness))
             self.turnOn()
         else:
             self.turnOff()

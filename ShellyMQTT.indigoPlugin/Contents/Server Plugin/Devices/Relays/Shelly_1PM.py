@@ -75,6 +75,7 @@ class Shelly_1PM(Shelly_1):
             self.device.updateStateOnServer('overpower', (payload == 'overpower'))
             if overpower:
                 indigo.device.turnOff(self.device.id)
+                self.logCommandReceived("off (overpower)")
             else:
                 Shelly_1.handleMessage(self, topic, payload)
         else:

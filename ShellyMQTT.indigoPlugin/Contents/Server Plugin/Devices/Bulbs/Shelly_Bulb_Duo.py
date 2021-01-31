@@ -47,15 +47,22 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
                 if payload['ison']:
                     # we will accept a brightness value and save it
                     if self.isOff():
-                        self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
+                        # self.logger.info(u"\"{}\" on to {}%".format(self.device.name, payload['brightness']))
+                        self.logCommandReceived(u"brightness to {}%".format(payload['brightness']))
                     elif self.device.states['brightnessLevel'] != payload['brightness']:
-                        self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
+                        # self.logger.info(u"\"{}\" set to {}%".format(self.device.name, payload['brightness']))
+                        self.logCommandReceived(u"brightness to {}%".format(payload['brightness']))
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
                     self.device.updateStateOnServer("whiteLevel", payload['white'])
+
+                    if self.device.states['whiteTemperature'] != payload['temp']:
+                        self.logCommandReceived(u"white temperature to {}°K".format(payload['temp']))
                     self.device.updateStateOnServer("whiteTemperature", payload['temp'])
                     self.turnOn()
                 else:
                     # The light should be off regardless of a reported brightness value
+                    if not self.isOff():
+                        self.logCommandReceived("off")
                     self.turnOff()
             except ValueError:
                 self.logger.error(u"Problem parsing JSON: {}".format(payload))
@@ -73,8 +80,10 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
             if 'whiteLevel' in action.actionValue:
                 self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
+                self.logCommandSent(u"white level to {}%".format(action.actionValue['whiteLevel']))
             if 'whiteTemperature' in action.actionValue:
                 self.device.updateStateOnServer("whiteTemperature", action.actionValue['whiteTemperature'])
+                self.logCommandSent(u"white temperature to {}°K".format(action.actionValue['whiteTemperature']))
             self.set()
         else:
             Shelly_Bulb_Vintage.handleAction(self, action)

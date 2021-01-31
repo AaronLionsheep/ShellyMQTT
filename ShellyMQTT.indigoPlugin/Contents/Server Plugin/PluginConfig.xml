@@ -16,6 +16,16 @@
         </List>
     </Field>
 
+    <Field type="checkbox" id="log-device-activity" defaultValue="true">
+	    <Label>Log Device Activity:</Label>
+	    <Description>Enable log entries related to device activity</Description>
+    </Field>
+    <Field id="notice-log-device-activity" type="label" fontSize="small" fontColor="darkGrey">
+        <Label>Device activity includes turning on/off a device, adjusting brightness, and similar actions.</Label>
+    </Field>
+
+    <Field id="sep-1" type="separator"/>
+
     <Field type="checkbox" id="connector-fix" defaultValue="false">
 	    <Label>MQTT Connector Fix:</Label>
 	    <Description>Check if using MQTT Connector pre-v0.3.3</Description>
@@ -24,7 +34,7 @@
         <Label>See Issue #10 on the MQTT-Connector GitHub page.</Label>
     </Field>
 
-    <Field id="sep-1" type="separator"/>
+    <Field id="sep-2" type="separator"/>
 
     <Field type="checkbox" id="all-brokers-subscribe-to-announce" defaultValue="true">
 	    <Label>Subscribe to announcements on all Brokers:</Label>
@@ -39,7 +49,7 @@
         <List class="self" method="getBrokerDevices" dynamicReload="true"/>
     </Field>
 
-    <Field id="sep-2" type="separator"/>
+    <Field id="sep-3" type="separator"/>
 
     <Field type="menu" id="addon-address-format" defaultValue="host_name">
         <Label>Format of the address column for addon devices:</Label>
@@ -51,7 +61,7 @@
         </List>
     </Field>
 
-    <Field id="sep-3" type="separator"/>
+    <Field id="sep-4" type="separator"/>
 
     <Field id="low-battery-threshold" type="textfield" defaultValue="20">
         <Label>Low battery threshold (%):</Label>
