@@ -141,6 +141,16 @@ class Plugin(indigo.PluginBase):
             exit(-1)
         indigo.server.subscribeToBroadcast(u"com.flyingdiver.indigoplugin.mqtt", u"com.flyingdiver.indigoplugin.mqtt-message_queued", "message_handler")
 
+        # Subscribe to trigger changes so we can examine "Topic Component Match" events
+        indigo.triggers.subscribeToChanges()
+
+        # Examine all triggers and extract known message types
+        for trigger in indigo.triggers.iter("com.flyingdiver.indigoplugin.mqtt"):
+            if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
+                messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+                if len(messageType) > 0:
+                    self.messageTypes.append(messageType)
+
     def shutdown(self):
         """
         Called by Indigo to shutdown the plugin
@@ -462,6 +472,55 @@ class Plugin(indigo.PluginBase):
             if dev.isAddon() and dev.getHostDevice() == shelly:
                 dev.refreshAddressColumn()
 
+    @staticmethod
+    def isShellyMQTTTrigger(trigger):
+        """
+        Helper function to determine if a trigger is a ShellyMQTT trigger.
+
+        :param trigger: The trigger to examine
+        :return: True or False
+        """
+
+        return trigger.pluginId == "com.lionsheeptechnology.ShellyMQTT"
+
+    @staticmethod
+    def isMQTTConnectorTopicMatchTrigger(trigger):
+        """
+        Helper function to determine if a trigger is an MQTTConnector TopicMatch trigger.
+
+        :param trigger: The trigger to examine
+        :return: True or False
+        """
+
+        return trigger.pluginId == "com.flyingdiver.indigoplugin.mqtt" and trigger.pluginTypeId == "topicMatch"
+
+    def triggerCreated(self, trigger):
+        """
+        Monitors for the creation of any trigger.
+
+        :param trigger: The trigger that was created
+        :return: None
+        """
+        super(Plugin, self).triggerCreated(trigger)
+        if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
+            messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.append(messageType)
+
+    def triggerDeleted(self, trigger):
+        """
+        Monitors for the deletion of any trigger.
+
+        :param trigger: The trigger deleted
+        :return: None
+        """
+
+        super(Plugin, self).triggerDeleted(trigger)
+        if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
+            messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.remove(messageType)
+
     def triggerStartProcessing(self, trigger):
         """
         Called when a new trigger should be processed by the plugin.
@@ -491,8 +550,22 @@ class Plugin(indigo.PluginBase):
         :return:
         """
 
-        del self.triggers[origTrigger.id]
-        self.triggers[newTrigger.id] = newTrigger
+        super(Plugin, self).triggerUpdated(origTrigger, newTrigger)
+        if self.isMQTTConnectorTopicMatchTrigger(origTrigger) and origTrigger.enabled:
+            messageType = origTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.remove(messageType)
+
+        if self.isMQTTConnectorTopicMatchTrigger(newTrigger) and newTrigger.enabled:
+            messageType = newTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.append(messageType)
+
+        if self.isShellyMQTTTrigger(origTrigger):
+            del self.triggers[origTrigger.id]
+
+        if self.isShellyMQTTTrigger(newTrigger):
+            self.triggers[newTrigger.id] = newTrigger
 
     def addDeviceSubscriptions(self, shelly):
         """
