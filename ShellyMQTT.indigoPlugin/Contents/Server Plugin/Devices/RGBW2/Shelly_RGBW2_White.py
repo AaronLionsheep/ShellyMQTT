@@ -64,8 +64,9 @@ class Shelly_RGBW2_White(Shelly_1PM):
                     self.applyBrightness(payload['brightness'])
                 else:
                     # The light should be off regardless of a reported brightness value
+                    if not self.isOff():
+                        self.logCommandReceived("off")
                     self.turnOff()
-                    self.logCommandReceived("off")
 
                 # Record the overpower status
                 overloaded = payload.get("overpower", False)
