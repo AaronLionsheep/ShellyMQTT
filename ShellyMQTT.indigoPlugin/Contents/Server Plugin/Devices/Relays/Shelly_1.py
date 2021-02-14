@@ -49,8 +49,6 @@ class Shelly_1(Shelly):
                     self.logCommandReceived("off")
                 self.turnOff()
         elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            if self.device.states['sw-input'] != (payload == '1'):
-                self.logCommandReceived("switch input {}".format(payload == '1'))
             self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
         elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
