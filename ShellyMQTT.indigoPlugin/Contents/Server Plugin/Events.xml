@@ -43,7 +43,7 @@
         <ConfigUI>
             <Field id="device-id" type="menu">
                 <Label>Device:</Label>
-                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3,self.shelly-button1" method="getShellyDevices"/>
+                <List class="self" filter="self.shelly-dimmer-sl,self.shelly-i3,self.shelly-button1" method="getShellyDevices"/>
             </Field>
         </ConfigUI>
     </Event>
@@ -53,7 +53,7 @@
         <ConfigUI>
             <Field id="device-id" type="menu">
                 <Label>Device:</Label>
-                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3,self.shelly-button1" method="getShellyDevices"/>
+                <List class="self" filter="self.shelly-dimmer-sl,self.shelly-i3,self.shelly-button1" method="getShellyDevices"/>
             </Field>
         </ConfigUI>
     </Event>
@@ -63,7 +63,7 @@
         <ConfigUI>
             <Field id="device-id" type="menu">
                 <Label>Device:</Label>
-                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+                <List class="self" filter="self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
             </Field>
         </ConfigUI>
     </Event>
@@ -73,7 +73,7 @@
         <ConfigUI>
             <Field id="device-id" type="menu">
                 <Label>Device:</Label>
-                <List class="self" filter="self.shelly-1,self.shelly-1pm,self.shelly-2-5-relay,self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
+                <List class="self" filter="self.shelly-dimmer-sl,self.shelly-i3" method="getShellyDevices"/>
             </Field>
         </ConfigUI>
     </Event>

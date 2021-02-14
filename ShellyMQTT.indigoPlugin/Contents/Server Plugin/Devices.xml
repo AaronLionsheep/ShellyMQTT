@@ -2134,7 +2134,7 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-em-relay" method="getTemplateDevices"/>
+                <List class="self" filter="self.shelly-em-meter,self.shelly-em-relay" method="getTemplateDevices"/>
                 <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
@@ -2286,7 +2286,7 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-em-relay" method="getTemplateDevices"/>
+                <List class="self" filter="self.shelly-3em-meter,self.shelly-em-relay" method="getTemplateDevices"/>
                 <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
