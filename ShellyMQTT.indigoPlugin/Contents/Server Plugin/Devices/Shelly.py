@@ -221,6 +221,7 @@ class Shelly:
 
         if self.getAddress() is not None:
             self.publish("{}/command".format(self.getAddress()), "update")
+            self.logCommandSent("status request")
 
     def announce(self):
         """
@@ -242,6 +243,7 @@ class Shelly:
             if not self.device.states.get('has-firmware-update', False):
                 self.logger.warning(u"\"%s\" has not notified that it has a newer firmware. Attempting to update anyway...", self.device.name)
             self.publish("{}/command".format(self.getAddress()), "update_fw")
+            self.logCommandSent("update firmware")
 
     def setTemperature(self, temperature, state="temperature", unitsProps="temp-units", decimalsProps="temp-decimals", offsetProps="temp-offset"):
         """
@@ -322,12 +324,12 @@ class Shelly:
 
         # id should appear in part of the device address
         if identifier and self.getAddress() and identifier in self.getAddress():
-            self.logger.info(u"Updated device details for \"{}\" via announcement message".format(self.device.name))
+            self.logger.debug(u"Updated device details for \"{}\" via announcement message".format(self.device.name))
             self.device.updateStateOnServer('mac-address', mac_address)
             self.device.updateStateOnServer('ip-address', ip_address)
 
             if self.device.states.get('firmware-version', '') not in [firmware_version, None, '']:
-                self.logger.info(u"Detected a firmware change for \"{}\"".format(self.device.name))
+                self.logger.debug(u"Detected a firmware change for \"{}\"".format(self.device.name))
             self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
@@ -409,7 +411,7 @@ class Shelly:
         new_energy = energy - resetEnergyOffset
         if new_energy < 0:  # If the offset is greater than what is being reported, the device must have reset
             # our last known energy total can be used to determine the previous energy usage
-            self.logger.info(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last known energy usage value...")
+            self.logger.debug(u"%s: Must have lost power and the energy usage has reset to 0. Determining previous usage based on last known energy usage value...")
             resetEnergyOffset = self.device.states.get(energyState, 0) * 60 * 1000 * -1
             newProps = self.device.pluginProps
             newProps[offsetProp] = resetEnergyOffset
@@ -451,8 +453,8 @@ class Shelly:
         :return: None
         """
 
-        if not self.isOn():
-            self.logger.info(u"\"{}\" on".format(self.device.name))
+        # if not self.isOn():
+        #     self.logger.info(u"\"{}\" on".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=True)
         self.updateStateImage()
 
@@ -463,8 +465,8 @@ class Shelly:
         :return: None
         """
 
-        if not self.isOff():
-            self.logger.info(u"\"{}\" off".format(self.device.name))
+        # if not self.isOff():
+        #     self.logger.info(u"\"{}\" off".format(self.device.name))
         self.device.updateStateOnServer(key='onOffState', value=False)
         self.updateStateImage()
 
@@ -560,6 +562,14 @@ class Shelly:
                         indigo.trigger.execute(trigger)
         except ValueError:
             pass
+
+    def logCommandSent(self, message):
+        if indigo.activePlugin.pluginPrefs.get('log-device-activity', True):
+            self.logger.info(u"sent \"{}\" {}".format(self.device.name, message))
+
+    def logCommandReceived(self, message):
+        if indigo.activePlugin.pluginPrefs.get('log-device-activity', True):
+            self.logger.info(u"received \"{}\" {}".format(self.device.name, message))
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):

@@ -1654,7 +1654,7 @@
     <!--<Device id="sep-plugs" />-->
 
     <Device type="relay" id="shelly-plug">
-        <Name>Shelly Plug</Name>
+        <Name>Shelly Plug (US)</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />

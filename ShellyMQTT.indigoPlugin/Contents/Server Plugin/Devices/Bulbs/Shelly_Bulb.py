@@ -62,8 +62,11 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
                     # we will accept a brightness value and save it
                     self.device.updateStateOnServer("brightnessLevel", payload['brightness'])
                     self.turnOn()
+                    self.logCommandReceived("brightness to {}%".format(payload['brightness']))
                 else:
                     # The light should be off regardless of a reported brightness value
+                    if not self.isOff():
+                        self.logCommandReceived("off")
                     self.turnOff()
 
                 # Record the color data
@@ -94,6 +97,7 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
             if 'blueLevel' in action.actionValue:
                 self.device.updateStateOnServer("blueLevel", int(action.actionValue['blueLevel']))
             self.set()
+            self.logCommandSent(u"color values RGBW to {}, {}, {}, {}".format(self.device.states['redLevel'], self.device.states['greenLevel'], self.device.states['blueLevel'], self.device.states['whiteLevel']))
         else:
             Shelly_Bulb_Vintage.handleAction(self, action)
 

@@ -42,6 +42,8 @@ class Shelly_Flood(Shelly):
         if topic == "{}/sensor/temperature".format(self.getAddress()):
             self.setTemperature(float(payload))
         elif topic == "{}/sensor/flood".format(self.getAddress()):
+            if self.device.states['onOffState'] != (payload == 'true'):
+                self.logCommandReceived("{}".format("wet" if (payload == 'true') else "dry"))
             if payload == 'true':
                 self.device.updateStateOnServer(key='onOffState', value=True, uiValue='wet')
             elif payload == 'false':

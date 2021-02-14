@@ -39,6 +39,7 @@ from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
 from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Switch
 
 from Queue import Queue
+import logging
 
 kCurDevVersion = 0  # current version of plugin devices
 
@@ -85,7 +86,8 @@ deviceClasses = {
 class Plugin(indigo.PluginBase):
     def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
         indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
-        self.debug = pluginPrefs.get("debugMode", False)
+        # self.debug = pluginPrefs.get("debugMode", False)
+        self.setLogLevel(pluginPrefs.get('log-level', "info"))
         self.lowBatteryThreshold = pluginPrefs.get("low-battery-threshold", 20)
 
         # {
@@ -139,6 +141,16 @@ class Plugin(indigo.PluginBase):
             exit(-1)
         indigo.server.subscribeToBroadcast(u"com.flyingdiver.indigoplugin.mqtt", u"com.flyingdiver.indigoplugin.mqtt-message_queued", "message_handler")
 
+        # Subscribe to trigger changes so we can examine "Topic Component Match" events
+        indigo.triggers.subscribeToChanges()
+
+        # Examine all triggers and extract known message types
+        for trigger in indigo.triggers.iter("com.flyingdiver.indigoplugin.mqtt"):
+            if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
+                messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+                if len(messageType) > 0:
+                    self.messageTypes.append(messageType)
+
     def shutdown(self):
         """
         Called by Indigo to shutdown the plugin
@@ -166,6 +178,28 @@ class Plugin(indigo.PluginBase):
 
         except self.StopThread:
             pass
+
+    def setLogLevel(self, level):
+        """
+        Helper method to set the logging level.
+
+        :param level: Expected to be a string with a valid log level.
+        :return: None
+        """
+
+        valid_log_levels = ["debug", "info", "warning"]
+        if level not in valid_log_levels:
+            self.logger.error(u"Attempted to set the log level to an unhandled value: {}".format(level))
+
+        if level == "debug":
+            self.indigo_log_handler.setLevel(logging.DEBUG)
+            self.logger.debug(u"Log level set to debug")
+        elif level == "info":
+            self.indigo_log_handler.setLevel(logging.INFO)
+            self.logger.info(u"Log level set to info")
+        elif level == "warning":
+            self.indigo_log_handler.setLevel(logging.WARNING)
+            self.logger.warning(u"Log level set to warning")
 
     def validatePrefsConfigUi(self, valuesDict):
         """
@@ -201,13 +235,14 @@ class Plugin(indigo.PluginBase):
         """
 
         if userCancelled is False:
-            self.debug = valuesDict.get('debugMode', False)
+            # self.debug = valuesDict.get('debugMode', False)
+            self.setLogLevel(valuesDict.get('log-level', "info"))
             self.lowBatteryThreshold = int(valuesDict.get('low-battery-threshold', 20))
 
-        if self.debug is True:
-            self.logger.info(u"Debugging on")
-        else:
-            self.logger.info(u"Debugging off")
+        # if self.debug is True:
+        #     self.logger.info(u"Debugging on")
+        # else:
+        #     self.logger.info(u"Debugging off")
 
         for shelly in self.shellyDevices.values():
             if shelly.isAddon():
@@ -278,7 +313,7 @@ class Plugin(indigo.PluginBase):
                     # Add it to the known device list and stop attempting startup
                     # The host will attempt to start any of its addons
                     self.dependents[device.id] = shelly
-                    self.logger.info(u"{} is queued to be started after the host starts".format(shelly.device.name))
+                    self.logger.debug(u"{} is queued to be started after the host starts".format(shelly.device.name))
                     return False
 
         self.logger.info(u"Starting \"%s\"...", device.name)
@@ -295,7 +330,8 @@ class Plugin(indigo.PluginBase):
         #
         # Add the device id to our internal list of devices
         #
-        shelly.subscribe()
+        # NOTE: Stopped subscribing to individual topics in 0.2.4
+        # shelly.subscribe()
         self.addDeviceSubscriptions(shelly)
         self.shellyDevices[device.id] = shelly
         self.messageTypes.append(shelly.getMessageType())
@@ -368,7 +404,8 @@ class Plugin(indigo.PluginBase):
                         'topic': topic
                     }
                     # Unsubscribe the broker from this topic and remove the record of the topic
-                    self.mqttPlugin.executeAction("del_subscription", deviceId=shelly.getBrokerId(), props=props)
+                    # NOTE: Stopped subscribing to individual topics in 0.2.4
+                    # self.mqttPlugin.executeAction("del_subscription", deviceId=shelly.getBrokerId(), props=props)
                     topicsToRemove.append(topic)
 
             #
@@ -435,6 +472,55 @@ class Plugin(indigo.PluginBase):
             if dev.isAddon() and dev.getHostDevice() == shelly:
                 dev.refreshAddressColumn()
 
+    @staticmethod
+    def isShellyMQTTTrigger(trigger):
+        """
+        Helper function to determine if a trigger is a ShellyMQTT trigger.
+
+        :param trigger: The trigger to examine
+        :return: True or False
+        """
+
+        return trigger.pluginId == "com.lionsheeptechnology.ShellyMQTT"
+
+    @staticmethod
+    def isMQTTConnectorTopicMatchTrigger(trigger):
+        """
+        Helper function to determine if a trigger is an MQTTConnector TopicMatch trigger.
+
+        :param trigger: The trigger to examine
+        :return: True or False
+        """
+
+        return trigger.pluginId == "com.flyingdiver.indigoplugin.mqtt" and trigger.pluginTypeId == "topicMatch"
+
+    def triggerCreated(self, trigger):
+        """
+        Monitors for the creation of any trigger.
+
+        :param trigger: The trigger that was created
+        :return: None
+        """
+        super(Plugin, self).triggerCreated(trigger)
+        if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
+            messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.append(messageType)
+
+    def triggerDeleted(self, trigger):
+        """
+        Monitors for the deletion of any trigger.
+
+        :param trigger: The trigger deleted
+        :return: None
+        """
+
+        super(Plugin, self).triggerDeleted(trigger)
+        if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
+            messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.remove(messageType)
+
     def triggerStartProcessing(self, trigger):
         """
         Called when a new trigger should be processed by the plugin.
@@ -464,8 +550,22 @@ class Plugin(indigo.PluginBase):
         :return:
         """
 
-        del self.triggers[origTrigger.id]
-        self.triggers[newTrigger.id] = newTrigger
+        super(Plugin, self).triggerUpdated(origTrigger, newTrigger)
+        if self.isMQTTConnectorTopicMatchTrigger(origTrigger) and origTrigger.enabled:
+            messageType = origTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.remove(messageType)
+
+        if self.isMQTTConnectorTopicMatchTrigger(newTrigger) and newTrigger.enabled:
+            messageType = newTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(messageType) > 0:
+                self.messageTypes.append(messageType)
+
+        if self.isShellyMQTTTrigger(origTrigger):
+            del self.triggers[origTrigger.id]
+
+        if self.isShellyMQTTTrigger(newTrigger):
+            self.triggers[newTrigger.id] = newTrigger
 
     def addDeviceSubscriptions(self, shelly):
         """
@@ -928,7 +1028,7 @@ class Plugin(indigo.PluginBase):
                         'retain': 0,
                     }
                     self.mqttPlugin.executeAction("publish", deviceId=brokerId, props=props, waitUntilDone=False)
-                    self.logger.info(u"published \"announce\" to \"shellies/command\" on broker \"%s\"", indigo.devices[brokerId].name)
+                    self.logger.debug(u"published \"announce\" to \"shellies/command\" on broker \"%s\"", indigo.devices[brokerId].name)
 
     def updateShelly(self, valuesDict, typeId):
         """

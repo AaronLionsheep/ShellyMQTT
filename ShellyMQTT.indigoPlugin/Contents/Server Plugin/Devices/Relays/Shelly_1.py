@@ -41,10 +41,16 @@ class Shelly_1(Shelly):
 
         if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
             if payload == "on":
+                if not self.isOn():
+                    self.logCommandReceived("on")
                 self.turnOn()
             elif payload == "off":
+                if not self.isOff():
+                    self.logCommandReceived("off")
                 self.turnOff()
         elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
+            if self.device.states['sw-input'] != (payload == '1'):
+                self.logCommandReceived("switch input {}".format(payload == '1'))
             self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
         elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
             self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
@@ -62,18 +68,22 @@ class Shelly_1(Shelly):
         if action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.turnOn()
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
+            self.logCommandSent("on")
         elif action.deviceAction == indigo.kDeviceAction.TurnOff:
             self.turnOff()
             self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
+            self.logCommandSent("off")
         elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
             self.sendStatusRequestCommand()
         elif action.deviceAction == indigo.kDeviceAction.Toggle:
             if self.isOn():
                 self.turnOff()
                 self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
+                self.logCommandSent("off")
             elif self.isOff():
                 self.turnOn()
                 self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
+                self.logCommandSent("on")
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):
