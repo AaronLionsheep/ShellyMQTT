@@ -1,10 +1,11 @@
+# coding=utf-8
 import indigo
 from ..Shelly import Shelly
 
 
-class Shelly_1(Shelly):
+class Shelly_Gas(Shelly):
     """
-    The Shelly 1 is a simple on/off relay.
+
     """
 
     def __init__(self, device):
@@ -24,10 +25,10 @@ class Shelly_1(Shelly):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
-                "{}/relay/{}".format(address, self.getChannel()),
-                "{}/input/{}".format(address, self.getChannel()),
-                "{}/longpush/{}".format(address, self.getChannel()),
-                "{}/input_event/{}".format(address, self.getChannel())
+                "{}/sensor/operation".format(address),
+                "{}/sensor/gas".format(address),
+                "{}/sensor/self_test".format(address),
+                "{}/sensor/concentration".format(address)
             ]
 
     def handleMessage(self, topic, payload):
@@ -39,21 +40,24 @@ class Shelly_1(Shelly):
         :return: None
         """
 
-        if topic == "{}/relay/{}".format(self.getAddress(), self.getChannel()):
-            if payload == "on":
-                if not self.isOn():
-                    self.logCommandReceived("on")
-                self.turnOn()
-            elif payload == "off":
-                if not self.isOff():
-                    self.logCommandReceived("off")
-                self.turnOff()
-        elif topic == "{}/input/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="sw-input", value=(payload == '1'))
-        elif topic == "{}/longpush/{}".format(self.getAddress(), self.getChannel()):
-            self.device.updateStateOnServer(key="longpush", value=(payload == '1'))
+        if topic == "{}/sensor/operation".format(self.getAddress()):
+            self.device.updateStateOnServer(key="sensor-status", value=payload)
+        elif topic == "{}/sensor/gas".format(self.getAddress()):
+            self.device.updateStateOnServer(key="gas-detected", value=payload)
+            self.updateStateImage()
+        elif topic == "{}/sensor/self_test".format(self.getAddress()):
+            self.device.updateStateOnServer(key="self-test", value=payload)
+        elif topic == "{}/sensor/concentration".format(self.getAddress()):
+            try:
+                concentration = int(payload)
+                self.device.updateStateOnServer(key="sensorValue", value=concentration, uiValue='{} ppm'.format(concentration))
+            except ValueError:
+                self.logger.error(u"Unable to convert concentration of \"{}\" to an int!".format(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
+
+        # Update the display state after data changed
+        self.updateStateImage()
 
     def handleAction(self, action):
         """
@@ -63,25 +67,31 @@ class Shelly_1(Shelly):
         :return: None
         """
 
-        if action.deviceAction == indigo.kDeviceAction.TurnOn:
-            self.turnOn()
-            self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
-            self.logCommandSent("on")
-        elif action.deviceAction == indigo.kDeviceAction.TurnOff:
-            self.turnOff()
-            self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
-            self.logCommandSent("off")
-        elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
+        if action.deviceAction == indigo.kDeviceAction.RequestStatus:
             self.sendStatusRequestCommand()
-        elif action.deviceAction == indigo.kDeviceAction.Toggle:
-            if self.isOn():
-                self.turnOff()
-                self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "off")
-                self.logCommandSent("off")
-            elif self.isOff():
-                self.turnOn()
-                self.publish("{}/relay/{}/command".format(self.getAddress(), self.getChannel()), "on")
-                self.logCommandSent("on")
+
+    def handlePluginAction(self, action):
+        if action.pluginTypeId == "gas-self-test":
+            self.logCommandSent("start self test")
+            self.publish("{}/sensor/start_self_test".format(self.getAddress()), "start")
+        elif action.pluginTypeId == "gas-mute-alarm":
+            self.logCommandSent("mute alarm")
+            self.publish("{}/sensor/mute".format(self.getAddress()), "mute")
+        elif action.pluginTypeId == "gas-unmute-alarm":
+            self.logCommandSent("unmute alarm")
+            self.publish("{}/sensor/unmute".format(self.getAddress()), "unmute")
+
+    def updateStateImage(self):
+        """
+        Sets the state image based on device states.
+
+        :return: None
+        """
+
+        if self.device.states.get('gas-detected', '') in ['mild', 'heavy']:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorTripped)
+        else:
+            self.device.updateStateImageOnServer(indigo.kStateImageSel.SensorOn)
 
     @staticmethod
     def validateConfigUI(valuesDict, typeId, devId):

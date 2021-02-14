@@ -60,4 +60,39 @@
         </ConfigUI>
         <CallbackMethod>timedOff</CallbackMethod>
     </Action>
+
+    <Action id="sep3"/>
+
+    <Action id="gas-self-test">
+        <Name>Shelly Gas Self-Test</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Shelly Gas Device:</Label>
+                <List class="indigo.devices" filter="self.shelly-gas" dynamicReload="true"/>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>dispatchEventToDevice</CallbackMethod>
+    </Action>
+
+    <Action id="gas-mute-alarm">
+        <Name>Mute Shelly Gas Alarm</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Shelly Gas Device:</Label>
+                <List class="indigo.devices" filter="self.shelly-gas" dynamicReload="true"/>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>dispatchEventToDevice</CallbackMethod>
+    </Action>
+
+    <Action id="gas-unmute-alarm">
+        <Name>Unmute Shelly Gas Alarm</Name>
+        <ConfigUI>
+            <Field id="device-id" type="menu">
+                <Label>Shelly Gas Device:</Label>
+                <List class="indigo.devices" filter="self.shelly-gas" dynamicReload="true"/>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>dispatchEventToDevice</CallbackMethod>
+    </Action>
 </Actions>

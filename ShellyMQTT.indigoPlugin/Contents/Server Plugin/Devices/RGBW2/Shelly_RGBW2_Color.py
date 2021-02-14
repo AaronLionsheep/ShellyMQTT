@@ -73,8 +73,9 @@ class Shelly_RGBW2_Color(Shelly_1PM):
                     self.applyBrightness(payload['gain'])
                 else:
                     # The light should be off regardless of a reported brightness value
+                    if not self.isOff():
+                        self.logCommandReceived("off")
                     self.turnOff()
-                    self.logCommandReceived("off")
 
                 # Record the color data
                 self.device.updateStateOnServer("redLevel", payload.get("red", 0))
