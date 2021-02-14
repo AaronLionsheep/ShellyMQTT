@@ -23,6 +23,7 @@ from Devices.Sensors.Shelly_EM_Meter import Shelly_EM_Meter
 from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
 from Devices.Sensors.Shelly_i3 import Shelly_i3
 from Devices.Sensors.Shelly_Button1 import Shelly_Button1
+from Devices.Sensors.Shelly_Gas import Shelly_Gas
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -64,6 +65,7 @@ deviceClasses = {
     "shelly-3em-meter": Shelly_3EM_Meter,
     "shelly-i3": Shelly_i3,
     "shelly-button1": Shelly_Button1,
+    "shelly-gas": Shelly_Gas,
 
     # Bulb devices
     "shelly-bulb": Shelly_Bulb,
@@ -481,7 +483,8 @@ class Plugin(indigo.PluginBase):
         :return: True or False
         """
 
-        return trigger.pluginId == "com.lionsheeptechnology.ShellyMQTT"
+        return isinstance(trigger, indigo.PluginEventTrigger) \
+               and trigger.pluginId == "com.lionsheeptechnology.ShellyMQTT"
 
     @staticmethod
     def isMQTTConnectorTopicMatchTrigger(trigger):
@@ -492,7 +495,9 @@ class Plugin(indigo.PluginBase):
         :return: True or False
         """
 
-        return trigger.pluginId == "com.flyingdiver.indigoplugin.mqtt" and trigger.pluginTypeId == "topicMatch"
+        return isinstance(trigger, indigo.PluginEventTrigger) \
+            and trigger.pluginId == "com.flyingdiver.indigoplugin.mqtt" \
+            and trigger.pluginTypeId == "topicMatch"
 
     def triggerCreated(self, trigger):
         """
@@ -1136,7 +1141,8 @@ class Plugin(indigo.PluginBase):
 
         def logDividerRow():
             self.logger.info(
-                u"   +{5:-^{0}s}+{5:-<{1}s}+{5:-<{2}s}+{5:-<{0}s}+{5:-<{3}s}+{5:-<{4}s}+".format(nameLength + 3, ipLength + 2, addressLength + 3, updateLength + 2, firmwareLength + 2, ""))
+                u"   +{5:-^{0}s}+{5:-<{1}s}+{5:-<{2}s}+{5:-<{0}s}+{5:-<{3}s}+{5:-<{4}s}+".format(nameLength + 3, ipLength + 2, addressLength + 3, updateLength + 2,
+                                                                                                 firmwareLength + 2, ""))
 
         def logRow(name, ip, address, host, update, firmware, no=""):
             self.logger.info(
@@ -1153,12 +1159,24 @@ class Plugin(indigo.PluginBase):
             no = 1
             for shelly in shellies:
                 if not shelly.isAddon():
-                    logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address=shelly.getAddress(), host="N/A", update="Yes" if shelly.updateAvailable() else "No", firmware=shelly.getFirmware())
+                    logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address=shelly.getAddress(), host="N/A",
+                           update="Yes" if shelly.updateAvailable() else "No", firmware=shelly.getFirmware())
                 else:
                     logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address="", host=shelly.getHostDevice().device.name, update="", firmware="")
                 no += 1
 
             logDividerRow()
+
+    def dispatchEventToDevice(self, pluginAction, device, callerWaitingForResult):
+        deviceId = int(pluginAction.props['device-id'])
+        if not deviceId:
+            return
+
+        shelly = self.shellyDevices[deviceId]
+        if not shelly:
+            return
+
+        shelly.handlePluginAction(pluginAction)
 
     #####################
     #     Utilities     #
@@ -1395,4 +1413,3 @@ class Plugin(indigo.PluginBase):
             return True
         else:
             return False, valuesDict, errors
-

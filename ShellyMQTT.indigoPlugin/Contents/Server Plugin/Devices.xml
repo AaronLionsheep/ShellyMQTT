@@ -2740,4 +2740,114 @@
             </State>
         </States>
     </Device>
+
+    <Device type="sensor" id="shelly-gas">
+        <Name>Shelly Gas</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsOnState" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsSensorValue" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="AllowOnStateChange" defaultValue="false" hidden="true" />
+
+            <Field id="template-device" type="menu">
+                <Label>Use information from Device:</Label>
+                <List class="self" filter="self.shelly-gas" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+            </Field>
+
+            <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Selecting a device will populate the Broker and MQTT Topic Root.</Label>
+            </Field>
+
+            <Field id="template-notice-2" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Note: A discovered device will populate the MQTT Topic Root with the standard "shellies/" pattern and will work with devices right out of the box.</Label>
+            </Field>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Field id="broker-id" type="menu">
+                <Label>MQTT Broker:</Label>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+            </Field>
+
+            <Field id="address" type="textfield">
+                <Label>MQTT Topic Root:</Label>
+            </Field>
+
+            <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+            </Field>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Field id="message-type" type="textfield">
+                <Label>Message Type:</Label>
+            </Field>
+
+            <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+            </Field>
+
+            <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+                <Label>Same Message Type for Announce:</Label>
+                <Description>Uses the same message type for announce messages</Description>
+            </Field>
+
+            <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+                <Label>Announce Message Type:</Label>
+            </Field>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Field type="checkbox" id="muted" defaultValue="false">
+                <Label>Mute Logging:</Label>
+                <Description>Device warnings and errors will still be logged.</Description>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+            <State id="sensor-status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Sensor Status</TriggerLabel>
+                <ControlPageLabel>Sensor Status</ControlPageLabel>
+            </State>
+            <State id="gas-detected">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Gas Level Detected</TriggerLabel>
+                <ControlPageLabel>Gas Level Detected</ControlPageLabel>
+            </State>
+            <State id="self-test">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Self Test</TriggerLabel>
+                <ControlPageLabel>Self Test</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
 </Devices>

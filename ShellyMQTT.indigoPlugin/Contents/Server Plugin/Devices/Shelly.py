@@ -87,6 +87,16 @@ class Shelly:
 
         return None
 
+    def handlePluginAction(self, action):
+        """
+        The default handler for a plugin-defined action
+
+        :param action: The plugin action
+        :return: None
+        """
+
+        return None
+
     def publish(self, topic, payload):
         """
         Publishes a message on a given topic to the device's broker.

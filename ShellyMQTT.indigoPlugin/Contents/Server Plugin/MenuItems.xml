@@ -70,4 +70,21 @@
         <CallbackMethod>updateShelly</CallbackMethod>
         <ButtonTitle>Update!</ButtonTitle>
     </MenuItem>
+
+    <MenuItem id="sep-4"/>
+
+    <MenuItem id="gas-self-test">
+        <Name>Shelly Gas Self-Test</Name>
+        <ConfigUI actionId="gas-self-test"/>
+    </MenuItem>
+
+    <MenuItem id="gas-mute-alarm">
+        <Name>Mute Shelly Gas Alarm</Name>
+        <ConfigUI actionId="gas-mute-alarm"/>
+    </MenuItem>
+
+    <MenuItem id="gas-unmute-alarm">
+        <Name>Unmute Shelly Gas Alarm</Name>
+        <ConfigUI actionId="gas-unmute-alarm"/>
+    </MenuItem>
 </MenuItems>
