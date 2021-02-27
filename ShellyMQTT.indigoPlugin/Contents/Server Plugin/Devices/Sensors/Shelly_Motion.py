@@ -64,6 +64,8 @@ class Shelly_Motion(Shelly):
                     self.device.updateStateOnServer(key="active", value=active)
                 if "vibration" in payload:
                     vibration = payload['vibration'] is True
+                    if self.device.states.get('vibration', False) != vibration and vibration:
+                        self.logCommandReceived("tampering detected!")
                     self.device.updateStateOnServer(key="vibration", value=vibration)
                 if "lux" in payload:
                     self.device.updateStateOnServer(key="lux", value=payload['lux'])
