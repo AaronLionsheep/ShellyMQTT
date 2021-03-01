@@ -8,6 +8,7 @@ from Devices.Relays.Shelly_1PM import Shelly_1PM
 from Devices.Relays.Shelly_2_5_Relay import Shelly_2_5_Relay
 from Devices.Relays.Shelly_4_Pro import Shelly_4_Pro
 from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
+from Devices.Relays.Shelly_Uni_Relay import Shelly_Uni_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
 
@@ -24,6 +25,8 @@ from Devices.Sensors.Shelly_3EM_Meter import Shelly_3EM_Meter
 from Devices.Sensors.Shelly_i3 import Shelly_i3
 from Devices.Sensors.Shelly_Button1 import Shelly_Button1
 from Devices.Sensors.Shelly_Gas import Shelly_Gas
+from Devices.Sensors.Shelly_Uni_Input import Shelly_Uni_Input
+from Devices.Sensors.Shelly_Motion import Shelly_Motion
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -66,6 +69,7 @@ deviceClasses = {
     "shelly-i3": Shelly_i3,
     "shelly-button1": Shelly_Button1,
     "shelly-gas": Shelly_Gas,
+    "shelly-motion": Shelly_Motion,
 
     # Bulb devices
     "shelly-bulb": Shelly_Bulb,
@@ -81,7 +85,12 @@ deviceClasses = {
     "shelly-addon-dht22": Shelly_Addon_DHT22,
     "shelly-addon-detached-switch": Shelly_Addon_Detached_Switch,
 
-    "shelly-dimmer-sl": Shelly_Dimmer_SL
+    # Shelly Dimmer
+    "shelly-dimmer-sl": Shelly_Dimmer_SL,
+    
+    # Shelly Uni
+    "shelly-uni-relay": Shelly_Uni_Relay,
+    "shelly-uni-input": Shelly_Uni_Input
 }
 
 
@@ -884,8 +893,8 @@ class Plugin(indigo.PluginBase):
         """
 
         hostable_model_categories = {  # Shelly models that can host an "addon"
-            "ds1820": ["shelly-1", "shelly-1pm"],
-            "dht22": ["shelly-1", "shelly-1pm"],
+            "ds1820": ["shelly-1", "shelly-1pm", "shelly-uni-relay", "shelly-uni-input"],
+            "dht22": ["shelly-1", "shelly-1pm", "shelly-uni-relay", "shelly-uni-input"],
             "detached-switch": ["shelly-1", "shelly-1pm", "shelly-2-5-relay", "shelly-4-pro", "shelly-dimmer-sl"]
         }
 
