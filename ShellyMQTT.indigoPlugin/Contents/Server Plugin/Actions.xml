@@ -5,7 +5,7 @@
         <ConfigUI>
             <Field id="shelly-device-id" type="menu">
                 <Label>Shelly Device to "discover":</Label>
-                <List class="self" method="getShellyDevices" dynamicReload="true"/>
+                <List class="self" method="mg_getShellyDevices" dynamicReload="true"/>
             </Field>
         </ConfigUI>
         <CallbackMethod>cb_discoverShelly</CallbackMethod>
@@ -23,7 +23,7 @@
         <ConfigUI>
             <Field id="shelly-device-id" type="menu">
                 <Label>Shelly Device to "discover":</Label>
-                <List class="self" method="getShellyDevices" dynamicReload="true"/>
+                <List class="self" method="mg_getShellyDevices" dynamicReload="true"/>
             </Field>
         </ConfigUI>
         <CallbackMethod>cb_updateShelly</CallbackMethod>

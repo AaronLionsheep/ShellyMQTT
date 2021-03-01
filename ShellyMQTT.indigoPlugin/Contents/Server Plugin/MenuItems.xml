@@ -64,7 +64,7 @@
 
             <Field id="shelly-device-id" type="menu">
                 <Label>Shelly Device:</Label>
-                <List class="self" method="getUpdatableShellyDevices" dynamicReload="true"/>
+                <List class="self" method="mg_getUpdatableShellyDevices" dynamicReload="true"/>
             </Field>
         </ConfigUI>
         <CallbackMethod>cb_updateShelly</CallbackMethod>
