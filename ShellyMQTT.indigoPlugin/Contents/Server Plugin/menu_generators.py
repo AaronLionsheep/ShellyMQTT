@@ -119,7 +119,7 @@ def getUpdatableShellyDevices(plugin, filter=None, valuesDict={}, typeId=None, t
     :return: A list of Indigo deviceId's corresponding to updatable shelly devices.
     """
 
-    shellies = getShellyDevices()
+    shellies = getShellyDevices(plugin)
     updatable = []
     for dev in shellies:
         device = indigo.devices[dev[0]]
@@ -150,7 +150,7 @@ def getAddonHostDevices(plugin, filter=None, valuesDict={}, typeId=None, targetI
                 for model in models:
                     hostable_models.add(model)
 
-    shellies = getShellyDevices()
+    shellies = getShellyDevices(plugin)
     hostable = []
     for dev in shellies:
         shelly = plugin.shellyDevices.get(dev[0])
