@@ -920,70 +920,7 @@ class Plugin(indigo.PluginBase):
     #     Actions from the User     #
     #################################
 
-    def populateFromChosenDevice(self, valuesDict, typeId, devId):
-        """
-        Reads the chosen device and automatically populates the device address and broker.
 
-        The key for the selected item is expected to be of the form <broker-id>|<identifier>.
-        The values taken from this key will be populated if found.
-
-        :return: Populated ConfigUI values.
-        """
-
-        # Get the chosen device
-        key = valuesDict.get("discovered-device", None)
-
-        # Parse the identifier and broker id
-        if key is None:
-            return valuesDict
-
-        parts = key.split("|")
-        if len(parts) != 2:
-            return valuesDict
-
-        brokerId = parts[0]
-        identifier = parts[1]
-
-        # Set the data
-        valuesDict["broker-id"] = brokerId
-        valuesDict["address"] = u"shellies/{}".format(identifier)
-
-        return valuesDict
-
-    def populateFromTemplateDevice(self, valuesDict, typeId, devId):
-        """
-        Reads the chosen device and automatically populates the device address and broker.
-
-        The key for the selected item is expected to be of the form <broker-id>|<identifier>.
-        The values taken from this key will be populated if found.
-
-        :return: Populated ConfigUI values.
-        """
-
-        # Get the chosen device
-        key = valuesDict.get("template-device", None)
-
-        # Parse the identifier and broker id
-        if key is None:
-            return valuesDict
-
-        parts = key.split("|")
-        if len(parts) < 2:  # Existing devices will have the name as a third "part" for uniqueness in the menu
-            return valuesDict
-
-        brokerId = parts[0]
-        address = parts[1]
-
-        # Set the data
-        valuesDict["broker-id"] = brokerId
-        valuesDict["address"] = u"{}".format(address)
-
-        # A message-type is included in the data
-        if len(parts) == 4:
-            message_type = parts[2]
-            valuesDict["message-type"] = u"{}".format(message_type)
-
-        return valuesDict
 
     #####################
     #     Utilities     #

@@ -12,7 +12,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -120,7 +120,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -260,7 +260,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-2-5-relay" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -427,7 +427,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-4-pro" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -543,7 +543,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -708,7 +708,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -845,7 +845,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1010,7 +1010,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1148,7 +1148,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1250,7 +1250,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-rgbw2-white" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1368,7 +1368,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1465,7 +1465,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1566,7 +1566,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1665,7 +1665,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1772,7 +1772,7 @@
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
                 <List class="self" filter="" method="getDiscoveredDevices"/>
-                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2135,7 +2135,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-em-meter,self.shelly-em-relay" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2287,7 +2287,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-3em-meter,self.shelly-em-relay" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2448,7 +2448,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-em-meter,self.shelly-3em-meter" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2548,7 +2548,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-i3" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2660,7 +2660,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.button1" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2755,7 +2755,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-gas" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2862,7 +2862,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-uni-relay,self.shelly-uni-input" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2972,7 +2972,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-uni-input,self.shelly-uni-relay" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -3081,7 +3081,7 @@
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
                 <List class="self" filter="self.shelly-motion" method="getTemplateDevices"/>
-                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
+                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
