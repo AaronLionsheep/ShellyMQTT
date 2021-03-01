@@ -2,7 +2,7 @@
 <MenuItems>
     <MenuItem id="log-build-code">
         <Name>Log Build-code</Name>
-        <CallbackMethod>logBuildCode</CallbackMethod>
+        <CallbackMethod>cb_logBuildCode</CallbackMethod>
     </MenuItem>
 
     <MenuItem id="sep-1"/>
@@ -14,19 +14,19 @@
 
     <MenuItem id="discover-shellies">
         <Name>Discover All Shellies</Name>
-        <CallbackMethod>discoverShellies</CallbackMethod>
+        <CallbackMethod>cb_discoverShellies</CallbackMethod>
     </MenuItem>
 
     <MenuItem id="sep-2"/>
 
     <MenuItem id="print-discovered-shellies">
         <Name>Log Discovered Shellies</Name>
-        <CallbackMethod>printDiscoveredShellies</CallbackMethod>
+        <CallbackMethod>cb_printDiscoveredShellies</CallbackMethod>
     </MenuItem>
 
     <MenuItem id="print-shelly-overview">
         <Name>Log Shelly Devices Overview</Name>
-        <CallbackMethod>printShellyDevicesOverview</CallbackMethod>
+        <CallbackMethod>cb_printShellyDevicesOverview</CallbackMethod>
     </MenuItem>
 
     <MenuItem id="sep-3"/>
@@ -43,7 +43,7 @@
             <Field id="run-discover-devices" type="button" tooltip="Click this button to start the automatic discovery process.">
                 <Label>Auto-discovery:</Label>
                 <Title>Discover All Shellies</Title>
-                <CallbackMethod>discoverShellies</CallbackMethod>
+                <CallbackMethod>cb_discoverShellies</CallbackMethod>
             </Field>
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Watch the logs - this may not be immediate. You should only need to run this once.</Label>
@@ -54,7 +54,7 @@
             <Field id="refresh-devices" type="button" tooltip="Click this button to get the devices that need updates.">
                 <Label>Reload Updatable Shellies:</Label>
                 <Title>Reload</Title>
-                <CallbackMethod>menuChanged</CallbackMethod>
+                <CallbackMethod>cb_menuChanged</CallbackMethod>
             </Field>
             <Field id="notice-2" type="label" fontSize="small" fontColor="darkGrey">
                 <Label>Discovery may take a few seconds, so the device list below needs to be refreshed manually.</Label>
@@ -67,7 +67,7 @@
                 <List class="self" method="getUpdatableShellyDevices" dynamicReload="true"/>
             </Field>
         </ConfigUI>
-        <CallbackMethod>updateShelly</CallbackMethod>
+        <CallbackMethod>cb_updateShelly</CallbackMethod>
         <ButtonTitle>Update!</ButtonTitle>
     </MenuItem>
 

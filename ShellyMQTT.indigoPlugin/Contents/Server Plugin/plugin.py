@@ -44,6 +44,7 @@ from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Sw
 
 from Queue import Queue
 import logging
+import callbacks
 
 kCurDevVersion = 0  # current version of plugin devices
 
@@ -919,15 +920,6 @@ class Plugin(indigo.PluginBase):
     #     Actions from the User     #
     #################################
 
-    def menuChanged(self, valuesDict, typeId):
-        """
-        Dummy function used to update a ConfigUI dynamic menu
-
-        :return: the values currently in the ConfigUI
-        """
-
-        return valuesDict
-
     def populateFromChosenDevice(self, valuesDict, typeId, devId):
         """
         Reads the chosen device and automatically populates the device address and broker.
@@ -993,200 +985,6 @@ class Plugin(indigo.PluginBase):
 
         return valuesDict
 
-    def logBuildCode(self, pluginAction=None, device=None, callerWaitingForResult=False):
-        build_code_file = open("{}/build_code.txt".format(os.getcwd()))
-        self.logger.info(u"Build code: {}".format(build_code_file.read()))
-        build_code_file.close()
-
-    def discoverShelly(self, pluginAction, device, callerWaitingForResult):
-        """
-        Handler for discovering a targeted Shelly device. This will send an announce command to
-        the selected Shelly device.
-
-        :param pluginAction: The action data.
-        :param device:
-        :param callerWaitingForResult:
-        :return: None
-        """
-
-        shellyDevId = int(pluginAction.props['shelly-device-id'])
-        shelly = self.shellyDevices[shellyDevId]
-        if shelly:
-            shelly.announce()
-
-    def discoverShellies(self, pluginAction=None, device=None, callerWaitingForResult=False):
-        """
-        Sends a discovery message to all currently used brokers.
-
-        :return: None
-        """
-
-        if not self.mqttPlugin.isEnabled():
-            self.logger.error(u"MQTT plugin must be enabled!")
-            return None
-        else:
-            if self.pluginPrefs.get('all-brokers-subscribe-to-announce', True):
-                # Have all shellies on all broker devices send announcements
-                brokerIds = map(lambda b: b[0], self.getBrokerDevices())
-            else:
-                # We need to get the user-specified brokers from the plugin config
-                brokerIds = self.pluginPrefs.get('brokers-subscribing-to-announce', [])
-
-            for brokerId in brokerIds:
-                brokerId = int(brokerId)
-                if indigo.devices[brokerId].enabled:
-                    props = {
-                        'topic': 'shellies/command',
-                        'payload': 'announce',
-                        'qos': 0,
-                        'retain': 0,
-                    }
-                    self.mqttPlugin.executeAction("publish", deviceId=brokerId, props=props, waitUntilDone=False)
-                    self.logger.debug(u"published \"announce\" to \"shellies/command\" on broker \"%s\"", indigo.devices[brokerId].name)
-
-    def updateShelly(self, valuesDict, typeId):
-        """
-        Handler for the Update Helper.
-        This will send an update command to the selected shelly device.
-
-        :param valuesDict: Data from the UI.
-        :param typeId:
-        :return: True or false depending on the validity of the submitted data.
-        """
-
-        if valuesDict['shelly-device-id'] == "":
-            errors = indigo.Dict()
-            errors['shelly-device-id'] = "You must select a device to update!"
-            return False, valuesDict, errors
-        else:
-            shellyDeviceId = int(valuesDict['shelly-device-id'])
-            shelly = self.shellyDevices[shellyDeviceId]
-            shelly.sendUpdateFirmwareCommand()
-            return True
-
-    def timedOn(self, pluginAction, device, callerWaitingForResult):
-        """
-        Turns a configured device on for a specified duration before turning it back off.
-
-        :param pluginAction: The action properties.
-        :param device: N/A
-        :param callerWaitingForResult: N/A
-        :return: None
-        """
-
-        deviceId = int(pluginAction.props['device-id'])
-        duration = int(pluginAction.props['duration'])
-        indigo.device.turnOn(deviceId, delay=0, duration=duration)
-
-    def timedOff(self, pluginAction, device, callerWaitingForResult):
-        """
-        Turns a configured device off for a specified duration before turning it back on.
-
-        :param pluginAction: The action properties.
-        :param device: N/A
-        :param callerWaitingForResult: N/A
-        :return: none
-        """
-
-        deviceId = int(pluginAction.props['device-id'])
-        duration = int(pluginAction.props['duration'])
-        indigo.device.turnOff(deviceId, delay=0, duration=duration)
-
-    def printDiscoveredShellies(self, pluginAction=None, device=None, callerWaitingForResult=False):
-        """
-        Print out all discovered shellies connected to each broker
-
-        :param pluginAction:
-        :param device:
-        :param callerWaitingForResult:
-        :return: None
-        """
-
-        if len(self.discoveredDevices.keys()) == 0:
-            self.logger.info(u"No announcement messages have been parsed yet. Run \"Discover Shellies\" to update device info.")
-            return
-
-        for brokerId in self.discoveredDevices.keys():
-            broker = indigo.devices[int(brokerId)]
-            if len(self.discoveredDevices[brokerId].keys()) == 0:
-                self.logger.info(u"No newly discovered devices on \"{}\"!".format(broker.name))
-            else:
-                self.logger.info(u"Newly discovered devices on \"{}\"".format(broker.name))
-                for identifier in self.discoveredDevices[brokerId].keys():
-                    ip = self.discoveredDevices[brokerId][identifier].get('ip', '')
-                    self.logger.info(u"    {:25} ({})".format(identifier, ip))
-
-    def printShellyDevicesOverview(self, pluginAction=None, device=None, callerWaitingForResult=False):
-        """
-        Print out all shellies connected to each broker
-
-        :param pluginAction:
-        :param device:
-        :param callerWaitingForResult:
-        :return: None
-        """
-
-        overview = {}
-        # {
-        #     broker1Id: [shelly1, shelly2],
-        #     broker2Id: [shelly3, shelly4]
-        # }
-
-        # Gather our devices
-        for shelly in self.shellyDevices.values():
-            brokerId = shelly.getBrokerId()
-            if brokerId not in overview.keys():
-                overview[brokerId] = []
-
-            overview[brokerId].append(shelly)
-
-        # Output
-        nameLength = 40
-        ipLength = 15
-        addressLength = 40
-        updateLength = 16
-        firmwareLength = 35
-        row = u"{no: >2} | {name: <{nameWidth}}|{ip: ^{ipWidth}}| {address: <{addressWidth}}| {host: ^{nameWidth}}|{update: ^{updateWidth}}|{firmware: ^{firmwareWidth}}| {no: <2}"
-
-        def logDividerRow():
-            self.logger.info(
-                u"   +{5:-^{0}s}+{5:-<{1}s}+{5:-<{2}s}+{5:-<{0}s}+{5:-<{3}s}+{5:-<{4}s}+".format(nameLength + 3, ipLength + 2, addressLength + 3, updateLength + 2,
-                                                                                                 firmwareLength + 2, ""))
-
-        def logRow(name, ip, address, host, update, firmware, no=""):
-            self.logger.info(
-                row.format(no=no, name=name, nameWidth=nameLength + 2, ip=ip, ipWidth=ipLength + 2, address=address, addressWidth=addressLength + 2, host=host,
-                           update=update, updateWidth=updateLength + 2, firmware=firmware, firmwareWidth=firmwareLength + 2))
-
-        for brokerId in overview.keys():
-            self.logger.info(u"Shelly devices connected to {} ({})".format(indigo.devices[brokerId].name, len(overview[brokerId])))
-            logDividerRow()
-            logRow(name="Name", ip="IP Address", address="MQTT Address", host="Host Device", update="Update Available", firmware="Current Firmware")
-            logDividerRow()
-
-            shellies = sorted(overview[brokerId], key=lambda s: s.device.name)
-            no = 1
-            for shelly in shellies:
-                if not shelly.isAddon():
-                    logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address=shelly.getAddress(), host="N/A",
-                           update="Yes" if shelly.updateAvailable() else "No", firmware=shelly.getFirmware())
-                else:
-                    logRow(no=str(no), name=shelly.device.name, ip=shelly.getIpAddress(), address="", host=shelly.getHostDevice().device.name, update="", firmware="")
-                no += 1
-
-            logDividerRow()
-
-    def dispatchEventToDevice(self, pluginAction, device, callerWaitingForResult):
-        deviceId = int(pluginAction.props['device-id'])
-        if not deviceId:
-            return
-
-        shelly = self.shellyDevices[deviceId]
-        if not shelly:
-            return
-
-        shelly.handlePluginAction(pluginAction)
-
     #####################
     #     Utilities     #
     #####################
@@ -1203,109 +1001,6 @@ class Plugin(indigo.PluginBase):
             deviceSubscriptions = self.brokerDeviceSubscriptions[broker]
             for topic in deviceSubscriptions:
                 self.logger.debug(u"        %s: %s", topic, deviceSubscriptions[topic])
-
-    def validateDeviceConfigUi_OLD(self, valuesDict, typeId, devId):
-        """
-        Validates a device config.
-
-        :param valuesDict: The values in the Config UI.
-        :param typeId: the device type as specified in the type attribute.
-        :param devId: The id of the device (0 if a new device).
-        :return: True if the config is valid.
-        """
-
-        # Container for errors found and their reasons
-        errors = indigo.Dict()
-
-        if typeId == "shelly-1pm":
-            pass
-        elif typeId == "shelly-2.5":
-            pass
-        elif typeId == "shelly-ht":
-            # Check for a valid temperature offset
-            tempOffset = valuesDict.get('temp-offset')
-            if tempOffset == "":
-                valuesDict['temp-offset'] = 0
-            else:
-                try:
-                    float(tempOffset)
-                except ValueError:
-                    errors['temp-offset'] = "Unable to convert this value to a float!"
-
-            # Check for a valid humidity offset
-            humidityOffset = valuesDict.get('humidity-offset')
-            if humidityOffset == "":
-                valuesDict['humidity-offset'] = 0
-            else:
-                try:
-                    float(humidityOffset)
-                except ValueError:
-                    errors['humidity-offset'] = "Unable to convert this value to a float!"
-        elif typeId == "shelly-flood":
-            # Check for a valid temperature offset
-            tempOffset = valuesDict.get('temp-offset')
-            if tempOffset == "":
-                valuesDict['temp-offset'] = 0
-            else:
-                try:
-                    float(tempOffset)
-                except ValueError:
-                    errors['temp-offset'] = "Unable to convert this value to a float!"
-        elif typeId == "shelly-door-window":
-            pass
-        elif typeId == "shelly-dimmer-sl":
-            pass
-        elif typeId == "shelly-addon-ds1820":
-            # Check for a valid temperature offset
-            tempOffset = valuesDict.get('temp-offset')
-            if tempOffset == "":
-                valuesDict['temp-offset'] = 0
-            else:
-                try:
-                    float(tempOffset)
-                except ValueError:
-                    errors['temp-offset'] = "Unable to convert this value to a float!"
-        elif typeId == "shelly-addon-dht22":
-            # Check for a valid temperature offset
-            tempOffset = valuesDict.get('temp-offset')
-            if tempOffset == "":
-                valuesDict['temp-offset'] = 0
-            else:
-                try:
-                    float(tempOffset)
-                except ValueError:
-                    errors['temp-offset'] = "Unable to convert this value to a float!"
-
-            # Check for a valid humidity offset
-            humidityOffset = valuesDict.get('humidity-offset')
-            if humidityOffset == "":
-                valuesDict['humidity-offset'] = 0
-            else:
-                try:
-                    float(humidityOffset)
-                except ValueError:
-                    errors['humidity-offset'] = "Unable to convert this value to a float!"
-        elif typeId == "shelly-plug-s":
-            pass
-
-        if len(errors) == 0:
-            # Get the address from the current valid properties
-            # No address present will cause the shelly device to get the address
-            shelly = self.shellyDevices.get(devId, None)
-            address = valuesDict.get('address', shelly.getAddress() if shelly else None)
-            if address and shelly:
-                # See if we are now replacing an unknown device on the same broker
-                devicesOnBroker = self.discoveredDevices.get(shelly.getBrokerId(), {})
-                for identifier in devicesOnBroker.keys():
-                    if identifier in address:
-                        # This address will match with the unknown device
-                        del devicesOnBroker[identifier]
-
-            # No errors were found, must be valid
-            return True, valuesDict
-        else:
-            # Errors were found, return the data back and the errors
-            return False, valuesDict, errors
 
     def validateDeviceConfigUi(self, valuesDict, typeId, devId):
         """
@@ -1422,3 +1117,13 @@ class Plugin(indigo.PluginBase):
             return True
         else:
             return False, valuesDict, errors
+
+    def __getattr__(self, method_name):
+        def method(*args, **kwargs):
+            if method_name.startswith("cb_"):
+                cb_method = method_name.replace("cb_", "")
+                injected_args = (self,) + args
+                return getattr(callbacks, cb_method)(*injected_args, **kwargs)
+            else:
+                return getattr(self, method_name)(*args, **kwargs)
+        return method
