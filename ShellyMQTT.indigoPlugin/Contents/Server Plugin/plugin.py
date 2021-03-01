@@ -893,8 +893,8 @@ class Plugin(indigo.PluginBase):
         """
 
         hostable_model_categories = {  # Shelly models that can host an "addon"
-            "ds1820": ["shelly-1", "shelly-1pm"],
-            "dht22": ["shelly-1", "shelly-1pm"],
+            "ds1820": ["shelly-1", "shelly-1pm", "shelly-uni-relay", "shelly-uni-input"],
+            "dht22": ["shelly-1", "shelly-1pm", "shelly-uni-relay", "shelly-uni-input"],
             "detached-switch": ["shelly-1", "shelly-1pm", "shelly-2-5-relay", "shelly-4-pro", "shelly-dimmer-sl"]
         }
 

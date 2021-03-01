@@ -46,6 +46,8 @@ class StateImages:
         self.DimmerOff = "DimmerOff"
         self.TemperatureSensor = "TemperatureSensor"
         self.TemperatureSensorOn = "TemperatureSensorOn"
+        self.MotionSensorTripped = "MotionSensorTripped"
+        self.MotionSensor = "MotionSensor"
         self.SensorTripped = "SensorTripped"
         self.SensorOn = "SensorOn"
         self.SensorOff = "SensorOff"

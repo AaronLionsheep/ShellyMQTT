@@ -574,10 +574,24 @@ class Shelly:
             pass
 
     def logCommandSent(self, message):
+        """
+        Helper method that logs when a device command is sent.
+
+        :param message: The message describing the command.
+        :return: None
+        """
+
         if indigo.activePlugin.pluginPrefs.get('log-device-activity', True):
             self.logger.info(u"sent \"{}\" {}".format(self.device.name, message))
 
     def logCommandReceived(self, message):
+        """
+        Helper method that logs when a command is received.
+
+        :param message: The message describing the command.
+        :return: None
+        """
+
         if indigo.activePlugin.pluginPrefs.get('log-device-activity', True):
             self.logger.info(u"received \"{}\" {}".format(self.device.name, message))
 
