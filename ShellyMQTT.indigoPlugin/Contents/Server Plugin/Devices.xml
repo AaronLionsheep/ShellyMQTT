@@ -11,8 +11,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -31,7 +31,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -119,8 +119,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -139,7 +139,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
             <Field id="address" type="textfield">
                 <Label>MQTT Topic Root:</Label>
@@ -259,8 +259,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-2-5-relay" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-2-5-relay" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -275,7 +275,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -400,7 +400,7 @@
         <ConfigUI>
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -426,8 +426,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-4-pro" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-4-pro" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -442,7 +442,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -542,8 +542,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -562,7 +562,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -707,8 +707,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -727,7 +727,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -844,8 +844,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -864,7 +864,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1009,8 +1009,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1029,7 +1029,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1147,8 +1147,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1167,7 +1167,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1249,8 +1249,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-rgbw2-white" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-rgbw2-white" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1265,7 +1265,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1367,8 +1367,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1387,7 +1387,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1464,8 +1464,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1484,7 +1484,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1565,8 +1565,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1585,7 +1585,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1664,8 +1664,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1684,7 +1684,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1771,8 +1771,8 @@
 
             <Field id="discovered-device" type="menu">
                 <Label>Add a Discovered Device:</Label>
-                <List class="self" filter="" method="mg_getDiscoveredDevices"/>
-                <CallbackMethod>cb_populateFromChosenDevice</CallbackMethod>
+                <List class="self" filter="" method="getDiscoveredDevices"/>
+                <CallbackMethod>populateFromChosenDevice</CallbackMethod>
             </Field>
 
             <Field id="notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -1791,7 +1791,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -1902,7 +1902,7 @@
 
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
-                <List class="self" filter="ds1820" method="mg_getAddonHostDevices" dynamicReload="true"/>
+                <List class="self" filter="ds1820" method="getAddonHostDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="message-sep" type="separator"/>
@@ -1984,7 +1984,7 @@
 
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
-                <List class="self" filter="dht22" method="mg_getAddonHostDevices" dynamicReload="true"/>
+                <List class="self" filter="dht22" method="getAddonHostDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -2081,7 +2081,7 @@
 
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
-                <List class="self" filter="detached-switch" method="mg_getAddonHostDevices" dynamicReload="true"/>
+                <List class="self" filter="detached-switch" method="getAddonHostDevices" dynamicReload="true"/>
             </Field>
 
             <Field type="checkbox" id="invert" defaultValue="false">
@@ -2134,8 +2134,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-em-meter,self.shelly-em-relay" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-em-meter,self.shelly-em-relay" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2150,7 +2150,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2286,8 +2286,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-3em-meter,self.shelly-em-relay" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-3em-meter,self.shelly-em-relay" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2302,7 +2302,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2447,8 +2447,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-em-meter,self.shelly-3em-meter" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-em-meter,self.shelly-3em-meter" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2463,7 +2463,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2547,8 +2547,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-i3" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-i3" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2563,7 +2563,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2659,8 +2659,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.button1" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.button1" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2675,7 +2675,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2754,8 +2754,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-gas" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-gas" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2770,7 +2770,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2861,8 +2861,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-uni-relay,self.shelly-uni-input" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-uni-relay,self.shelly-uni-input" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2877,7 +2877,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -2971,8 +2971,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-uni-input,self.shelly-uni-relay" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-uni-input,self.shelly-uni-relay" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -2987,7 +2987,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">
@@ -3080,8 +3080,8 @@
 
             <Field id="template-device" type="menu">
                 <Label>Use information from Device:</Label>
-                <List class="self" filter="self.shelly-motion" method="mg_getTemplateDevices"/>
-                <CallbackMethod>cb_populateFromTemplateDevice</CallbackMethod>
+                <List class="self" filter="self.shelly-motion" method="getTemplateDevices"/>
+                <CallbackMethod>populateFromTemplateDevice</CallbackMethod>
             </Field>
 
             <Field id="template-notice-1" type="label" fontSize="small" fontColor="darkGrey">
@@ -3096,7 +3096,7 @@
 
             <Field id="broker-id" type="menu">
                 <Label>MQTT Broker:</Label>
-                <List class="self" filter="" method="mg_getBrokerDevices" dynamicReload="true"/>
+                <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
             </Field>
 
             <Field id="address" type="textfield">

@@ -5,15 +5,15 @@
         <ConfigUI>
             <Field id="shelly-device-id" type="menu">
                 <Label>Shelly Device to "discover":</Label>
-                <List class="self" method="mg_getShellyDevices" dynamicReload="true"/>
+                <List class="self" method="getShellyDevices" dynamicReload="true"/>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_discoverShelly</CallbackMethod>
+        <CallbackMethod>discoverShelly</CallbackMethod>
     </Action>
 
     <Action id="discover-shellies">
         <Name>Discover All Shellies</Name>
-        <CallbackMethod>cb_discoverShellies</CallbackMethod>
+        <CallbackMethod>discoverShellies</CallbackMethod>
     </Action>
 
     <Action id="sep1"/>
@@ -23,10 +23,10 @@
         <ConfigUI>
             <Field id="shelly-device-id" type="menu">
                 <Label>Shelly Device to "discover":</Label>
-                <List class="self" method="mg_getShellyDevices" dynamicReload="true"/>
+                <List class="self" method="getShellyDevices" dynamicReload="true"/>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_updateShelly</CallbackMethod>
+        <CallbackMethod>updateShelly</CallbackMethod>
     </Action>
 
     <Action id="sep2"/>
@@ -43,7 +43,7 @@
                 <Label>The duration to turn on before turning back off (seconds):</Label>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_timedOn</CallbackMethod>
+        <CallbackMethod>timedOn</CallbackMethod>
     </Action>
 
     <Action id="timed-off">
@@ -58,7 +58,7 @@
                 <Label>The duration to turn off before turning back on (seconds):</Label>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_timedOff</CallbackMethod>
+        <CallbackMethod>timedOff</CallbackMethod>
     </Action>
 
     <Action id="sep3"/>
@@ -71,7 +71,7 @@
                 <List class="indigo.devices" filter="self.shelly-gas" dynamicReload="true"/>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_dispatchEventToDevice</CallbackMethod>
+        <CallbackMethod>dispatchEventToDevice</CallbackMethod>
     </Action>
 
     <Action id="gas-mute-alarm">
@@ -82,7 +82,7 @@
                 <List class="indigo.devices" filter="self.shelly-gas" dynamicReload="true"/>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_dispatchEventToDevice</CallbackMethod>
+        <CallbackMethod>dispatchEventToDevice</CallbackMethod>
     </Action>
 
     <Action id="gas-unmute-alarm">
@@ -93,6 +93,6 @@
                 <List class="indigo.devices" filter="self.shelly-gas" dynamicReload="true"/>
             </Field>
         </ConfigUI>
-        <CallbackMethod>cb_dispatchEventToDevice</CallbackMethod>
+        <CallbackMethod>dispatchEventToDevice</CallbackMethod>
     </Action>
 </Actions>
