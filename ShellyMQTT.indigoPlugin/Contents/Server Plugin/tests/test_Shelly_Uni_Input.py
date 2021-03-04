@@ -27,11 +27,13 @@ class Test_Shelly_Uni_Input(unittest.TestCase):
         self.device.pluginProps['invert'] = False
         self.device.pluginProps['last-input-event-id'] = -1
         self.device.states['onOffState'] = False
+        self.device.states['voltage'] = 0
 
     def test_getSubscriptions(self):
         subscriptions = [
             "shellies/announce",
             "shellies/shelly-uni-input/online",
+            "shellies/shelly-uni-input/info",
             "shellies/shelly-uni-input/input/0",
             "shellies/shelly-uni-input/input_event/0"
         ]
@@ -87,3 +89,8 @@ class Test_Shelly_Uni_Input(unittest.TestCase):
         """Test that an input_event message is processed"""
         self.shelly.handleMessage("shellies/shelly-uni-input/input_event/0", '{"event": "S", "event_cnt": 1}')
         processInputEvent.assert_called_with('{"event": "S", "event_cnt": 1}')
+
+    def test_handleMessage_info(self):
+        payload = '{"adcs": [{"voltage": 12.13}]}'
+        self.shelly.handleMessage("shellies/shelly-uni-input/info", payload)
+        self.assertEqual(12.13, self.device.states['voltage'])

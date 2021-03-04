@@ -2019,6 +2019,11 @@
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
                 <ControlPageLabel>Has Firmware Update</ControlPageLabel>
             </State>
+            <State id="voltage">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>ADC Voltage</TriggerLabel>
+                <ControlPageLabel>ADC Voltage</ControlPageLabel>
+            </State>
         </States>
     </Device>
 
@@ -2085,6 +2090,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Has Firmware Update</TriggerLabel>
                 <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+            <State id="voltage">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>ADC Voltage</TriggerLabel>
+                <ControlPageLabel>ADC Voltage</ControlPageLabel>
             </State>
         </States>
     </Device>
