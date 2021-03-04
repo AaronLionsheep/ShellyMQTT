@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<Template>
+    <Field id="broker-id" type="menu">
+        <Label>MQTT Broker:</Label>
+        <List class="self" filter="" method="getBrokerDevices" dynamicReload="true"/>
+    </Field>
+</Template>
