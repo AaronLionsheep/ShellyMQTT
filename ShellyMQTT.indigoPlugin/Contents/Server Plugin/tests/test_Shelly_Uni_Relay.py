@@ -35,6 +35,7 @@ class Test_Shelly_Uni_Relay(unittest.TestCase):
         topics = [
             "shellies/announce",
             "shellies/shelly-uni-relay/online",
+            "shellies/shelly-uni-relay/info",
             "shellies/shelly-uni-relay/relay/0"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
@@ -151,3 +152,8 @@ class Test_Shelly_Uni_Relay(unittest.TestCase):
         self.assertTrue("address" in errors)
         self.assertTrue("message-type" in errors)
         self.assertTrue("announce-message-type" in errors)
+
+    def test_handleMessage_info(self):
+        payload = '{"adcs": [{"voltage": 12.13}]}'
+        self.shelly.handleMessage("shellies/shelly-uni-relay/info", payload)
+        self.assertEqual(12.13, self.device.states['voltage'])

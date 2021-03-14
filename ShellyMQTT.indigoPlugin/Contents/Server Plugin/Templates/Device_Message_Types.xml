@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Template>
+    <Field id="message-type" type="textfield">
+        <Label>Message Type:</Label>
+    </Field>
+
+    <Field id="message-type-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+        <Label>This is the message type defined in your MQTTConnector trigger that will match with this device.</Label>
+    </Field>
+
+    <Field type="checkbox" id="announce-message-type-same-as-message-type" defaultValue="true">
+        <Label>Same Message Type for Announce:</Label>
+        <Description>Uses the same message type for announce messages</Description>
+    </Field>
+
+    <Field id="announce-message-type" type="textfield" visibleBindingId="announce-message-type-same-as-message-type" visibleBindingValue="false" alwaysUseInDialogHeightCalc="true">
+        <Label>Announce Message Type:</Label>
+    </Field>
+</Template>

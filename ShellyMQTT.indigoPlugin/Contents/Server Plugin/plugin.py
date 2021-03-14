@@ -93,6 +93,132 @@ deviceClasses = {
     "shelly-uni-input": Shelly_Uni_Input
 }
 
+deviceModelInformation = {
+    # Relay devices
+    "shelly-1": {
+        "class": Shelly_1,
+        "relations": []
+    },
+    "shelly-1pm": {
+        "class": Shelly_1PM,
+        "relations": []
+    },
+    "shelly-2-5-relay": {
+        "class": Shelly_2_5_Relay,
+        "relations": [Shelly_2_5_Relay]
+    },
+    "shelly-4-pro": {
+        "class": Shelly_4_Pro,
+        "relations": [Shelly_4_Pro]
+    },
+    "shelly-em-relay": {
+        "class": Shelly_EM_Relay,
+        "relations": [Shelly_EM_Meter, Shelly_3EM_Meter]
+    },
+
+    # RGBW2 devices
+    "shelly-rgbw2-white": {
+        "class": Shelly_RGBW2_White,
+        "relations": [Shelly_RGBW2_White]
+    },
+    "shelly-rgbw2-color": {
+        "class": Shelly_RGBW2_Color,
+        "relations": []
+    },
+
+    # Sensor devices
+    "shelly-ht": {
+        "class": Shelly_HT,
+        "relations": []
+    },
+    "shelly-flood": {
+        "class": Shelly_Flood,
+        "relations": []
+    },
+    "shelly-door-window": {
+        "class": Shelly_Door_Window,
+        "relations": []
+    },
+    "shelly-em-meter": {
+        "class": Shelly_EM_Meter,
+        "relations": [Shelly_EM_Meter, Shelly_EM_Relay]
+    },
+    "shelly-3em-meter": {
+        "class": Shelly_3EM_Meter,
+        "relations": [Shelly_3EM_Meter, Shelly_EM_Relay]
+    },
+    "shelly-i3": {
+        "class": Shelly_i3,
+        "relations": [Shelly_i3]
+    },
+    "shelly-button1": {
+        "class": Shelly_Button1,
+        "relations": []
+    },
+    "shelly-gas": {
+        "class": Shelly_Gas,
+        "relations": []
+    },
+    "shelly-motion": {
+        "class": Shelly_Motion,
+        "relations": []
+    },
+
+    # Bulb devices
+    "shelly-bulb": {
+        "class": Shelly_Bulb,
+        "relations": []
+    },
+    "shelly-bulb-vintage": {
+        "class": Shelly_Bulb_Vintage,
+        "relations": []
+    },
+    "shelly-bulb-duo": {
+        "class": Shelly_Bulb_Duo,
+        "relations": []
+    },
+
+    # Plug devices
+    "shelly-plug": {
+        "class": Shelly_Plug,
+        "relations": []
+    },
+    "shelly-plug-s": {
+        "class": Shelly_Plug_S,
+        "relations": []
+    },
+
+    # Add-on devices
+    "shelly-addon-ds1820": {
+        "class": Shelly_Addon_DS1820,
+        "relations": []
+    },
+    "shelly-addon-dht22": {
+        "class": Shelly_Addon_DHT22,
+        "relations": []
+    },
+    "shelly-addon-detached-switch": {
+        "class": Shelly_Addon_Detached_Switch,
+        "relations": []
+    },
+
+    # Shelly Dimmer
+    "shelly-dimmer-sl": {
+        "class": Shelly_Dimmer_SL,
+        "relations": []
+    },
+
+    # Shelly Uni
+    "shelly-uni-relay": {
+        "class": Shelly_Uni_Relay,
+        "relations": [Shelly_Uni_Relay, Shelly_Uni_Input]
+    },
+    "shelly-uni-input": {
+        "class": Shelly_Uni_Input,
+        "relations": [Shelly_Uni_Input, Shelly_Uni_Relay]
+    }
+}
+
 
 class Plugin(indigo.PluginBase):
 
@@ -1285,9 +1411,18 @@ class Plugin(indigo.PluginBase):
             for identifier in brokerDevices:
                 discovered_devices.append((u"{}|shellies/{}".format(brokerId, identifier), u"{} on {}".format(identifier, brokerName)))
 
+        # Dynamically build a filter if none was supplied
+        if filter is None or len(filter) == 0:
+            related_device_types = []
+            for model in deviceModelInformation[typeId]['relations']:
+                for model_type_id, info in deviceModelInformation.items():
+                    if info['class'] is model:
+                        related_device_types.append("self.{}".format(model_type_id))
+            filter = ",".join(related_device_types)
+
         # Build the related devices section
         related_devices = []
-        types = [cat.strip() for cat in filter.split(",")]
+        types = [cat.strip() for cat in filter.split(",") if cat.strip()]
         for dev_type in types:
             for device in indigo.devices.iter(dev_type):
                 if device.id != targetId:  # We don't want the current device to be used as a template for itself

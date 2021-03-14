@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<Template>
+    <Field type="checkbox" id="invert" defaultValue="false">
+        <Label>Invert:</Label>
+        <Description>Invert the reported value of the contact.</Description>
+    </Field>
+</Template>

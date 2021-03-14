@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Template>
+    <Field id="address" type="textfield">
+        <Label>MQTT Topic Root:</Label>
+    </Field>
+
+    <Field id="address-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+        <Label>Out of the box, all Shelly devices publish their data to "shellies/[THE-DEVICE-ID]". For example, "shellies/shelly1pm-B8F69F"</Label>
+    </Field>
+</Template>

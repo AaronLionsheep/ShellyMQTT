@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<Template>
+    <Field type="checkbox" id="muted" defaultValue="false">
+        <Label>Mute Logging:</Label>
+        <Description>Device warnings and errors will still be logged.</Description>
+    </Field>
+</Template>

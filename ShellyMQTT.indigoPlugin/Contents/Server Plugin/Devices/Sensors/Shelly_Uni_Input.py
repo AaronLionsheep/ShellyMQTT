@@ -1,5 +1,6 @@
 # coding=utf-8
 import indigo
+import json
 from Shelly_i3 import Shelly_i3
 
 
@@ -25,6 +26,7 @@ class Shelly_Uni_Input(Shelly_i3):
             return [
                 "shellies/announce",
                 "{}/online".format(address),
+                "{}/info".format(address),
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/input_event/{}".format(address, self.getChannel())
             ]
@@ -38,7 +40,17 @@ class Shelly_Uni_Input(Shelly_i3):
         :return: None
         """
 
-        Shelly_i3.handleMessage(self, topic, payload)
+        if topic == "{}/info".format(self.getAddress()):
+            try:
+                payload = json.loads(payload)
+                adcs = payload.get('adcs', [])
+                if len(adcs) > 0 and type(adcs[0]) is dict:
+                    voltage = adcs[0].get('voltage', None)
+                    self.device.updateStateOnServer(key="voltage", value=voltage)
+            except ValueError:
+                self.logger.error(u"Problem parsing JSON: {}".format(payload))
+        else:
+            Shelly_i3.handleMessage(self, topic, payload)
 
         # Update the display state after data changed
         self.updateStateImage()
