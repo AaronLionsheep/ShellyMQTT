@@ -36,7 +36,9 @@ class Test_Shelly_Uni_Relay(unittest.TestCase):
             "shellies/announce",
             "shellies/shelly-uni-relay/online",
             "shellies/shelly-uni-relay/info",
-            "shellies/shelly-uni-relay/relay/0"
+            "shellies/shelly-uni-relay/relay/0",
+            "shellies/shelly-uni-relay/ext_temperatures",
+            "shellies/shelly-uni-relay/ext_humidities"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 

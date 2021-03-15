@@ -1140,7 +1140,6 @@ class Plugin(indigo.PluginBase):
         """
         Turns a configured device on for a specified duration before turning it back off.
 
-        :param plugin:
         :param pluginAction: The action properties.
         :param device: N/A
         :param callerWaitingForResult: N/A
@@ -1155,7 +1154,6 @@ class Plugin(indigo.PluginBase):
         """
         Turns a configured device off for a specified duration before turning it back on.
 
-        :param plugin:
         :param pluginAction: The action properties.
         :param device: N/A
         :param callerWaitingForResult: N/A
@@ -1170,7 +1168,6 @@ class Plugin(indigo.PluginBase):
         """
         Print out all discovered shellies connected to each broker
 
-        :param plugin:
         :param pluginAction:
         :param device:
         :param callerWaitingForResult:
@@ -1195,7 +1192,6 @@ class Plugin(indigo.PluginBase):
         """
         Print out all shellies connected to each broker
 
-        :param plugin:
         :param pluginAction:
         :param device:
         :param callerWaitingForResult:
@@ -1251,6 +1247,42 @@ class Plugin(indigo.PluginBase):
                 no += 1
 
             logDividerRow()
+
+    def printConnectedSensors(self, valuesDict={}, typeId=None):
+        """
+        Prints an overview of sensors connected to the chosen device.
+
+        :param valuesDict:
+        :param typeId:
+        :return: None
+        """
+
+        if valuesDict['shelly-device-id'] == "":
+            errors = indigo.Dict()
+            errors['shelly-device-id'] = "You must select a device!"
+            return False, valuesDict, errors
+        else:
+            shellyDeviceId = int(valuesDict['shelly-device-id'])
+            shelly = self.shellyDevices[shellyDeviceId]
+
+            # Build the combined list of sensors
+            sensors = shelly.temperature_sensors + shelly.humidity_sensors
+            unique_sensors = []
+            for sensor in sensors:
+                if sensor not in unique_sensors:
+                    unique_sensors.append(sensor)
+            sensors = sorted(unique_sensors, key=lambda s: s['channel'])
+
+            self.logger.info("Sensors connected to \"{}\":".format(shelly.device.name))
+            if len(sensors) == 0:
+                self.logger.info("No connected sensors detected!")
+            for sensor in sensors:
+                channel = sensor['channel'] + 1
+                identifier = sensor['id']
+                sensor_type = "DHT22" if sensor in shelly.humidity_sensors else "DS1820"
+                self.logger.info("Channel {}: {} ({})".format(channel, identifier, sensor_type))
+
+            return True
 
     def dispatchEventToDevice(self, pluginAction, device, callerWaitingForResult):
         deviceId = int(pluginAction.props['device-id'])

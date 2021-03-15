@@ -27,7 +27,9 @@ class Shelly_1(Shelly):
                 "{}/relay/{}".format(address, self.getChannel()),
                 "{}/input/{}".format(address, self.getChannel()),
                 "{}/longpush/{}".format(address, self.getChannel()),
-                "{}/input_event/{}".format(address, self.getChannel())
+                "{}/input_event/{}".format(address, self.getChannel()),
+                "{}/ext_temperatures".format(address),
+                "{}/ext_humidities".format(address)
             ]
 
     def handleMessage(self, topic, payload):
