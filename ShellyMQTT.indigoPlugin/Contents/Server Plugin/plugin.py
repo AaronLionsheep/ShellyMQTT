@@ -1127,7 +1127,7 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
-    def menuChanged(self, valuesDict, typeId):
+    def menuChanged(self, valuesDict, typeId, callerWaitingForResult):
         """
         Dummy function used to update a ConfigUI dynamic menu
 
@@ -1524,3 +1524,52 @@ class Plugin(indigo.PluginBase):
             if shelly and shelly.device.deviceTypeId in hostable_models:
                 hostable.append(dev)
         return hostable
+
+    def getSensorChannelsAndIdentifiers(self, filter=None, valuesDict={}, typeId=None, targetId=None):
+        """
+        Builds a list of sensor channels and a list of sensors connected to a device.
+
+        :param filter:
+        :param valuesDict:
+        :param typeId:
+        :param targetId:
+        :return:
+        """
+
+        # Get the base device where the sensors are connected
+        if valuesDict.get('host-id', None) is None:
+            return [(u"-1", u"%%disabled:No host device selected!%%")]
+        host_id = valuesDict['host-id']
+        shelly = self.shellyDevices[int(host_id)]
+
+        menu = list()
+        menu.append((u"-1", u"%%disabled:Select by channel:%%"))
+
+        temperature_ids = [s['id'] for s in shelly.temperature_sensors]
+        humidity_ids = [s['id'] for s in shelly.humidity_sensors]
+        if filter == "ds1820":
+            menu.append((u"0", u"Channel 1"))
+            menu.append((u"1", u"Channel 2"))
+            menu.append((u"2", u"Channel 3"))
+            menu.append((u"-1", u"%%separator%%"))
+            menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
+
+            ds1820s = [(s, s) for s in temperature_ids if s not in humidity_ids]
+            if len(ds1820s) == 0:
+                menu.append((u"-1", u"%%disabled:No connected DS1820 sensors%%"))
+            else:
+                menu.extend(ds1820s)
+        elif filter == "dht22":
+            menu.append((u"0", u"Channel 1"))
+            menu.append((u"-1", u"%%separator%%"))
+            menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
+
+            dht22s = [(s, s) for s in humidity_ids]
+            if len(dht22s) == 0:
+                menu.append((u"-1", u"%%disabled:No connected DHT22 sensors%%"))
+            else:
+                menu.extend(dht22s)
+        else:
+            menu.append((u"-1", u"%%disabled:Error building identifier list%%"))
+
+        return menu

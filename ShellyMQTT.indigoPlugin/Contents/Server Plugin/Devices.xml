@@ -1256,10 +1256,12 @@
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
                 <List class="self" filter="ds1820" method="getAddonHostDevices" dynamicReload="true"/>
+                <CallbackMethod>menuChanged</CallbackMethod>
             </Field>
 
             <Field id="message-sep" type="separator"/>
 
+            <!--
             <Field type="menu" id="probe-number" defaultValue="0">
                 <Label>Probe:</Label>
                 <List>
@@ -1267,6 +1269,16 @@
                     <Option value="1">Probe 2</Option>
                     <Option value="2">Probe 3</Option>
                 </List>
+            </Field>
+            -->
+
+            <Field id="probe-number" type="menu" defaultValue="0">
+                <Label>Sensor:</Label>
+                <List class="self" filter="ds1820" method="getSensorChannelsAndIdentifiers" dynamicReload="true"/>
+            </Field>
+
+            <Field id="probe-number-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>NOTE: Selecting a probe by the hardware identifier only works properly on devices with firmware version 1.7.0 or later.</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
@@ -1335,6 +1347,18 @@
             <Field id="host-id" type="menu">
                 <Label>Shelly Host Device:</Label>
                 <List class="self" filter="dht22" method="getAddonHostDevices" dynamicReload="true"/>
+                <CallbackMethod>menuChanged</CallbackMethod>
+            </Field>
+
+            <Field id="probe-sep" type="separator"/>
+
+            <Field id="probe-number" type="menu" defaultValue="0">
+                <Label>Sensor:</Label>
+                <List class="self" filter="dht22" method="getSensorChannelsAndIdentifiers" dynamicReload="true"/>
+            </Field>
+
+            <Field id="probe-number-notice-1" type="label" fontSize="small" fontColor="darkGrey">
+                <Label>NOTE: Selecting a probe by the hardware identifier only works properly on devices with firmware version 1.7.0 or later.</Label>
             </Field>
 
             <Field id="temp-sep" type="separator"/>
