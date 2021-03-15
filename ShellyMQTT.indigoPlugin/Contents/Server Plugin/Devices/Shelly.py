@@ -13,6 +13,8 @@ class Shelly:
         self.device = device
         self.logger = ShellyLogger(self)
         self.triggers = []
+        self.temperature_sensors = []
+        self.humidity_sensors = []
 
     def refresh_device(self):
         """
@@ -75,6 +77,10 @@ class Shelly:
                 self.setLastInputEventId(0)
         elif topic == "{}/input_event/{}".format(self.getAddress(), self.getChannel()):
             self.processInputEvent(payload)
+        elif topic == "{}/ext_temperatures".format(self.getAddress()):
+            self.processTemperatureSensors(payload)
+        elif topic == "{}/ext_humidities".format(self.getAddress()):
+            self.processHumiditySensors(payload)
         return None
 
     def handleAction(self, action):
@@ -383,6 +389,60 @@ class Shelly:
         for trigger in indigo.activePlugin.triggers.values():
             if trigger.pluginTypeId == eventName and int(trigger.pluginProps.get('device-id', -1)) == self.device.id:
                 indigo.trigger.execute(trigger)
+
+    def processTemperatureSensors(self, payload):
+        """
+        Parses a message containing information about all connected temperature sensors.
+
+        The payload is expected to be of the form:
+        {
+            "0":{"hwID":"XXXXXXXX","tC":20.5},
+            "1":{"hwID":"YYYYYYYY","tC":21.5},
+            "2":{"hwID":"ZZZZZZZZ","tC":22.5}
+        }
+
+        :param payload: A json-formatted string containing sensor information
+        :return: None
+        """
+
+        try:
+            sensors = json.loads(payload)
+            self.temperature_sensors = []
+            for channel, sensor in sensors.items():
+                # Invalid if the sensor reads 999
+                if sensor['tC'] != 999:
+                    self.temperature_sensors.append({
+                        "channel": int(channel),
+                        "id": sensor['hwID']
+                    })
+        except ValueError:
+            self.logger.error(u"Problem parsing JSON: {}".format(payload))
+
+    def processHumiditySensors(self, payload):
+        """
+        Parses a message containing information about all connected humidity sensors.
+
+        The payload is expected to be of the form:
+        {
+            "0":{"hwID":"XXXXXXXX","hum":50}
+        }
+
+        :param payload: A json-formatted string containing sensor information
+        :return: None
+        """
+
+        try:
+            sensors = json.loads(payload)
+            self.humidity_sensors = []
+            for channel, sensor in sensors.items():
+                # Invalid if the sensor reads 999
+                if sensor['hum'] != 999:
+                    self.humidity_sensors.append({
+                        "channel": int(channel),
+                        "id": sensor['hwID']
+                    })
+        except ValueError:
+            self.logger.error(u"Problem parsing JSON: {}".format(payload))
 
     def getLastInputEventId(self):
         """

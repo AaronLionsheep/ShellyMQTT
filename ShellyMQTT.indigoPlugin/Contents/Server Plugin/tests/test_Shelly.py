@@ -21,13 +21,14 @@ class Test_Shelly(unittest.TestCase):
         self.shelly = Devices.Shelly.Shelly(self.device)
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
+        self.device.pluginProps['broker-id'] = "12345"
+        self.device.pluginProps['address'] = "shellies/test-shelly"
         self.device.pluginProps['resetEnergyOffset'] = 0
         self.device.pluginProps['last-input-event-id'] = -1
 
     @patch('Devices.Shelly.Shelly.getSubscriptions', return_value=["test/one", "test/two"])
     def test_subscribe(self, getSubscriptions):
         """Test subscribing to a topic."""
-        self.device.pluginProps['broker-id'] = "12345"
         self.shelly.subscribe()
 
         subscriptions = [
@@ -41,7 +42,6 @@ class Test_Shelly(unittest.TestCase):
         """Test subscribing to a topic."""
         indigo.activePlugin.pluginPrefs['connector-fix'] = True
 
-        self.device.pluginProps['broker-id'] = "12345"
         self.shelly.subscribe()
 
         subscriptions = [
@@ -52,7 +52,6 @@ class Test_Shelly(unittest.TestCase):
 
     def test_publish(self):
         """Test publishing a payload to a topic."""
-        self.device.pluginProps['broker-id'] = "12345"
         self.shelly.publish("some/topic", {'the': 'payload'})
 
         expected = [
@@ -101,12 +100,9 @@ class Test_Shelly(unittest.TestCase):
         self.assertIsNone(self.shelly.getMQTT())
 
     def test_getBrokerId_valid(self):
-        self.device.pluginProps['broker-id'] = "12345"
         self.assertEquals(12345, self.shelly.getBrokerId())
 
     def test_getBrokerId_empty(self):
-        self.assertIsNone(self.shelly.getBrokerId())
-
         self.device.pluginProps['broker-id'] = None
         self.assertIsNone(self.shelly.getBrokerId())
 
@@ -147,21 +143,18 @@ class Test_Shelly(unittest.TestCase):
 
     @patch('Devices.Shelly.Shelly.publish')
     def test_sendStatusRequestCommand(self, publish):
-        self.shelly.device.pluginProps['address'] = "shellies/test-shelly"
         self.shelly.sendStatusRequestCommand()
 
         publish.assert_called_with("shellies/test-shelly/command", "update")
 
     @patch('Devices.Shelly.Shelly.publish')
     def test_announce(self, publish):
-        self.shelly.device.pluginProps['address'] = "shellies/test-shelly"
         self.shelly.announce()
 
         publish.assert_called_with("shellies/test-shelly/command", "announce")
 
     @patch('Devices.Shelly.Shelly.publish')
     def test_sendUpdateFirmwareCommand(self, publish):
-        self.shelly.device.pluginProps['address'] = "shellies/test-shelly"
         self.shelly.sendUpdateFirmwareCommand()
 
         publish.assert_called_with("shellies/test-shelly/command", "update_fw")
@@ -459,3 +452,95 @@ class Test_Shelly(unittest.TestCase):
         self.assertTrue(trigger_S.executed)
         self.assertFalse(trigger_L.executed)
         self.assertFalse(trigger_S_other.executed)
+
+    def test_process_temperature_sensors_creates_correct_list(self):
+        """Test that the list of sensors is properly created"""
+        payload = '{"0":{"hwID":"2885186e38190123","tC":20.5}, "1":{"hwID":"2885186e38190456","tC":21.5}, "2":{"hwID":"2885186e38190789","tC":22.5}}'
+        self.shelly.processTemperatureSensors(payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190123"},
+            {"channel": 1, "id": "2885186e38190456"},
+            {"channel": 2, "id": "2885186e38190789"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.temperature_sensors)
+
+    def test_process_temperature_sensors_ignores_invalid_sensors(self):
+        """Test that the list of sensors is properly created"""
+        payload = '{"0":{"hwID":"2885186e38190123","tC":20.5}, "1":{"hwID":"000000000000000","tC":999}, "2":{"hwID":"2885186e38190789","tC":22.5}}'
+        self.shelly.processTemperatureSensors(payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190123"},
+            {"channel": 2, "id": "2885186e38190789"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.temperature_sensors)
+
+    def test_process_temperature_sensors_removes_old_sensors(self):
+        """Test that old sensors are no longer included"""
+        payload = '{"0":{"hwID":"2885186e38190123","tC":20.5}, "1":{"hwID":"2885186e38190456","tC":21.5}, "2":{"hwID":"2885186e38190789","tC":22.5}}'
+        self.shelly.processTemperatureSensors(payload)
+        payload = '{"0":{"hwID":"2885186e38190456","tC":20.5}, "1":{"hwID":"00000000000000","tC":999}, "2":{"hwID":"2885186e38190789","tC":22.5}}'
+        self.shelly.processTemperatureSensors(payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190456"},
+            {"channel": 2, "id": "2885186e38190789"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.temperature_sensors)
+
+    def test_process_humidity_sensors_creates_correct_list(self):
+        """Test that the list of sensors is properly created"""
+        payload = '{"0":{"hwID":"2885186e38190123","hum":20.5}, "1":{"hwID":"2885186e38190456","hum":21.5}}'
+        self.shelly.processHumiditySensors(payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190123"},
+            {"channel": 1, "id": "2885186e38190456"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.humidity_sensors)
+
+    def test_process_humidity_sensors_ignores_invalid_sensors(self):
+        """Test that the list of sensors is properly created"""
+        payload = '{"0":{"hwID":"2885186e38190123","hum":20.5}, "1":{"hwID":"000000000000000","hum":999}}'
+        self.shelly.processHumiditySensors(payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190123"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.humidity_sensors)
+
+    def test_process_humidity_sensors_removes_old_sensors(self):
+        """Test that old sensors are no longer included"""
+        payload = '{"0":{"hwID":"2885186e38190123","hum":20.5}, "1":{"hwID":"2885186e38190456","hum":21.5}}'
+        self.shelly.processHumiditySensors(payload)
+        payload = '{"0":{"hwID":"2885186e38190456","hum":20.5}}'
+        self.shelly.processHumiditySensors(payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190456"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.humidity_sensors)
+
+    def test_handleMessage_temperature_sensors(self):
+        """Test that temperature sensor messages are processed"""
+        topic = 'shellies/test-shelly/ext_temperatures'
+        payload = '{"0":{"hwID":"2885186e38190123","tC":20.5}, "1":{"hwID":"2885186e38190456","tC":21.5}}'
+        self.shelly.handleMessage(topic, payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190123"},
+            {"channel": 1, "id": "2885186e38190456"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.temperature_sensors)
+    
+    def test_handleMessage_humidity_sensors(self):
+        """Test that humidity sensor messages are processed"""
+        topic = 'shellies/test-shelly/ext_humidities'
+        payload = '{"0":{"hwID":"2885186e38190456","hum":20.5}}'
+        self.shelly.handleMessage(topic, payload)
+
+        expected = [
+            {"channel": 0, "id": "2885186e38190456"}
+        ]
+        self.assertItemsEqual(expected, self.shelly.humidity_sensors)
