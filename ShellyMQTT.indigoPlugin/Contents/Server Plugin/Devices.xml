@@ -1261,17 +1261,6 @@
 
             <Field id="message-sep" type="separator"/>
 
-            <!--
-            <Field type="menu" id="probe-number" defaultValue="0">
-                <Label>Probe:</Label>
-                <List>
-                    <Option value="0">Probe 1</Option>
-                    <Option value="1">Probe 2</Option>
-                    <Option value="2">Probe 3</Option>
-                </List>
-            </Field>
-            -->
-
             <Field id="probe-number" type="menu" defaultValue="0">
                 <Label>Sensor:</Label>
                 <List class="self" filter="ds1820" method="getSensorChannelsAndIdentifiers" dynamicReload="true"/>

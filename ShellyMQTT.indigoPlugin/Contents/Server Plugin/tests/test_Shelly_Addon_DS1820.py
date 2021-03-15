@@ -41,7 +41,8 @@ class Test_Shelly_Addon_DS1820(unittest.TestCase):
     def test_getSubscriptions(self):
         subscriptions = [
             "shellies/shelly-addon-test/online",
-            "shellies/shelly-addon-test/ext_temperature/0"
+            "shellies/shelly-addon-test/ext_temperature/0",
+            "shellies/shelly-addon-test/ext_temperatures"
         ]
 
         self.assertListEqual(subscriptions, self.shelly.getSubscriptions())
@@ -71,6 +72,13 @@ class Test_Shelly_Addon_DS1820(unittest.TestCase):
 
     def test_handleMessage_temperature_invalid(self):
         self.assertRaises(ValueError, self.shelly.handleMessage("shellies/shelly-addon-test/ext_temperature/0", "A"))
+
+    def test_handleMessage_temperature_hwid(self):
+        self.device.pluginProps['probe-number'] = "2885186e38190456"
+        payload = '{"0":{"hwID":"2885186e38190123","tC":20.5}, "1":{"hwID":"2885186e38190456","tC":50}}'
+        self.shelly.handleMessage("shellies/shelly-addon-test/ext_temperatures", payload)
+        self.assertEqual(124, self.shelly.device.states['temperature'])
+        self.assertEqual("124.0 °F", self.shelly.device.states_meta['temperature']['uiValue'])
 
     def test_handleMessage_online_true(self):
         self.device.states['online'] = False
