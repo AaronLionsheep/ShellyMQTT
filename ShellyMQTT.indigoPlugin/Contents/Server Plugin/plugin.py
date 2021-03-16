@@ -1545,8 +1545,12 @@ class Plugin(indigo.PluginBase):
         menu = list()
         menu.append((u"-1", u"%%disabled:Select by channel:%%"))
 
+        channels = {}
         temperature_ids = [s['id'] for s in shelly.temperature_sensors]
         humidity_ids = [s['id'] for s in shelly.humidity_sensors]
+        for sensor in shelly.temperature_sensors + shelly.humidity_sensors:
+            channels[sensor['id']] = sensor['channel'] + 1
+
         if filter == "ds1820":
             menu.append((u"0", u"Channel 1"))
             menu.append((u"1", u"Channel 2"))
@@ -1554,7 +1558,7 @@ class Plugin(indigo.PluginBase):
             menu.append((u"-1", u"%%separator%%"))
             menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
 
-            ds1820s = [(s, s) for s in temperature_ids if s not in humidity_ids]
+            ds1820s = [(s, "{} (Channel {})".format(s, channels[s])) for s in temperature_ids if s not in humidity_ids]
             if len(ds1820s) == 0:
                 menu.append((u"-1", u"%%disabled:No connected DS1820 sensors%%"))
             else:
@@ -1564,7 +1568,7 @@ class Plugin(indigo.PluginBase):
             menu.append((u"-1", u"%%separator%%"))
             menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
 
-            dht22s = [(s, s) for s in humidity_ids]
+            dht22s = [(s, "{} (Channel {})".format(s, channels[s])) for s in humidity_ids]
             if len(dht22s) == 0:
                 menu.append((u"-1", u"%%disabled:No connected DHT22 sensors%%"))
             else:
