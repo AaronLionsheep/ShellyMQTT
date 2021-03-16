@@ -1558,7 +1558,7 @@ class Plugin(indigo.PluginBase):
             menu.append((u"-1", u"%%separator%%"))
             menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
 
-            ds1820s = [(s, "{} (Channel {})".format(s, channels[s])) for s in temperature_ids if s not in humidity_ids]
+            ds1820s = [(s, "{} (Channel {})".format(s, channels[s])) for s in sorted(temperature_ids, key=lambda x: channels[x]) if s not in humidity_ids]
             if len(ds1820s) == 0:
                 menu.append((u"-1", u"%%disabled:No connected DS1820 sensors%%"))
             else:
@@ -1568,7 +1568,7 @@ class Plugin(indigo.PluginBase):
             menu.append((u"-1", u"%%separator%%"))
             menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
 
-            dht22s = [(s, "{} (Channel {})".format(s, channels[s])) for s in humidity_ids]
+            dht22s = [(s, "{} (Channel {})".format(s, channels[s])) for s in sorted(humidity_ids, key=lambda x: channels[x])]
             if len(dht22s) == 0:
                 menu.append((u"-1", u"%%disabled:No connected DHT22 sensors%%"))
             else:
