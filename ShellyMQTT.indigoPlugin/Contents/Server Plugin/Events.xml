@@ -93,4 +93,10 @@
             </Field>
         </ConfigUI>
     </Event>
+
+    <!-- Temperature Events -->
+
+    <Event id="abnormal-temperature-status-any">
+        <Name>Any Abnormal Temperature Status</Name>
+    </Event>
 </Events>

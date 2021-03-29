@@ -454,7 +454,14 @@ class Shelly:
         :return: None
         """
 
+        previous_status = self.device.states.get('temperature-status', None)
         self.device.updateStateOnServer("temperature-status", payload)
+
+        if payload != previous_status and payload != "Normal":
+            # The temperature status has changed to an abnormal value
+            for trigger in indigo.activePlugin.triggers.values():
+                if trigger.pluginTypeId == "abnormal-temperature-status-any":
+                    indigo.trigger.execute(trigger)
 
     def getLastInputEventId(self):
         """
