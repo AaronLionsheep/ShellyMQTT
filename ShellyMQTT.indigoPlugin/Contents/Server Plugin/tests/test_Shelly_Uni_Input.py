@@ -35,7 +35,9 @@ class Test_Shelly_Uni_Input(unittest.TestCase):
             "shellies/shelly-uni-input/online",
             "shellies/shelly-uni-input/info",
             "shellies/shelly-uni-input/input/0",
-            "shellies/shelly-uni-input/input_event/0"
+            "shellies/shelly-uni-input/input_event/0",
+            "shellies/shelly-uni-input/ext_temperatures",
+            "shellies/shelly-uni-input/ext_humidities"
         ]
 
         self.assertListEqual(subscriptions, self.shelly.getSubscriptions())

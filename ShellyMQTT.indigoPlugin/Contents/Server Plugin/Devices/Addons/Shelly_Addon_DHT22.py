@@ -1,5 +1,6 @@
 # coding=utf-8
 import indigo
+import json
 from Shelly_Addon import Shelly_Addon
 
 
@@ -26,7 +27,9 @@ class Shelly_Addon_DHT22(Shelly_Addon):
             return [
                 "{}/online".format(address),
                 "{}/ext_temperature/{}".format(address, self.getProbeNumber()),
-                "{}/ext_humidity/{}".format(address, self.getProbeNumber())
+                "{}/ext_temperatures".format(address),
+                "{}/ext_humidity/{}".format(address, self.getProbeNumber()),
+                "{}/ext_humidities".format(address)
             ]
 
     def handleMessage(self, topic, payload):
@@ -58,6 +61,26 @@ class Shelly_Addon_DHT22(Shelly_Addon):
                 self.device.updateStateOnServer(key="humidity", value=humidity, uiValue='{:.{}f}%'.format(humidity, decimals), decimalPlaces=decimals)
             except ValueError:
                 self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
+        elif topic == "{}/ext_temperatures".format(self.getAddress()) and len(self.getProbeNumber()) > 1:
+            try:
+                data = json.loads(payload)
+                for sensor in data.values():
+                    if sensor['hwID'] == self.getProbeNumber():
+                        value = sensor['tC']
+                        self.handleMessage("{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()), value)
+                        break
+            except ValueError:
+                self.logger.warn("Unable to convert payload to json: {}".format(payload))
+        elif topic == "{}/ext_humidities".format(self.getAddress()) and len(self.getProbeNumber()) > 1:
+            try:
+                data = json.loads(payload)
+                for sensor in data.values():
+                    if sensor['hwID'] == self.getProbeNumber():
+                        value = sensor['hum']
+                        self.handleMessage("{}/ext_humidity/{}".format(self.getAddress(), self.getProbeNumber()), value)
+                        break
+            except ValueError:
+                self.logger.warn("Unable to convert payload to json: {}".format(payload))
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 
@@ -87,7 +110,7 @@ class Shelly_Addon_DHT22(Shelly_Addon):
         :return: The probe number to be used in the topic.
         """
 
-        return 0
+        return self.device.pluginProps.get('probe-number', None)
 
     def updateStateImage(self):
         """

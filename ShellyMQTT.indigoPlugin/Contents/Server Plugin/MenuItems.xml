@@ -29,6 +29,17 @@
         <CallbackMethod>printShellyDevicesOverview</CallbackMethod>
     </MenuItem>
 
+    <MenuItem id="print-connected-sensors">
+        <Name>Log Connected Sensors...</Name>
+        <ConfigUI>
+            <Field id="shelly-device-id" type="menu">
+                <Label>Shelly Device to examine connected sensors:</Label>
+                <List class="self" filter="ds1820,dht22" method="getAddonHostDevices" dynamicReload="true"/>
+            </Field>
+        </ConfigUI>
+        <CallbackMethod>printConnectedSensors</CallbackMethod>
+    </MenuItem>
+
     <MenuItem id="sep-3"/>
 
     <MenuItem id="shelly-update-helper">

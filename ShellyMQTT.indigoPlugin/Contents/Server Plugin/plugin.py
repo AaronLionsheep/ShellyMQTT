@@ -1127,7 +1127,7 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
-    def menuChanged(self, valuesDict, typeId):
+    def menuChanged(self, valuesDict, typeId, callerWaitingForResult):
         """
         Dummy function used to update a ConfigUI dynamic menu
 
@@ -1140,7 +1140,6 @@ class Plugin(indigo.PluginBase):
         """
         Turns a configured device on for a specified duration before turning it back off.
 
-        :param plugin:
         :param pluginAction: The action properties.
         :param device: N/A
         :param callerWaitingForResult: N/A
@@ -1155,7 +1154,6 @@ class Plugin(indigo.PluginBase):
         """
         Turns a configured device off for a specified duration before turning it back on.
 
-        :param plugin:
         :param pluginAction: The action properties.
         :param device: N/A
         :param callerWaitingForResult: N/A
@@ -1170,7 +1168,6 @@ class Plugin(indigo.PluginBase):
         """
         Print out all discovered shellies connected to each broker
 
-        :param plugin:
         :param pluginAction:
         :param device:
         :param callerWaitingForResult:
@@ -1195,7 +1192,6 @@ class Plugin(indigo.PluginBase):
         """
         Print out all shellies connected to each broker
 
-        :param plugin:
         :param pluginAction:
         :param device:
         :param callerWaitingForResult:
@@ -1251,6 +1247,42 @@ class Plugin(indigo.PluginBase):
                 no += 1
 
             logDividerRow()
+
+    def printConnectedSensors(self, valuesDict={}, typeId=None):
+        """
+        Prints an overview of sensors connected to the chosen device.
+
+        :param valuesDict:
+        :param typeId:
+        :return: None
+        """
+
+        if valuesDict['shelly-device-id'] == "":
+            errors = indigo.Dict()
+            errors['shelly-device-id'] = "You must select a device!"
+            return False, valuesDict, errors
+        else:
+            shellyDeviceId = int(valuesDict['shelly-device-id'])
+            shelly = self.shellyDevices[shellyDeviceId]
+
+            # Build the combined list of sensors
+            sensors = shelly.temperature_sensors + shelly.humidity_sensors
+            unique_sensors = []
+            for sensor in sensors:
+                if sensor not in unique_sensors:
+                    unique_sensors.append(sensor)
+            sensors = sorted(unique_sensors, key=lambda s: s['channel'])
+
+            self.logger.info("Sensors connected to \"{}\":".format(shelly.device.name))
+            if len(sensors) == 0:
+                self.logger.info("No connected sensors detected!")
+            for sensor in sensors:
+                channel = sensor['channel'] + 1
+                identifier = sensor['id']
+                sensor_type = "DHT22" if sensor in shelly.humidity_sensors else "DS1820"
+                self.logger.info("Channel {}: {} ({})".format(channel, identifier, sensor_type))
+
+            return True
 
     def dispatchEventToDevice(self, pluginAction, device, callerWaitingForResult):
         deviceId = int(pluginAction.props['device-id'])
@@ -1492,3 +1524,56 @@ class Plugin(indigo.PluginBase):
             if shelly and shelly.device.deviceTypeId in hostable_models:
                 hostable.append(dev)
         return hostable
+
+    def getSensorChannelsAndIdentifiers(self, filter=None, valuesDict={}, typeId=None, targetId=None):
+        """
+        Builds a list of sensor channels and a list of sensors connected to a device.
+
+        :param filter:
+        :param valuesDict:
+        :param typeId:
+        :param targetId:
+        :return:
+        """
+
+        # Get the base device where the sensors are connected
+        if valuesDict.get('host-id', None) is None:
+            return [(u"-1", u"%%disabled:No host device selected!%%")]
+        host_id = valuesDict['host-id']
+        shelly = self.shellyDevices[int(host_id)]
+
+        menu = list()
+        menu.append((u"-1", u"%%disabled:Select by channel:%%"))
+
+        channels = {}
+        temperature_ids = [s['id'] for s in shelly.temperature_sensors]
+        humidity_ids = [s['id'] for s in shelly.humidity_sensors]
+        for sensor in shelly.temperature_sensors + shelly.humidity_sensors:
+            channels[sensor['id']] = sensor['channel'] + 1
+
+        if filter == "ds1820":
+            menu.append((u"0", u"Channel 1"))
+            menu.append((u"1", u"Channel 2"))
+            menu.append((u"2", u"Channel 3"))
+            menu.append((u"-1", u"%%separator%%"))
+            menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
+
+            ds1820s = [(s, "{} (Channel {})".format(s, channels[s])) for s in sorted(temperature_ids, key=lambda x: channels[x]) if s not in humidity_ids]
+            if len(ds1820s) == 0:
+                menu.append((u"-1", u"%%disabled:No connected DS1820 sensors%%"))
+            else:
+                menu.extend(ds1820s)
+        elif filter == "dht22":
+            menu.append((u"0", u"Channel 1"))
+            menu.append((u"-1", u"%%separator%%"))
+            menu.append((u"-1", u"%%disabled:Select by identifier:%%"))
+
+            dht22s = [(s, "{} (Channel {})".format(s, channels[s])) for s in sorted(humidity_ids, key=lambda x: channels[x])]
+            if len(dht22s) == 0:
+                menu.append((u"-1", u"%%disabled:No connected DHT22 sensors%%"))
+            else:
+                menu.extend(dht22s)
+        else:
+            menu.append((u"-1", u"%%disabled:Error building identifier list%%"))
+
+        return menu

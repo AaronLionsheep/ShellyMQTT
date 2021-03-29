@@ -26,7 +26,9 @@ class Shelly_Uni_Relay(Shelly_1):
                 "shellies/announce",
                 "{}/online".format(address),
                 "{}/info".format(address),
-                "{}/relay/{}".format(address, self.getChannel())
+                "{}/relay/{}".format(address, self.getChannel()),
+                "{}/ext_temperatures".format(address),
+                "{}/ext_humidities".format(address)
             ]
 
     def handleMessage(self, topic, payload):

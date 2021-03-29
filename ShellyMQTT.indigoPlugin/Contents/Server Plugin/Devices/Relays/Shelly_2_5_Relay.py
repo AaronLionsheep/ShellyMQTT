@@ -13,6 +13,20 @@ class Shelly_2_5_Relay(Shelly_1PM):
     def __init__(self, device):
         Shelly_1PM.__init__(self, device)
 
+    def getSubscriptions(self):
+        """
+        Default method to return a list of topics that the device subscribes to.
+
+        :return: A list of topics.
+        """
+
+        subscriptions = Shelly_1PM.getSubscriptions(self)
+        if "{}/ext_temperatures".format(self.getAddress()) in subscriptions:
+            subscriptions.remove("{}/ext_temperatures".format(self.getAddress()))
+        if "{}/ext_humidities".format(self.getAddress()) in subscriptions:
+            subscriptions.remove("{}/ext_humidities".format(self.getAddress()))
+        return subscriptions
+
     def handleMessage(self, topic, payload):
         """
         This method is called when a message comes in and matches one of this devices subscriptions.

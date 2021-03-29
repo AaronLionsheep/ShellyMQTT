@@ -1,5 +1,6 @@
 # coding=utf-8
 import indigo
+import json
 from Shelly_Addon import Shelly_Addon
 
 
@@ -26,6 +27,7 @@ class Shelly_Addon_DS1820(Shelly_Addon):
             return [
                 "{}/online".format(address),
                 "{}/ext_temperature/{}".format(address, self.getProbeNumber()),
+                "{}/ext_temperatures".format(address)
             ]
 
     def handleMessage(self, topic, payload):
@@ -38,12 +40,23 @@ class Shelly_Addon_DS1820(Shelly_Addon):
         """
 
         if topic == "{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()):
-            # For some reason, the shelly reports the temperature with a preceding colon...
             try:
                 temperature = float(payload)
                 self.setTemperature(temperature)
             except ValueError:
                 self.logger.error(u"Unable to convert value of \"{}\" into a float!".format(payload))
+        elif topic == "{}/ext_temperatures".format(self.getAddress()) and len(self.getProbeNumber()) > 1:
+            # If the user selected a channel number (0-2), then the string version will have 1 character
+            # and we will not get to this block
+            try:
+                data = json.loads(payload)
+                for sensor in data.values():
+                    if sensor['hwID'] == self.getProbeNumber():
+                        value = sensor['tC']
+                        self.handleMessage("{}/ext_temperature/{}".format(self.getAddress(), self.getProbeNumber()), value)
+                        break
+            except ValueError:
+                self.logger.warn("Unable to convert payload to json: {}".format(payload))
         elif topic == "{}/online".format(self.getAddress()):
             Shelly_Addon.handleMessage(self, topic, payload)
 

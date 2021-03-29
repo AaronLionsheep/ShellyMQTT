@@ -52,7 +52,9 @@ class Test_Shelly_1PM(unittest.TestCase):
             "shellies/shelly1pm-test/relay/0/energy",
             "shellies/shelly1pm-test/temperature",
             "shellies/shelly1pm-test/overtemperature",
-            "shellies/shelly1pm-test/input_event/0"
+            "shellies/shelly1pm-test/input_event/0",
+            "shellies/shelly1pm-test/ext_temperatures",
+            "shellies/shelly1pm-test/ext_humidities"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
