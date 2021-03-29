@@ -34,6 +34,7 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
         self.device.updateStateOnServer("mac-address", None)
         self.device.updateStateOnServer("online", False)
         self.device.updateStateOnServer("curEnergyLevel", 0)
+        self.device.updateStateOnServer("temperature-status", "Normal")
 
     def test_getSubscriptions_no_address(self):
         """Test getting subscriptions with no address defined."""
@@ -53,7 +54,8 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
             "shellies/shelly25relay-test/relay/0/energy",
             "shellies/shelly25relay-test/temperature",
             "shellies/shelly25relay-test/overtemperature",
-            "shellies/shelly25relay-test/input_event/0"
+            "shellies/shelly25relay-test/input_event/0",
+            "shellies/shelly25relay-test/temperature_status"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
@@ -71,7 +73,8 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
             "shellies/shelly25relay-test/relay/1/energy",
             "shellies/shelly25relay-test/temperature",
             "shellies/shelly25relay-test/overtemperature",
-            "shellies/shelly25relay-test/input_event/1"
+            "shellies/shelly25relay-test/input_event/1",
+            "shellies/shelly25relay-test/temperature_status"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
@@ -186,6 +189,10 @@ class Test_Shelly_2_5_Relay(unittest.TestCase):
         self.assertTrue(self.shelly.device.states['online'])
         self.shelly.handleMessage("shellies/shelly25relay-test/online", "false")
         self.assertFalse(self.shelly.device.states['online'])
+
+    def test_handleMessage_temperature_status(self):
+        self.shelly.handleMessage("shellies/shelly25relay-test/temperature_status", "High")
+        self.assertEqual("High", self.shelly.device.states['temperature-status'])
 
     @patch('Devices.Shelly.Shelly.publish')
     def test_handleAction_turn_on(self, publish):

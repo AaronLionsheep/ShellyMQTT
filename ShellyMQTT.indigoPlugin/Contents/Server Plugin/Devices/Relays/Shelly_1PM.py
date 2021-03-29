@@ -35,7 +35,8 @@ class Shelly_1PM(Shelly_1):
                 "{}/overtemperature".format(address),
                 "{}/input_event/{}".format(address, self.getChannel()),
                 "{}/ext_temperatures".format(address),
-                "{}/ext_humidities".format(address)
+                "{}/ext_humidities".format(address),
+                "{}/temperature_status".format(address)
             ]
 
     def handleMessage(self, topic, payload):

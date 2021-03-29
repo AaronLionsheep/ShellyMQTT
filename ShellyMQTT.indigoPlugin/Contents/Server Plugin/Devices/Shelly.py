@@ -81,6 +81,8 @@ class Shelly:
             self.processTemperatureSensors(payload)
         elif topic == "{}/ext_humidities".format(self.getAddress()):
             self.processHumiditySensors(payload)
+        elif topic == "{}/temperature_status".format(self.getAddress()):
+            self.processTemperatureStatus(payload)
         return None
 
     def handleAction(self, action):
@@ -443,6 +445,16 @@ class Shelly:
                     })
         except ValueError:
             self.logger.error(u"Problem parsing JSON: {}".format(payload))
+
+    def processTemperatureStatus(self, payload):
+        """
+        Parses a message containing the temperature status for a device.
+
+        :param payload: The payload of the temperature status
+        :return: None
+        """
+
+        self.device.updateStateOnServer("temperature-status", payload)
 
     def getLastInputEventId(self):
         """

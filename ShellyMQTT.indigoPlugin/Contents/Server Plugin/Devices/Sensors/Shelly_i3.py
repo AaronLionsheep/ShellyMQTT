@@ -26,7 +26,8 @@ class Shelly_i3(Shelly):
                 "shellies/announce",
                 "{}/online".format(address),
                 "{}/input/{}".format(address, self.getChannel()),
-                "{}/input_event/{}".format(address, self.getChannel())
+                "{}/input_event/{}".format(address, self.getChannel()),
+                "{}/temperature_status".format(address)
             ]
 
     def handleMessage(self, topic, payload):
