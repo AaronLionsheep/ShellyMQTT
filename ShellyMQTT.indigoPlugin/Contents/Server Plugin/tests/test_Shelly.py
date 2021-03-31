@@ -453,6 +453,22 @@ class Test_Shelly(unittest.TestCase):
         self.assertFalse(trigger_L.executed)
         self.assertFalse(trigger_S_other.executed)
 
+    def test_process_temperature_status_normal_event_trigger_executed(self):
+        """Test that a normal temperature status fires executes a trigger"""
+        trigger = IndigoTrigger("abnormal-temperature-status-any", {})
+        indigo.activePlugin.triggers['1'] = trigger
+
+        self.shelly.processTemperatureStatus("Normal")
+        self.assertFalse(trigger.executed)
+
+    def test_process_temperature_status_abnormal_event_trigger_executed(self):
+        """Test that an abnormal temperature status fires executes a trigger"""
+        trigger = IndigoTrigger("abnormal-temperature-status-any", {})
+        indigo.activePlugin.triggers['1'] = trigger
+
+        self.shelly.processTemperatureStatus("High")
+        self.assertTrue(trigger.executed)
+
     def test_process_temperature_sensors_creates_correct_list(self):
         """Test that the list of sensors is properly created"""
         payload = '{"0":{"hwID":"2885186e38190123","tC":20.5}, "1":{"hwID":"2885186e38190456","tC":21.5}, "2":{"hwID":"2885186e38190789","tC":22.5}}'

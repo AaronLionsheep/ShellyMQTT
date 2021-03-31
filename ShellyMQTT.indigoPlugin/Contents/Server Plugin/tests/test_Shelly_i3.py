@@ -27,13 +27,15 @@ class Test_Shelly_i3(unittest.TestCase):
         self.device.pluginProps['invert'] = False
         self.device.pluginProps['last-input-event-id'] = -1
         self.device.states['onOffState'] = False
+        self.device.states['temperature-status'] = "Normal"
 
     def test_getSubscriptions(self):
         subscriptions = [
             "shellies/announce",
             "shellies/shelly-i3-test/online",
             "shellies/shelly-i3-test/input/0",
-            "shellies/shelly-i3-test/input_event/0"
+            "shellies/shelly-i3-test/input_event/0",
+            "shellies/shelly-i3-test/temperature_status"
         ]
 
         self.assertListEqual(subscriptions, self.shelly.getSubscriptions())
@@ -75,6 +77,10 @@ class Test_Shelly_i3(unittest.TestCase):
         self.device.states['online'] = True
         self.shelly.handleMessage("shellies/shelly-i3-test/online", "false")
         self.assertFalse(self.device.states['online'])
+
+    def test_handleMessage_temperature_status(self):
+        self.shelly.handleMessage("shellies/shelly-i3-test/temperature_status", "High")
+        self.assertEqual("High", self.shelly.device.states['temperature-status'])
 
     @patch('Devices.Shelly.Shelly.publish')
     def test_sendStatusRequestCommand(self, publish):

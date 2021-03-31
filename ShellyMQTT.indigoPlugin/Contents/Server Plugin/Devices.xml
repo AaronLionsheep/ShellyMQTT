@@ -122,6 +122,11 @@
                 <TriggerLabel>SW Input</TriggerLabel>
                 <ControlPageLabel>SW Input</ControlPageLabel>
             </State>
+            <State id="temperature-status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Temperature Status</TriggerLabel>
+                <ControlPageLabel>Temperature Status</ControlPageLabel>
+            </State>
             <State id="overpower">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Overpower</TriggerLabel>
@@ -228,6 +233,11 @@
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>SW Input</TriggerLabel>
                 <ControlPageLabel>SW Input</ControlPageLabel>
+            </State>
+            <State id="temperature-status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Temperature Status</TriggerLabel>
+                <ControlPageLabel>Temperature Status</ControlPageLabel>
             </State>
             <State id="overpower">
                 <ValueType>Boolean</ValueType>
@@ -1814,6 +1824,11 @@
             <Template file="Templates/Device_Mute_Logging.xml"/>
         </ConfigUI>
         <States>
+            <State id="temperature-status">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Temperature Status</TriggerLabel>
+                <ControlPageLabel>Temperature Status</ControlPageLabel>
+            </State>
             <State id="online">
                 <ValueType>Boolean</ValueType>
                 <TriggerLabel>Online</TriggerLabel>
