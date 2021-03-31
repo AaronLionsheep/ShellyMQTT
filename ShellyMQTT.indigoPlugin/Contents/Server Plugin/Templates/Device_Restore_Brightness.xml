@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Template>
+    <Field type="checkbox" id="restore-brightness" defaultValue="false">
+        <Label>Restore Brightness:</Label>
+    </Field>
+
+    <Field type="label" id="restore-brightness-notice-1" fontSize="small" fontColor="darkGrey">
+        <Label>Restore the last brightness value when turning on (uncheck to always set brightness to 100%)</Label>
+    </Field>
+</Template>

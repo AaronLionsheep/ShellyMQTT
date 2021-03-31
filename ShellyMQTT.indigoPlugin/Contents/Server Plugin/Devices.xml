@@ -745,6 +745,10 @@
             <Field id="mute-sep" type="separator"/>
 
             <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="brightness-sep" type="separator"/>
+
+            <Template file="Templates/Device_Restore_Brightness.xml"/>
         </ConfigUI>
         <States>
             <State id="sw-input">
@@ -826,6 +830,10 @@
             <Field id="mute-sep" type="separator"/>
 
             <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="brightness-sep" type="separator"/>
+
+            <Template file="Templates/Device_Restore_Brightness.xml"/>
         </ConfigUI>
         <States>
             <State id="overpower">
@@ -896,6 +904,10 @@
             <Field id="mute-sep" type="separator"/>
 
             <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="brightness-sep" type="separator"/>
+
+            <Template file="Templates/Device_Restore_Brightness.xml"/>
         </ConfigUI>
         <States>
             <State id="overpower">
@@ -962,6 +974,10 @@
             <Field id="mute-sep" type="separator"/>
 
             <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="brightness-sep" type="separator"/>
+
+            <Template file="Templates/Device_Restore_Brightness.xml"/>
         </ConfigUI>
         <States>
             <State id="online">
@@ -1015,6 +1031,10 @@
             <Field id="mute-sep" type="separator"/>
 
             <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="brightness-sep" type="separator"/>
+
+            <Template file="Templates/Device_Restore_Brightness.xml"/>
         </ConfigUI>
         <States>
             <State id="online">
@@ -1072,6 +1092,10 @@
             <Field id="mute-sep" type="separator"/>
 
             <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="brightness-sep" type="separator"/>
+
+            <Template file="Templates/Device_Restore_Brightness.xml"/>
         </ConfigUI>
         <States>
             <State id="online">

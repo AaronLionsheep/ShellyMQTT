@@ -106,6 +106,24 @@ class Shelly_RGBW2_Color(Shelly_1PM):
         :param action: The Indigo action.
         :return: None
         """
+        
+        def on():
+            if self.device.pluginProps.get('restore-brightness', False):
+                # Turn on without passing a brightness
+                self.publish("{}/color/{}/command".format(self.getAddress(), self.getChannel()), "on")
+            else:
+                self.applyBrightness(100)
+                self.set()
+            self.logCommandSent("on")
+
+        def off():
+            if self.device.pluginProps.get('restore-brightness', False):
+                # Turn off without passing a brightness
+                self.publish("{}/color/{}/command".format(self.getAddress(), self.getChannel()), "off")
+            else:
+                self.applyBrightness(0)
+                self.set()
+            self.logCommandSent("off")
 
         if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
             if 'whiteLevel' in action.actionValue:
@@ -119,13 +137,9 @@ class Shelly_RGBW2_Color(Shelly_1PM):
             self.set()
             self.logCommandSent(u"color values RGBW to {}, {}, {}, {}".format(self.device.states['redLevel'], self.device.states['greenLevel'], self.device.states['blueLevel'], self.device.states['whiteLevel']))
         elif action.deviceAction == indigo.kDeviceAction.TurnOn:
-            self.applyBrightness(100)
-            self.set()
-            self.logCommandSent("brightness to 100%")
+            on()
         elif action.deviceAction == indigo.kDeviceAction.TurnOff:
-            self.applyBrightness(0)
-            self.set()
-            self.logCommandSent("off")
+            off()
         elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
             self.applyBrightness(action.actionValue)
             self.set()
@@ -143,13 +157,9 @@ class Shelly_RGBW2_Color(Shelly_1PM):
         elif action.deviceAction == indigo.kDeviceAction.Toggle:
             # Override the toggle since dimmer's need their brightness set.
             if self.isOn():
-                self.applyBrightness(0)
-                self.set()
-                self.logCommandSent("off")
+                off()
             elif self.isOff():
-                self.applyBrightness(100)
-                self.set()
-                self.logCommandSent("brightness to 100%")
+                on()
         else:
             Shelly_1PM.handleAction(self, action)
 
