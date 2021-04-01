@@ -33,7 +33,9 @@ class Shelly_3EM_Meter(Shelly_EM_Meter):
                 "{}/emeter/{}/reactive_power".format(address, self.getChannel()),
                 "{}/emeter/{}/voltage".format(address, self.getChannel()),
                 "{}/emeter/{}/current".format(address, self.getChannel()),
-                "{}/emeter/{}/pf".format(address, self.getChannel())
+                "{}/emeter/{}/pf".format(address, self.getChannel()),
+                "{}/emeter/{}/total".format(address, self.getChannel()),
+                "{}/emeter/{}/total_returned".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):

@@ -31,7 +31,9 @@ class Shelly_EM_Meter(Shelly):
                 "{}/emeter/{}/returned_energy".format(address, self.getChannel()),
                 "{}/emeter/{}/power".format(address, self.getChannel()),
                 "{}/emeter/{}/reactive_power".format(address, self.getChannel()),
-                "{}/emeter/{}/voltage".format(address, self.getChannel())
+                "{}/emeter/{}/voltage".format(address, self.getChannel()),
+                "{}/emeter/{}/total".format(address, self.getChannel()),
+                "{}/emeter/{}/total_returned".format(address, self.getChannel())
             ]
 
     def handleMessage(self, topic, payload):
@@ -74,6 +76,18 @@ class Shelly_EM_Meter(Shelly):
                 self.device.updateStateOnServer('voltage', voltage, uiValue="{:.1f} V".format(voltage), decimalPlaces=1)
             except ValueError:
                 self.logger.error(u"Unable to convert voltage of \"{}\" to a float!".format(payload))
+        elif topic == "{}/emeter/{}/total".format(self.getAddress(), self.getChannel()):
+            try:
+                energy = float(payload)
+                self.device.updateStateOnServer('total-energy', energy, uiValue="{:.1f} Wh".format(energy), decimalPlaces=1)
+            except ValueError:
+                self.logger.error(u"Unable to convert energy of \"{}\" to a float!".format(payload))
+        elif topic == "{}/emeter/{}/total_returned".format(self.getAddress(), self.getChannel()):
+            try:
+                returned_energy = float(payload)
+                self.device.updateStateOnServer('total-returned-energy', returned_energy, uiValue="{:.1f} Wh".format(returned_energy), decimalPlaces=1)
+            except ValueError:
+                self.logger.error(u"Unable to convert returned_energy of \"{}\" to a float!".format(payload))
         else:
             Shelly.handleMessage(self, topic, payload)
 

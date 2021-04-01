@@ -1582,6 +1582,16 @@
                 <TriggerLabel>Energy Returned</TriggerLabel>
                 <ControlPageLabel>Energy Returned</ControlPageLabel>
             </State>
+            <State id="total-energy">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Total Energy</TriggerLabel>
+                <ControlPageLabel>Total Energy</ControlPageLabel>
+            </State>
+            <State id="total-returned-energy">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Total Returned Energy</TriggerLabel>
+                <ControlPageLabel>Total Returned Energy</ControlPageLabel>
+            </State>
             <State id="power">
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Power</TriggerLabel>
@@ -1694,6 +1704,16 @@
                 <ValueType>Float</ValueType>
                 <TriggerLabel>Energy Returned</TriggerLabel>
                 <ControlPageLabel>Energy Returned</ControlPageLabel>
+            </State>
+            <State id="total-energy">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Total Energy</TriggerLabel>
+                <ControlPageLabel>Total Energy</ControlPageLabel>
+            </State>
+            <State id="total-returned-energy">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Total Returned Energy</TriggerLabel>
+                <ControlPageLabel>Total Returned Energy</ControlPageLabel>
             </State>
             <State id="power">
                 <ValueType>Float</ValueType>
