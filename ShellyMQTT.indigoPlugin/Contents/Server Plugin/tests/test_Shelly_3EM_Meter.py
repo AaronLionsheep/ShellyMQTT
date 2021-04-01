@@ -29,6 +29,8 @@ class Test_Shelly_3EM_Meter(unittest.TestCase):
         self.device.updateStateOnServer("curEnergyLevel", 0)
         self.device.updateStateOnServer("accumEnergyTotal", 0)
         self.device.updateStateOnServer("power", 0)
+        self.device.updateStateOnServer("total-energy", 0)
+        self.device.updateStateOnServer("total-returned-energy", 0)
 
     def test_getSubscriptions_no_address(self):
         """Test getting subscriptions with no address defined."""
@@ -46,7 +48,9 @@ class Test_Shelly_3EM_Meter(unittest.TestCase):
             "shellies/shelly-3em-meter-test/emeter/0/reactive_power",
             "shellies/shelly-3em-meter-test/emeter/0/voltage",
             "shellies/shelly-3em-meter-test/emeter/0/current",
-            "shellies/shelly-3em-meter-test/emeter/0/pf"
+            "shellies/shelly-3em-meter-test/emeter/0/pf",
+            "shellies/shelly-3em-meter-test/emeter/0/total",
+            "shellies/shelly-3em-meter-test/emeter/0/total_returned"
         ]
         self.assertListEqual(topics, self.shelly.getSubscriptions())
 
@@ -93,6 +97,14 @@ class Test_Shelly_3EM_Meter(unittest.TestCase):
 
     def test_handleMessage_returned_energy_invalid(self):
         self.assertRaises(ValueError, self.shelly.handleMessage("shellies/shelly-3em-meter-test/emeter/0/returned_energy", "Aa"))
+
+    def test_handleMessage_total(self):
+        self.shelly.handleMessage("shellies/shelly-3em-meter-test/emeter/0/total", "5")
+        self.assertAlmostEqual(5.0, self.shelly.device.states['total-energy'], 1)
+
+    def test_handleMessage_total_returned(self):
+        self.shelly.handleMessage("shellies/shelly-3em-meter-test/emeter/0/total_returned", "6")
+        self.assertAlmostEqual(6.0, self.shelly.device.states['total-returned-energy'], 1)
 
     def test_handleMessage_voltage(self):
         self.shelly.handleMessage("shellies/shelly-3em-meter-test/emeter/0/voltage", "120.12")
