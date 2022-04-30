@@ -87,3 +87,4 @@ class TriggerExecutor:
     @staticmethod
     def execute(trigger):
         trigger.executed = True
+        trigger.execution_count += 1

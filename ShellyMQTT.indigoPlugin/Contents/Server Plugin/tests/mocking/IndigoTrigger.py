@@ -4,4 +4,5 @@ class IndigoTrigger:
         self.pluginTypeId = pluginTypeId
         self.pluginProps = pluginProps
         self.executed = False
+        self.execution_count = 0
 
