@@ -94,19 +94,19 @@ class Test_Shelly_Dimmer_SL(unittest.TestCase):
         self.assertFalse(self.shelly.device.states['sw-input'])
 
     def test_handleMessage_power(self):
-        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/relay/0/power", "0")
+        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/light/0/power", "0")
         self.assertEqual("0", self.shelly.device.states['curEnergyLevel'])
         self.assertEqual("0 W", self.shelly.device.states_meta['curEnergyLevel']['uiValue'])
 
-        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/relay/0/power", "101.123")
+        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/light/0/power", "101.123")
         self.assertEqual("101.123", self.shelly.device.states['curEnergyLevel'])
         self.assertEqual("101.123 W", self.shelly.device.states_meta['curEnergyLevel']['uiValue'])
 
     def test_handleMessage_energy(self):
-        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/relay/0/energy", "0")
+        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/light/0/energy", "0")
         self.assertAlmostEqual(0.0000, self.shelly.device.states['accumEnergyTotal'], 4)
 
-        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/relay/0/energy", "50")
+        self.shelly.handleMessage("shellies/shelly-dimmer-sl-test/light/0/energy", "50")
         self.assertAlmostEqual(0.0008, self.shelly.device.states['accumEnergyTotal'], 4)
 
     def test_handleMessage_temperature(self):
