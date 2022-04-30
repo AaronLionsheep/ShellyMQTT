@@ -1129,7 +1129,7 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
-    def menuChanged(self, valuesDict, typeId, callerWaitingForResult):
+    def menuChanged(self, valuesDict, typeId, callerWaitingForResult=True):
         """
         Dummy function used to update a ConfigUI dynamic menu
 
