@@ -636,12 +636,12 @@ class Shelly:
         """
 
         # Get the old battery level to determine if there was a change
-        oldBatteryLevel = self.device.states.get('batteryLevel', None)
+        oldBatteryLevel = self.device.states.get('batteryLevel', 0)
         # Save the current battery level
         self.device.updateStateOnServer(key="batteryLevel", value=batteryLevel, uiValue='{}%'.format(batteryLevel))
 
         try:
-            if indigo.activePlugin.lowBatteryThreshold >= int(batteryLevel) != int(oldBatteryLevel) and oldBatteryLevel:
+            if indigo.activePlugin.lowBatteryThreshold >= int(batteryLevel) and int(oldBatteryLevel) != int(batteryLevel):
                 # Battery level has changed
                 # Fire all triggers watching for a low battery event
                 for trigger in indigo.activePlugin.triggers.values():

@@ -560,3 +560,38 @@ class Test_Shelly(unittest.TestCase):
             {"channel": 0, "id": "2885186e38190456"}
         ]
         self.assertItemsEqual(expected, self.shelly.humidity_sensors)
+
+    def test_updateBatteryLevel(self):
+        """Test updating the battery level sets the state."""
+        self.shelly.updateBatteryLevel(52)
+
+        self.assertEqual(52, self.shelly.device.states['batteryLevel'])
+        self.assertEqual("52%", self.shelly.device.states_meta['batteryLevel']['uiValue'])
+
+    def test_updateBatteryLevel_triggers_low_battery(self):
+        """Test that a low battery level trigger is fired."""
+        trigger_any = IndigoTrigger("low-battery-any", {})
+        trigger_device = IndigoTrigger("low-battery-device", {'device-id': self.device.id})
+
+        indigo.activePlugin.triggers['1'] = trigger_any
+        indigo.activePlugin.triggers['2'] = trigger_device
+
+        self.shelly.updateBatteryLevel(10)
+
+        self.assertTrue(trigger_any.executed)
+        self.assertTrue(trigger_device.executed)
+
+    def test_updateBatteryLevel_only_triggers_on_change(self):
+        """Test that a low battery level trigger only fires when the battery level changes."""
+
+        trigger_any = IndigoTrigger("low-battery-any", {})
+        trigger_device = IndigoTrigger("low-battery-device", {'device-id': self.device.id})
+
+        indigo.activePlugin.triggers['1'] = trigger_any
+        indigo.activePlugin.triggers['2'] = trigger_device
+
+        self.shelly.updateBatteryLevel(10)
+        self.shelly.updateBatteryLevel(10)
+
+        self.assertEqual(trigger_any.execution_count, 1)
+        self.assertEqual(trigger_device.execution_count, 1)

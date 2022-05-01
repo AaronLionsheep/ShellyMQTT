@@ -4,6 +4,7 @@
         <Name>Shelly 1</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -67,6 +68,7 @@
         <Name>Shelly 1PM</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -169,6 +171,7 @@
         <Name>Shelly 2.5 (Relay)</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -302,6 +305,7 @@
         <Name>Shelly 4Pro</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -379,6 +383,7 @@
         <Name>Shelly H&amp;T</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -500,6 +505,7 @@
         <Name>Shelly Flood</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -591,6 +597,7 @@
         <Name>Shelly Door Window</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsStatusRequest" defaultValue="false" hidden="true" />
@@ -712,6 +719,7 @@
         <Name>Shelly Dimmer/SL</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
@@ -803,6 +811,7 @@
         <Name>Shelly RGBW2 (Color)</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
@@ -873,6 +882,7 @@
         <Name>Shelly RGBW2 (White)</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
@@ -947,6 +957,7 @@
         <Name>Shelly Bulb</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
@@ -1012,6 +1023,7 @@
         <Name>Shelly Bulb Vintage</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="false" />
@@ -1069,6 +1081,7 @@
         <Name>Shelly Bulb Duo</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="textfield" id="resetEnergyOffset" defaultValue="0" hidden="true"/>
             <Field type="checkbox" id="SupportsColor" hidden="true" defaultValue="true" />
@@ -1132,6 +1145,7 @@
         <Name>Shelly Plug (US)</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1195,6 +1209,7 @@
         <Name>Shelly PlugS</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1283,6 +1298,7 @@
         <Name>Shelly DS1820 Addon</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1363,6 +1379,7 @@
         <Name>Shelly DHT22 Addon</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1467,6 +1484,7 @@
         <Name>Shelly Detached Switch</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1517,6 +1535,7 @@
         <Name>Shelly EM Meter</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -1639,6 +1658,7 @@
         <Name>Shelly 3EM Meter</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -1772,6 +1792,7 @@
         <Name>Shelly EM/3EM Relay</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1829,6 +1850,7 @@
         <Name>Shelly i3</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -1905,6 +1927,7 @@
         <Name>Shelly Button1</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
@@ -1961,6 +1984,7 @@
         <Name>Shelly Gas</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -2031,6 +2055,7 @@
         <Name>Shelly Uni Relay</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -2103,6 +2128,7 @@
         <Name>Shelly Uni Input</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="true" hidden="true" />
@@ -2175,6 +2201,7 @@
         <Name>Shelly Motion</Name>
         <ConfigUI>
             <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />

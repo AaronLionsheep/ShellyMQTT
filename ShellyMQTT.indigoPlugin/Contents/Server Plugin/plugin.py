@@ -265,6 +265,7 @@ class Plugin(indigo.PluginBase):
         self.discoveredDevices = {}
         self.triggers = {}
         self.messageTypes = []
+        self.discoveredMessageTypes = []
         self.messageQueue = Queue()
         self.mqttPlugin = indigo.server.getPlugin("com.flyingdiver.indigoplugin.mqtt")
 
@@ -284,11 +285,12 @@ class Plugin(indigo.PluginBase):
         indigo.triggers.subscribeToChanges()
 
         # Examine all triggers and extract known message types
+
         for trigger in indigo.triggers.iter("com.flyingdiver.indigoplugin.mqtt"):
             if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
                 messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
                 if len(messageType) > 0:
-                    self.messageTypes.append(messageType)
+                    self.discoveredMessageTypes.append(messageType)
 
     def shutdown(self):
         """
@@ -668,12 +670,12 @@ class Plugin(indigo.PluginBase):
         if self.isMQTTConnectorTopicMatchTrigger(origTrigger) and origTrigger.enabled:
             messageType = origTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
             if len(messageType) > 0:
-                self.messageTypes.remove(messageType)
+                self.discoveredMessageTypes.remove(messageType)
 
         if self.isMQTTConnectorTopicMatchTrigger(newTrigger) and newTrigger.enabled:
             messageType = newTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
             if len(messageType) > 0:
-                self.messageTypes.append(messageType)
+                self.discoveredMessageTypes.append(messageType)
 
         if self.isShellyMQTTTrigger(origTrigger):
             del self.triggers[origTrigger.id]
@@ -1127,7 +1129,7 @@ class Plugin(indigo.PluginBase):
             shelly.sendUpdateFirmwareCommand()
             return True
 
-    def menuChanged(self, valuesDict, typeId, callerWaitingForResult):
+    def menuChanged(self, valuesDict, typeId, callerWaitingForResult=True):
         """
         Dummy function used to update a ConfigUI dynamic menu
 
