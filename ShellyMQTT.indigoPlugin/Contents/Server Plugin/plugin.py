@@ -285,7 +285,6 @@ class Plugin(indigo.PluginBase):
         indigo.triggers.subscribeToChanges()
 
         # Examine all triggers and extract known message types
-
         for trigger in indigo.triggers.iter("com.flyingdiver.indigoplugin.mqtt"):
             if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
                 messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
@@ -619,9 +618,9 @@ class Plugin(indigo.PluginBase):
         """
         super(Plugin, self).triggerCreated(trigger)
         if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
-            messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
-            if len(messageType) > 0:
-                self.messageTypes.append(messageType)
+            message_type = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(message_type) > 0:
+                self.discoveredMessageTypes.append(message_type)
 
     def triggerDeleted(self, trigger):
         """
@@ -633,9 +632,9 @@ class Plugin(indigo.PluginBase):
 
         super(Plugin, self).triggerDeleted(trigger)
         if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
-            messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
-            if len(messageType) > 0:
-                self.messageTypes.remove(messageType)
+            message_type = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(message_type) > 0:
+                self.discoveredMessageTypes.remove(message_type)
 
     def triggerStartProcessing(self, trigger):
         """
@@ -668,14 +667,14 @@ class Plugin(indigo.PluginBase):
 
         super(Plugin, self).triggerUpdated(origTrigger, newTrigger)
         if self.isMQTTConnectorTopicMatchTrigger(origTrigger) and origTrigger.enabled:
-            messageType = origTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
-            if len(messageType) > 0:
-                self.discoveredMessageTypes.remove(messageType)
+            message_type = origTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(message_type) > 0:
+                self.discoveredMessageTypes.remove(message_type)
 
         if self.isMQTTConnectorTopicMatchTrigger(newTrigger) and newTrigger.enabled:
-            messageType = newTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
-            if len(messageType) > 0:
-                self.discoveredMessageTypes.append(messageType)
+            message_type = newTrigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+            if len(message_type) > 0:
+                self.discoveredMessageTypes.append(message_type)
 
         if self.isShellyMQTTTrigger(origTrigger):
             del self.triggers[origTrigger.id]
