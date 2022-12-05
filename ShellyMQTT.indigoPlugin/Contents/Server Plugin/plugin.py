@@ -27,6 +27,7 @@ from Devices.Sensors.Shelly_Button1 import Shelly_Button1
 from Devices.Sensors.Shelly_Gas import Shelly_Gas
 from Devices.Sensors.Shelly_Uni_Input import Shelly_Uni_Input
 from Devices.Sensors.Shelly_Motion import Shelly_Motion
+from Devices.Sensors.Shelly_Motion_2 import Shelly_Motion_2
 
 # Import the bulb devices
 from Devices.Bulbs.Shelly_Bulb import Shelly_Bulb
@@ -70,6 +71,7 @@ deviceClasses = {
     "shelly-button1": Shelly_Button1,
     "shelly-gas": Shelly_Gas,
     "shelly-motion": Shelly_Motion,
+    "shelly-motion-2": Shelly_Motion_2,
 
     # Bulb devices
     "shelly-bulb": Shelly_Bulb,
@@ -161,6 +163,10 @@ deviceModelInformation = {
     },
     "shelly-motion": {
         "class": Shelly_Motion,
+        "relations": []
+    },
+    "shelly-motion-2": {
+        "class": Shelly_Motion_2,
         "relations": []
     },
 
