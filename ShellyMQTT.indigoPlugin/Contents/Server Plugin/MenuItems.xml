@@ -98,4 +98,16 @@
         <Name>Unmute Shelly Gas Alarm</Name>
         <ConfigUI actionId="gas-unmute-alarm"/>
     </MenuItem>
+
+    <MenuItem id="sep-5"/>
+
+    <MenuItem id="trv-start-boost">
+        <Name>Start TRV Boost</Name>
+        <ConfigUI actionId="trv-start-boost"/>
+    </MenuItem>
+
+    <MenuItem id="trv-stop-boost">
+        <Name>Stop TRV Boost</Name>
+        <ConfigUI actionId="trv-stop-boost"/>
+    </MenuItem>
 </MenuItems>

@@ -9,6 +9,7 @@ class Indigo:
         self.kStateImageSel = StateImages()
         self.kDeviceAction = DeviceActions()
         self.kUniversalAction = UniversalActions()
+        self.kThermostatAction = ThermostatActions()
         self.activePlugin = ShellyPlugin()
         self.device = IndigoDevice()
         self.trigger = TriggerExecutor()
@@ -57,6 +58,7 @@ class StateImages:
         self.WindowSensorClosed = "WindowSensorClosed"
         self.EnergyMeterOn = "EnergyMeterOn"
         self.EnergyMeterOff = "EnergyMeterOff"
+        self.HvacHeating = "HvacHeating"
 
 
 class DeviceActions:
@@ -77,6 +79,26 @@ class UniversalActions:
     def __init__(self):
         self.EnergyReset = "EnergyReset"
         self.EnergyUpdate = "EnergyUpdate"
+
+
+class ThermostatActions:
+
+    def __init__(self):
+        self.DecreaseCoolSetpoint = "DecreaseCoolSetpoint"
+        self.DecreaseHeatSetpoint = "DecreaseHeatSetpoint"
+        self.IncreaseCoolSetpoint = "IncreaseCoolSetpoint"
+        self.IncreaseHeatSetpoint = "IncreaseHeatSetpoint"
+        self.SetCoolSetpoint = "SetCoolSetpoint"
+        self.SetFanMode = "SetFanMode"
+        self.SetHeatSetpoint = "SetHeatSetpoint"
+        self.SetHvacMode = "SetHvacMode"
+        self.RequestStatusAll = "RequestStatusAll"
+        self.RequestMode = "RequestMode"
+        self.RequestEquipmentState = "RequestEquipmentState"
+        self.RequestTemperatures = "RequestTemperatures"
+        self.RequestHumidities = "RequestHumidities"
+        self.RequestDeadbands = "RequestDeadbands"
+        self.RequestSetpoints = "RequestSetpoints"
 
 
 class TriggerExecutor:

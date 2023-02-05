@@ -11,6 +11,7 @@ from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 from Devices.Relays.Shelly_Uni_Relay import Shelly_Uni_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
+from Devices.Shelly_TRV import Shelly_TRV
 
 # Import the RGBW2 devices
 from Devices.RGBW2.Shelly_RGBW2_White import Shelly_RGBW2_White
@@ -89,6 +90,9 @@ deviceClasses = {
 
     # Shelly Dimmer
     "shelly-dimmer-sl": Shelly_Dimmer_SL,
+
+    # Shelly TRV
+    "shelly-trv": Shelly_TRV,
     
     # Shelly Uni
     "shelly-uni-relay": Shelly_Uni_Relay,
@@ -211,6 +215,12 @@ deviceModelInformation = {
     # Shelly Dimmer
     "shelly-dimmer-sl": {
         "class": Shelly_Dimmer_SL,
+        "relations": []
+    },
+
+    # Shelly TRV
+    "shelly-trv": {
+        "class": Shelly_TRV,
         "relations": []
     },
 
@@ -583,6 +593,22 @@ class Plugin(indigo.PluginBase):
             if len(brokerSubscriptions) == 0:
                 del self.brokerDeviceSubscriptions[shelly.getBrokerId()]
 
+    def _normalize_action(self, action):
+        """
+        Normalize an action such that it can be checked like a device, universal, or thermostat action.
+
+        :param action: The action to normalize.
+        :return: action
+        """
+        action_types = ["deviceAction", "thermostatAction"]
+        for action_type in action_types:
+            # If the attribute is not present, add it with the value of None
+            if not hasattr(action, action_type):
+                # indigo must override __setattr__ as set_attr() is unable to add an attribute to the action instance
+                action.__dict__[action_type] = None
+
+        return action
+
     def actionControlDevice(self, action, device):
         """
         Handles an action being performed on the device.
@@ -591,10 +617,10 @@ class Plugin(indigo.PluginBase):
         :param device: The device that was acted on.
         :return: None
         """
-
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
-            shelly.handleAction(action)
+            normalized_action = self._normalize_action(action)
+            shelly.handleAction(normalized_action)
 
     def actionControlUniversal(self, action, device):
         """
@@ -604,10 +630,23 @@ class Plugin(indigo.PluginBase):
         :param device: The device that was acted on.
         :return: None
         """
-
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
-            shelly.handleAction(action)
+            normalized_action = self._normalize_action(action)
+            shelly.handleAction(normalized_action)
+
+    def actionControlThermostat(self, action, device):
+        """
+        Handles a thermostate-related action being performed on a device.
+
+        :param action: The action being performed.
+        :param device: The device the action was performed on.
+        :return: None
+        """
+        shelly = self.shellyDevices.get(device.id, None)
+        if shelly is not None:
+            normalized_action = self._normalize_action(action)
+            shelly.handleAction(normalized_action)
 
     ##########################################################################
     #

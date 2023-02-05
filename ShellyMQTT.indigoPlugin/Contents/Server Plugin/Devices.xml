@@ -2346,4 +2346,100 @@
             </State>
         </States>
     </Device>
+
+    <Device type="thermostat" id="shelly-trv">
+        <Name>Shelly TRV</Name>
+        <ConfigUI>
+            <Field type="checkbox" id="SupportsEnergyMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsPowerMeter" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsEnergyMeterCurPower" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsBatteryLevel" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="supportsStatusRequest" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsOnState" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="AllowOnStateChange" defaultValue="false" hidden="true" />
+
+            <Field type="checkbox" id="SupportsHeatSetpoint" defaultValue="true" hidden="true" />
+            <Field type="checkbox" id="SupportsCoolSetpoint" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsHvacOperationMode" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsHvacFanMode" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="ShowCoolHeatEquipmentStateUI" defaultValue="true" hidden="true" />
+
+            <Template file="Templates/Device_Template_Creation.xml"/>
+
+            <Field id="manual-config-sep" type="separator"/>
+
+            <Template file="Templates/Device_Broker.xml"/>
+            <Template file="Templates/Device_Address.xml"/>
+
+            <Field id="message-sep" type="separator"/>
+
+            <Template file="Templates/Device_Message_types.xml"/>
+
+            <Field id="mute-sep" type="separator"/>
+
+            <Template file="Templates/Device_Mute_Logging.xml"/>
+
+            <Field id="trv-config-sep" type="separator"/>
+
+            <Field type="menu" id="temp-units" defaultValue="C">
+                <Label>Temperature Units:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+        <States>
+            <State id="online">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Online</TriggerLabel>
+                <ControlPageLabel>Online</ControlPageLabel>
+            </State>
+            <State id="mac-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+            <State id="ip-address">
+                <ValueType>String</ValueType>
+                <TriggerLabel>IP Address</TriggerLabel>
+                <ControlPageLabel>IP Address</ControlPageLabel>
+            </State>
+            <State id="firmware-version">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="has-firmware-update">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Has Firmware Update</TriggerLabel>
+                <ControlPageLabel>Has Firmware Update</ControlPageLabel>
+            </State>
+            <State id="voltage">
+                <ValueType>Float</ValueType>
+                <TriggerLabel>Voltage</TriggerLabel>
+                <ControlPageLabel>Voltage</ControlPageLabel>
+            </State>
+            <State id="charging">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Charging</TriggerLabel>
+                <ControlPageLabel>Charging</ControlPageLabel>
+            </State>
+            <State id="calibrated">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Calibrated</TriggerLabel>
+                <ControlPageLabel>Calibrated</ControlPageLabel>
+            </State>
+            <State id="boost-minutes">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Boost Minutes Remaining</TriggerLabel>
+                <ControlPageLabel>Boost Minutes Remaining</ControlPageLabel>
+            </State>
+            <State id="valve-position">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Valve Position (% Open)</TriggerLabel>
+                <ControlPageLabel>Valve Position (% Open)</ControlPageLabel>
+            </State>
+        </States>
+    </Device>
 </Devices>
