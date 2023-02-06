@@ -10,6 +10,7 @@ class Indigo:
         self.kDeviceAction = DeviceActions()
         self.kUniversalAction = UniversalActions()
         self.kThermostatAction = ThermostatActions()
+        self.kHvacMode = HVACMode()
         self.activePlugin = ShellyPlugin()
         self.device = IndigoDevice()
         self.trigger = TriggerExecutor()
@@ -59,6 +60,18 @@ class StateImages:
         self.EnergyMeterOn = "EnergyMeterOn"
         self.EnergyMeterOff = "EnergyMeterOff"
         self.HvacHeating = "HvacHeating"
+
+
+class HVACMode:
+
+    def __init__(self):
+        self.Cool = "Cool"
+        self.HeatCool = "HeatCool"
+        self.Heat = "Heat"
+        self.Off = "Off"
+        self.ProgramHeatCool = "ProgramHeatCool"
+        self.ProgramCool = "ProgramCool"
+        self.ProgramHeat = "ProgramHeat"
 
 
 class DeviceActions:

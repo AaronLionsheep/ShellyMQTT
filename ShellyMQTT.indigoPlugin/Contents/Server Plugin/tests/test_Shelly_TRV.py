@@ -20,8 +20,6 @@ class Test_Shelly_TRV(unittest.TestCase):
         indigo.__init__()
 
         self.device = IndigoDevice(id=123456, name="New Device")
-        self.shelly = Shelly_TRV(self.device)
-
         logging.getLogger('Plugin.ShellyMQTT').addHandler(logging.NullHandler())
 
         self.device.pluginProps['address'] = "shellies/trv"
@@ -34,6 +32,9 @@ class Test_Shelly_TRV(unittest.TestCase):
         self.device.updateStateOnServer("temperatureInput1", None)
         self.device.updateStateOnServer("boost-minutes", None)
         self.device.updateStateOnServer("valve-position", None)
+        self.device.updateStateOnServer("hvacOperationMode", None)
+
+        self.shelly = Shelly_TRV(self.device)
 
     def test_getSubscriptions(self):
         subscriptions = [
@@ -158,3 +159,6 @@ class Test_Shelly_TRV(unittest.TestCase):
         stop_boost = PluginAction("trv-stop-boost")
         self.shelly.handlePluginAction(stop_boost)
         publish.assert_called_with("shellies/trv/thermostat/0/command/boost_minutes", "0")
+
+    def test_trv_is_in_heat_operation_mode(self):
+        self.assertEqual(indigo.kHvacMode.Heat, self.device.states['hvacOperationMode'])

@@ -8,6 +8,7 @@ class Shelly_TRV(Shelly):
     def __init__(self, device):
         Shelly.__init__(self, device)
         self.device.updateStateImageOnServer(indigo.kStateImageSel.HvacHeating)
+        self.device.updateStateOnServer("hvacOperationMode", value=indigo.kHvacMode.Heat)
 
     def getSubscriptions(self):
         """

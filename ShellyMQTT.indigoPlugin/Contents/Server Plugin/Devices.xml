@@ -2360,7 +2360,7 @@
 
             <Field type="checkbox" id="SupportsHeatSetpoint" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsCoolSetpoint" defaultValue="false" hidden="true" />
-            <Field type="checkbox" id="SupportsHvacOperationMode" defaultValue="false" hidden="true" />
+            <Field type="checkbox" id="SupportsHvacOperationMode" defaultValue="true" hidden="true" />
             <Field type="checkbox" id="SupportsHvacFanMode" defaultValue="false" hidden="true" />
             <Field type="checkbox" id="ShowCoolHeatEquipmentStateUI" defaultValue="true" hidden="true" />
 
