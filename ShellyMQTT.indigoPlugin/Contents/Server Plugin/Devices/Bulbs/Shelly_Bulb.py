@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_Bulb_Vintage import Shelly_Bulb_Vintage
+from .Shelly_Bulb_Vintage import Shelly_Bulb_Vintage
 
 
 class Shelly_Bulb(Shelly_Bulb_Vintage):

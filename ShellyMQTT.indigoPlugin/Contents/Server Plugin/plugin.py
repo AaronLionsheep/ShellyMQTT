@@ -43,7 +43,7 @@ from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
 from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
 from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Switch
 
-from Queue import Queue
+from queue import Queue
 import logging
 
 kCurDevVersion = 0  # current version of plugin devices

@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from ShellyLogger import ShellyLogger
+from .ShellyLogger import ShellyLogger
 
 
 class Shelly:

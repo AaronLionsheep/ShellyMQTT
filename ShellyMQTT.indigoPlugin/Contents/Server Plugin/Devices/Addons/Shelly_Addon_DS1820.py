@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_Addon import Shelly_Addon
+from .Shelly_Addon import Shelly_Addon
 
 
 class Shelly_Addon_DS1820(Shelly_Addon):

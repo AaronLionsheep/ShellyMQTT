@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly_i3 import Shelly_i3
+from .Shelly_i3 import Shelly_i3
 
 
 class Shelly_Uni_Input(Shelly_i3):

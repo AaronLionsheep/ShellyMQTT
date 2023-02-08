@@ -1,6 +1,6 @@
 # coding=utf-8
 import indigo
-from Shelly_Addon import Shelly_Addon
+from .Shelly_Addon import Shelly_Addon
 
 
 class Shelly_Addon_Detached_Switch(Shelly_Addon):

@@ -3,42 +3,24 @@ name: ShellyMQTT Test Suite
 on: [push, pull_request]
 
 jobs:
-  test:
-    runs-on: [macos-latest]
-    steps:
-    - uses: actions/checkout@v2
+  build:
 
-    - name: Set up Python 2.7
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
-        python-version: 2.7
+        python-version: "3.10"
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install mock Twisted
+        pip install pytest
 
-    - name: Run test suite
+    - name: Test with pytest
       run: |
         cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin
-        mv tests/mocking .
-        mv tests/test_*.py .
-        python -m twisted.trial $(ls -1 test_*.py | cut -f 1 -d '.' | sed "s/\//./g")
-
-  package:
-    needs: test
-    runs-on: [ubuntu-latest] # this action is linux only
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Archive Release
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: 'ShellyMQTT.indigoPlugin.zip'
-          exclusions: '*.git* LICENSE README.md'
-
-      - name: Upload Release as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ShellyMQTT.indigoPlugin.zip
-          path: ShellyMQTT.indigoPlugin.zip
+        pytest

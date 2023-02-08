@@ -1,6 +1,6 @@
 # coding=utf-8
 import indigo
-from Shelly_Plug import Shelly_Plug
+from .Shelly_Plug import Shelly_Plug
 
 
 class Shelly_Plug_S(Shelly_Plug):
