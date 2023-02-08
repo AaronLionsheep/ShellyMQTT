@@ -106,9 +106,8 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
 
         payload = {
             "turn": turn,
+            "temp": temp,
             "brightness": brightness,
-            # "white": white,
-            "temp": temp
         }
 
         try:

@@ -119,12 +119,12 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
         red, green, blue, white, brightness = (min(255, max(0, c)) for c in (red, green, blue, white, brightness))
 
         payload = {
-            "mode": "color",
             "turn": turn,
+            "mode": "color",
             "white": white,
             "red": red,
-            "blue": blue,
             "green": green,
+            "blue": blue,
             "gain": brightness
         }
 
