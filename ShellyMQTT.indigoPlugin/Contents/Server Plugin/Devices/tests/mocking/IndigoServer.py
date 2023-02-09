@@ -1,7 +1,5 @@
-#from MQTTConnector import MQTTConnector
-#from IndigoPlugin import ShellyPlugin
-
-from Devices.tests.mocking import MQTTConnector, ShellyPlugin
+from Devices.tests.mocking.MQTTConnector import MQTTConnector
+from Devices.tests.mocking.IndigoPlugin import ShellyPlugin
 
 
 class Indigo:
