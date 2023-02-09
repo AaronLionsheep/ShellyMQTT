@@ -2,6 +2,8 @@ import indigo
 import json
 import os
 
+from Devices.Shelly import Shelly
+
 # Import the relay devices
 from Devices.Relays.Shelly_1 import Shelly_1
 from Devices.Relays.Shelly_1PM import Shelly_1PM
@@ -287,19 +289,19 @@ class Plugin(indigo.PluginBase):
             exit(-1)
         indigo.server.subscribeToBroadcast(u"com.flyingdiver.indigoplugin.mqtt", u"com.flyingdiver.indigoplugin.mqtt-message_queued", "message_handler")
 
-        # Subscribe to trigger changes so we can examine "Topic Component Match" events
+        # Subscribe to trigger changes, so we can examine "Topic Component Match" events
         indigo.triggers.subscribeToChanges()
 
         # Examine all triggers and extract known message types
         for trigger in indigo.triggers.iter("com.flyingdiver.indigoplugin.mqtt"):
             if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
-                messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
-                if len(messageType) > 0:
-                    self.discoveredMessageTypes.append(messageType)
+                message_type = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+                if len(message_type) > 0:
+                    self.discoveredMessageTypes.append(message_type)
 
     def shutdown(self):
         """
-        Called by Indigo to shutdown the plugin
+        Called by Indigo to shut down the plugin
 
         :return: None
         """
@@ -340,22 +342,22 @@ class Plugin(indigo.PluginBase):
         :return: True or false to indicate if the device was started.
         """
 
-        instanceVers = int(device.pluginProps.get('devVersCount', 0))
-        if instanceVers < kCurDevVersion or kCurDevVersion == 0:
+        instance_vers = int(device.pluginProps.get('devVersCount', 0))
+        if instance_vers < kCurDevVersion or kCurDevVersion == 0:
             device = indigo.device.changeDeviceTypeId(device, device.deviceTypeId)
             device.replaceOnServer()
-            newProps = device.pluginProps
-            newProps["devVersCount"] = kCurDevVersion
-            device.replacePluginPropsOnServer(newProps)
+            new_props = device.pluginProps
+            new_props["devVersCount"] = kCurDevVersion
+            device.replacePluginPropsOnServer(new_props)
             device.stateListOrDisplayStateIdChanged()
             self.logger.debug(u"%s: Updated to version %s", device.name, kCurDevVersion)
-        elif instanceVers >= kCurDevVersion:
+        elif instance_vers >= kCurDevVersion:
             self.logger.debug(u"{}: Device Version is up to date".format(device.name))
         else:
-            self.logger.error(u"%s: Unknown device version: %s", device.name, instanceVers)
+            self.logger.error(u"%s: Unknown device version: %s", device.name, instance_vers)
 
         #
-        # Get or generate a shelly device
+        # Get or generate a Shelly device
         #
         shelly = self.createDeviceObject(device)
         if not shelly:
@@ -818,9 +820,8 @@ class Plugin(indigo.PluginBase):
         :param valuesDict:
         :return: Tuple of the form (valid, valuesDict, errors)
         """
-
         errors = indigo.Dict()
-        isValid = True
+        is_valid = True
 
         # Validate the low battery threshold
         threshold = valuesDict.get('low-battery-threshold', None)
@@ -830,10 +831,10 @@ class Plugin(indigo.PluginBase):
             try:
                 int(threshold)
             except ValueError:
-                isValid = False
+                is_valid = False
                 errors['low-battery-threshold'] = u"You must enter an integer value."
 
-        return isValid, valuesDict, errors
+        return is_valid, valuesDict, errors
 
     def validateDeviceConfigUi(self, valuesDict, typeId, devId):
         """
@@ -1002,7 +1003,7 @@ class Plugin(indigo.PluginBase):
             self.indigo_log_handler.setLevel(logging.WARNING)
             self.logger.warning(u"Log level set to warning")
 
-    def createDeviceObject(self, device):
+    def createDeviceObject(self, device) -> Shelly:
         """
         Helper function to generate a Shelly object from an indigo device
 

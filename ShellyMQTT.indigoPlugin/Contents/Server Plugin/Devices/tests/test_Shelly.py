@@ -583,6 +583,20 @@ class Test_Shelly(unittest.TestCase):
         self.assertTrue(trigger_any.executed)
         self.assertTrue(trigger_device.executed)
 
+    def test_updateBatteryLevel_triggers_low_battery_string_threshold(self):
+        """Test that a low battery level trigger is fired."""
+        trigger_any = IndigoTrigger("low-battery-any", {})
+        trigger_device = IndigoTrigger("low-battery-device", {'device-id': self.device.id})
+
+        indigo.activePlugin.lowBatteryThreshold = "20"
+        indigo.activePlugin.triggers['1'] = trigger_any
+        indigo.activePlugin.triggers['2'] = trigger_device
+
+        self.shelly.updateBatteryLevel(10)
+
+        self.assertTrue(trigger_any.executed)
+        self.assertTrue(trigger_device.executed)
+
     def test_updateBatteryLevel_only_triggers_on_change(self):
         """Test that a low battery level trigger only fires when the battery level changes."""
 
