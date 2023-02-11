@@ -91,7 +91,7 @@ deviceClasses = {
 
     # Shelly Dimmer
     "shelly-dimmer-sl": Shelly_Dimmer_SL,
-    
+
     # Shelly Uni
     "shelly-uni-relay": Shelly_Uni_Relay,
     "shelly-uni-input": Shelly_Uni_Input
@@ -414,9 +414,9 @@ class Plugin(indigo.PluginBase):
         #
         # Attempt to start any addon devices that this device hosts
         #
-        for dependentId in self.dependents.keys():
-            addon = self.dependents[dependentId]
-            if addon.isAddon() and addon.getHostDevice() and addon.getHostDevice().device.id == shelly.device.id:
+        for dependentId in list(self.dependents.keys()):
+            addon = self.dependents.get(dependentId)
+            if addon and addon.isAddon() and addon.getHostDevice() and addon.getHostDevice().device.id == shelly.device.id:
                 # This addon is hosted by the device that has just been started, so it must have failed startup before
                 del self.dependents[dependentId]
                 self.deviceStartComm(indigo.devices[dependentId])
