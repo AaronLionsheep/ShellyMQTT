@@ -444,9 +444,9 @@ class Plugin(indigo.PluginBase):
         #
         # See if any add-ons are connected
         #
-        for addonDev in self.shellyDevices.keys():
-            addon_shelly = self.shellyDevices[addonDev]
-            if addon_shelly.isAddon() and addon_shelly.getHostDevice().device.id == shelly.device.id:
+        for addonDev in list(self.shellyDevices.keys()):
+            addon_shelly = self.shellyDevices.get(addonDev)
+            if addon_shelly and addon_shelly.isAddon() and addon_shelly.getHostDevice().device.id == shelly.device.id:
                 # Save and stop dependents because these should be started when this device starts again
                 self.dependents[addon_shelly.device.id] = addon_shelly
                 self.deviceStopComm(addon_shelly.device)
