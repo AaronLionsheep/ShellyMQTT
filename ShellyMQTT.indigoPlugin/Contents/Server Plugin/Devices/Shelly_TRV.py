@@ -27,6 +27,7 @@ class Shelly_TRV(Shelly):
                 "shellies/announce",
                 "{}/online".format(address),
                 "{}/info".format(address),
+                "{}/settings".format(address)
             ]
 
     def handleMessage(self, topic, payload):
@@ -49,6 +50,12 @@ class Shelly_TRV(Shelly):
             self.updateBattery(battery)
             self.updateCharger(charger)
             self.updateCalibrated(calibrated)
+            self.processThermostat(thermostat)
+        elif topic == "{}/settings".format(self.getAddress()):
+            payload = json.loads(payload)
+            thermostats = payload.get("thermostats", [])
+            thermostat = thermostats[self.getChannel()] if len(thermostats) > self.getChannel() else {}
+
             self.processThermostat(thermostat)
         else:
             Shelly.handleMessage(self, topic, payload)

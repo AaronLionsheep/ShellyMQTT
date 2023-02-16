@@ -41,7 +41,8 @@ class Test_Shelly_TRV(unittest.TestCase):
         subscriptions = [
             "shellies/announce",
             "shellies/trv/online",
-            "shellies/trv/info"
+            "shellies/trv/info",
+            "shellies/trv/settings"
         ]
         self.assertListEqual(subscriptions, self.shelly.getSubscriptions())
 
@@ -174,7 +175,7 @@ class Test_Shelly_TRV(unittest.TestCase):
         self.assertEqual(None, self.device.states['schedule-profile'])
 
     def test_trv_stores_schedule_profile_names(self):
-        self.shelly.handleMessage("shellies/trv/info", '{"thermostats": [{"schedule_profile_names":["Dining Room","Livingroom 1","Bedroom","Bedroom 1","Holiday"]}]}')
+        self.shelly.handleMessage("shellies/trv/settings", '{"thermostats": [{"schedule_profile_names":["Dining Room","Livingroom 1","Bedroom","Bedroom 1","Holiday"]}]}')
         expected = {
             1: "Dining Room",
             2: "Livingroom 1",
