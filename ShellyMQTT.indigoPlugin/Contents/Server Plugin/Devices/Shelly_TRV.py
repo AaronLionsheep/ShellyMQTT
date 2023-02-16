@@ -106,6 +106,8 @@ class Shelly_TRV(Shelly):
         sensor_temperature = thermostat.get("tmp", {}).get("value")
         boost_minutes = thermostat.get("boost_minutes", None)
         valve_position = thermostat.get("pos", None)
+        schedule = thermostat.get("schedule", False)
+        schedule_profile = thermostat.get("schedule_profile")
 
         if target_temperature is not None:
             if self.device.pluginProps.get("temp-units", "C") == "F":
@@ -129,6 +131,11 @@ class Shelly_TRV(Shelly):
                 value=valve_position,
                 uiValue="{}% open".format(valve_position)
             )
+
+        if schedule:
+            self.device.updateStateOnServer(key="schedule-profile", value=schedule_profile)
+        else:
+            self.device.updateStateOnServer(key="schedule-profile", value=None)
 
     def handleAction(self, action):
         """

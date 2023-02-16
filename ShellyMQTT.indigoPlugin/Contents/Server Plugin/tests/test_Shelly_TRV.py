@@ -33,6 +33,7 @@ class Test_Shelly_TRV(unittest.TestCase):
         self.device.updateStateOnServer("boost-minutes", None)
         self.device.updateStateOnServer("valve-position", None)
         self.device.updateStateOnServer("hvacOperationMode", None)
+        self.device.updateStateOnServer("schedule-profile", None)
 
         self.shelly = Shelly_TRV(self.device)
 
@@ -162,3 +163,12 @@ class Test_Shelly_TRV(unittest.TestCase):
 
     def test_trv_is_in_heat_operation_mode(self):
         self.assertEqual(indigo.kHvacMode.Heat, self.device.states['hvacOperationMode'])
+
+    def test_trv_sets_schedule_profile(self):
+        self.shelly.handleMessage("shellies/trv/info", '{"thermostats": [{"schedule": true, "schedule_profile": 1}]}')
+        self.assertEqual(1, self.device.states['schedule-profile'])
+
+    def test_trv_clears_schedule_profile(self):
+        self.device.states['schedule-profile'] = 1
+        self.shelly.handleMessage("shellies/trv/info", '{"thermostats": [{"schedule": false, "schedule_profile": 1}]}')
+        self.assertEqual(None, self.device.states['schedule-profile'])

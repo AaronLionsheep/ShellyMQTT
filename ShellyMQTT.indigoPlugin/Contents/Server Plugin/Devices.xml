@@ -2440,6 +2440,11 @@
                 <TriggerLabel>Valve Position (% Open)</TriggerLabel>
                 <ControlPageLabel>Valve Position (% Open)</ControlPageLabel>
             </State>
+            <State id="schedule-profile">
+                <ValueType>Integer</ValueType>
+                <TriggerLabel>Schedule Profile</TriggerLabel>
+                <ControlPageLabel>Schedule Profile</ControlPageLabel>
+            </State>
         </States>
     </Device>
 </Devices>
