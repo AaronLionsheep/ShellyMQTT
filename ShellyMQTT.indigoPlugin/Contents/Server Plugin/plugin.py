@@ -937,6 +937,15 @@ class Plugin(indigo.PluginBase):
                 int(valuesDict['duration'])
             except ValueError:
                 errors['duration'] = "Unable to convert this value to an integer!"
+        elif typeId in ["trv-start-boost", "trv-stop-boost", "trv-set-schedule-profile", "trv-disable-schedule"]:
+            if not valuesDict['device-id']:
+                errors['device-id'] = "You must select a device!"
+
+            if typeId == "trv-start-boost" and not valuesDict['duration']:
+                errors['duration'] = "Please provide a duration!"
+
+            if typeId == "trv-set-schedule-profile" and not valuesDict["schedule-profile"]:
+                errors["schedule-profile"] = "You need to pick a profile!"
 
         if len(errors) == 0:
             return True
@@ -1623,3 +1632,37 @@ class Plugin(indigo.PluginBase):
             menu.append((u"-1", u"%%disabled:Error building identifier list%%"))
 
         return menu
+
+    def get_trv_schedule_profiles(self, filter="", valuesDict=None, typeId="", targetId=0):
+        """
+
+        Parameters
+        ----------
+        filter
+        valuesDict
+        typeId
+        targetId
+
+        Returns
+        -------
+
+        """
+        # Get the TRV currently selected
+        device_id = valuesDict.get('device-id', None)
+        if device_id is None:
+            return [(u"-1", u"%%disabled:No TRV device selected!%%")]
+
+        shelly = self.shellyDevices[int(device_id)]
+        if not isinstance(shelly, Shelly_TRV):
+            return []
+
+        menu_items = []
+        schedule_profiles = shelly.get_schedule_profiles()
+        for schedule_id in sorted(schedule_profiles.keys()):
+            schedule_name = schedule_profiles[schedule_id]
+            if not schedule_name:
+                schedule_name = "Unknown"
+            item_name = "{} ({})".format(schedule_id, schedule_name)
+            menu_items.append((schedule_id, item_name))
+
+        return menu_items

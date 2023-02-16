@@ -1,6 +1,6 @@
 # coding=utf-8
 import unittest
-from mock import patch
+from mock import patch, call
 import sys
 import logging
 
@@ -172,3 +172,50 @@ class Test_Shelly_TRV(unittest.TestCase):
         self.device.states['schedule-profile'] = 1
         self.shelly.handleMessage("shellies/trv/info", '{"thermostats": [{"schedule": false, "schedule_profile": 1}]}')
         self.assertEqual(None, self.device.states['schedule-profile'])
+
+    def test_trv_stores_schedule_profile_names(self):
+        self.shelly.handleMessage("shellies/trv/info", '{"thermostats": [{"schedule_profile_names":["Dining Room","Livingroom 1","Bedroom","Bedroom 1","Holiday"]}]}')
+        expected = {
+            1: "Dining Room",
+            2: "Livingroom 1",
+            3: "Bedroom",
+            4: "Bedroom 1",
+            5: "Holiday"
+        }
+        self.assertEqual(expected, self.shelly.get_schedule_profiles())
+
+    def test_trv_default_schedule_profile_names(self):
+        expected = {
+            1: None,
+            2: None,
+            3: None,
+            4: None,
+            5: None
+        }
+        self.assertEqual(expected, self.shelly.get_schedule_profiles())
+
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handlePluginAction_set_schedule_profile_and_enable(self, publish):
+        set_schedule_profile = PluginAction("trv-set-schedule-profile")
+        set_schedule_profile.props = {"schedule-profile": "1", "enable-schedule": False}
+        self.shelly.handlePluginAction(set_schedule_profile)
+        publish.assert_has_calls([
+            call("shellies/trv/thermostat/0/command/schedule_profile", "1"),
+            call("shellies/trv/thermostat/0/command/schedule", "0")
+        ])
+
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handlePluginAction_set_schedule_profile_and_enable(self, publish):
+        set_schedule_profile = PluginAction("trv-set-schedule-profile")
+        set_schedule_profile.props = {"schedule-profile": "1", "enable-schedule": True}
+        self.shelly.handlePluginAction(set_schedule_profile)
+        publish.assert_has_calls([
+            call("shellies/trv/thermostat/0/command/schedule_profile", "1"),
+            call("shellies/trv/thermostat/0/command/schedule", "1")
+        ])
+
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handlePluginAction_disable_schedule(self, publish):
+        disable_schedule = PluginAction("trv-disable-schedule")
+        self.shelly.handlePluginAction(disable_schedule)
+        publish.assert_called_with("shellies/trv/thermostat/0/command/schedule", "0")

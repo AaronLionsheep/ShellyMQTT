@@ -11,6 +11,8 @@ class Shelly_TRV(Shelly):
         self.device.updateStateOnServer("hvacOperationMode", value=indigo.kHvacMode.Heat)
         self.device.updateStateOnServer("hvacHeaterIsOn", value=True)
 
+        self.schedule_profile_names = []
+
     def getSubscriptions(self):
         """
         Default method to return a list of topics that the device subscribes to.
@@ -108,6 +110,7 @@ class Shelly_TRV(Shelly):
         valve_position = thermostat.get("pos", None)
         schedule = thermostat.get("schedule", False)
         schedule_profile = thermostat.get("schedule_profile")
+        self.schedule_profile_names = thermostat.get("schedule_profile_names", [])
 
         if target_temperature is not None:
             if self.device.pluginProps.get("temp-units", "C") == "F":
@@ -179,6 +182,32 @@ class Shelly_TRV(Shelly):
                 ),
                 "0"
             )
+        elif action.pluginTypeId == "trv-set-schedule-profile":
+            schedule_profile = action.props.get("schedule-profile")
+            enable_schedule = action.props.get("enable-schedule", False)
+            self.publish(
+                "{}/thermostat/{}/command/schedule_profile".format(
+                    self.getAddress(),
+                    self.getChannel()
+                ),
+                schedule_profile
+            )
+
+            self.publish(
+                "{}/thermostat/{}/command/schedule".format(
+                    self.getAddress(),
+                    self.getChannel()
+                ),
+                "1" if enable_schedule else "0"
+            )
+        elif action.pluginTypeId == "trv-disable-schedule":
+            self.publish(
+                "{}/thermostat/{}/command/schedule".format(
+                    self.getAddress(),
+                    self.getChannel()
+                ),
+                "0"
+            )
 
     def commandHeatSetpoint(self, value):
         """
@@ -235,3 +264,20 @@ class Shelly_TRV(Shelly):
                 errors['announce-message-type'] = u"You must supply the message type that will be associated with the announce messages."
 
         return is_valid, valuesDict, errors
+
+    def get_schedule_profiles(self):
+        """
+        Format the last known schedule profile names.
+        """
+        names = {
+            1: None,
+            2: None,
+            3: None,
+            4: None,
+            5: None
+        }
+
+        for index, name in enumerate(self.schedule_profile_names):
+            names[index + 1] = name
+
+        return names
