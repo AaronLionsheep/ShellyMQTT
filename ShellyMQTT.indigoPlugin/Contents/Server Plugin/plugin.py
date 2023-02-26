@@ -13,6 +13,7 @@ from Devices.Relays.Shelly_EM_Relay import Shelly_EM_Relay
 from Devices.Relays.Shelly_Uni_Relay import Shelly_Uni_Relay
 
 from Devices.Shelly_Dimmer_SL import Shelly_Dimmer_SL
+from Devices.Shelly_TRV import Shelly_TRV
 
 # Import the RGBW2 devices
 from Devices.RGBW2.Shelly_RGBW2_White import Shelly_RGBW2_White
@@ -91,6 +92,9 @@ deviceClasses = {
 
     # Shelly Dimmer
     "shelly-dimmer-sl": Shelly_Dimmer_SL,
+
+    # Shelly TRV
+    "shelly-trv": Shelly_TRV,
 
     # Shelly Uni
     "shelly-uni-relay": Shelly_Uni_Relay,
@@ -213,6 +217,12 @@ deviceModelInformation = {
     # Shelly Dimmer
     "shelly-dimmer-sl": {
         "class": Shelly_Dimmer_SL,
+        "relations": []
+    },
+
+    # Shelly TRV
+    "shelly-trv": {
+        "class": Shelly_TRV,
         "relations": []
     },
 
@@ -585,6 +595,22 @@ class Plugin(indigo.PluginBase):
             if len(brokerSubscriptions) == 0:
                 del self.brokerDeviceSubscriptions[shelly.getBrokerId()]
 
+    def _normalize_action(self, action):
+        """
+        Normalize an action such that it can be checked like a device, universal, or thermostat action.
+
+        :param action: The action to normalize.
+        :return: action
+        """
+        action_types = ["deviceAction", "thermostatAction"]
+        for action_type in action_types:
+            # If the attribute is not present, add it with the value of None
+            if not hasattr(action, action_type):
+                # indigo must override __setattr__ as set_attr() is unable to add an attribute to the action instance
+                action.__dict__[action_type] = None
+
+        return action
+
     def actionControlDevice(self, action, device):
         """
         Handles an action being performed on the device.
@@ -593,10 +619,10 @@ class Plugin(indigo.PluginBase):
         :param device: The device that was acted on.
         :return: None
         """
-
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
-            shelly.handleAction(action)
+            normalized_action = self._normalize_action(action)
+            shelly.handleAction(normalized_action)
 
     def actionControlUniversal(self, action, device):
         """
@@ -606,10 +632,23 @@ class Plugin(indigo.PluginBase):
         :param device: The device that was acted on.
         :return: None
         """
-
         shelly = self.shellyDevices.get(device.id, None)
         if shelly is not None:
-            shelly.handleAction(action)
+            normalized_action = self._normalize_action(action)
+            shelly.handleAction(normalized_action)
+
+    def actionControlThermostat(self, action, device):
+        """
+        Handles a thermostate-related action being performed on a device.
+
+        :param action: The action being performed.
+        :param device: The device the action was performed on.
+        :return: None
+        """
+        shelly = self.shellyDevices.get(device.id, None)
+        if shelly is not None:
+            normalized_action = self._normalize_action(action)
+            shelly.handleAction(normalized_action)
 
     ##########################################################################
     #
@@ -899,6 +938,15 @@ class Plugin(indigo.PluginBase):
                 int(valuesDict['duration'])
             except ValueError:
                 errors['duration'] = "Unable to convert this value to an integer!"
+        elif typeId in ["trv-start-boost", "trv-stop-boost", "trv-set-schedule-profile", "trv-disable-schedule"]:
+            if not valuesDict['device-id']:
+                errors['device-id'] = "You must select a device!"
+
+            if typeId == "trv-start-boost" and not valuesDict['duration']:
+                errors['duration'] = "Please provide a duration!"
+
+            if typeId == "trv-set-schedule-profile" and not valuesDict["schedule-profile"]:
+                errors["schedule-profile"] = "You need to pick a profile!"
 
         if len(errors) == 0:
             return True
@@ -1585,3 +1633,37 @@ class Plugin(indigo.PluginBase):
             menu.append((u"-1", u"%%disabled:Error building identifier list%%"))
 
         return menu
+
+    def get_trv_schedule_profiles(self, filter="", valuesDict=None, typeId="", targetId=0):
+        """
+
+        Parameters
+        ----------
+        filter
+        valuesDict
+        typeId
+        targetId
+
+        Returns
+        -------
+
+        """
+        # Get the TRV currently selected
+        device_id = valuesDict.get('device-id', None)
+        if device_id is None:
+            return [(u"-1", u"%%disabled:No TRV device selected!%%")]
+
+        shelly = self.shellyDevices[int(device_id)]
+        if not isinstance(shelly, Shelly_TRV):
+            return []
+
+        menu_items = []
+        schedule_profiles = shelly.get_schedule_profiles()
+        for schedule_id in sorted(schedule_profiles.keys()):
+            schedule_name = schedule_profiles[schedule_id]
+            if not schedule_name:
+                schedule_name = "Unknown"
+            item_name = "{} ({})".format(schedule_id, schedule_name)
+            menu_items.append((schedule_id, item_name))
+
+        return menu_items
