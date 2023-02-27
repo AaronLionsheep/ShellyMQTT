@@ -1,6 +1,6 @@
 import indigo
 import json
-from Shelly_1 import Shelly_1
+from .Shelly_1 import Shelly_1
 
 
 class Shelly_Uni_Relay(Shelly_1):

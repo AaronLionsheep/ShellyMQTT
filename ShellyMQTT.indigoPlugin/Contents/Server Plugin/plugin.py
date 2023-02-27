@@ -2,6 +2,8 @@ import indigo
 import json
 import os
 
+from Devices.Shelly import Shelly
+
 # Import the relay devices
 from Devices.Relays.Shelly_1 import Shelly_1
 from Devices.Relays.Shelly_1PM import Shelly_1PM
@@ -44,7 +46,7 @@ from Devices.Addons.Shelly_Addon_DS1820 import Shelly_Addon_DS1820
 from Devices.Addons.Shelly_Addon_DHT22 import Shelly_Addon_DHT22
 from Devices.Addons.Shelly_Addon_Detached_Switch import Shelly_Addon_Detached_Switch
 
-from Queue import Queue
+from queue import Queue
 import logging
 
 kCurDevVersion = 0  # current version of plugin devices
@@ -93,7 +95,7 @@ deviceClasses = {
 
     # Shelly TRV
     "shelly-trv": Shelly_TRV,
-    
+
     # Shelly Uni
     "shelly-uni-relay": Shelly_Uni_Relay,
     "shelly-uni-input": Shelly_Uni_Input
@@ -297,19 +299,19 @@ class Plugin(indigo.PluginBase):
             exit(-1)
         indigo.server.subscribeToBroadcast(u"com.flyingdiver.indigoplugin.mqtt", u"com.flyingdiver.indigoplugin.mqtt-message_queued", "message_handler")
 
-        # Subscribe to trigger changes so we can examine "Topic Component Match" events
+        # Subscribe to trigger changes, so we can examine "Topic Component Match" events
         indigo.triggers.subscribeToChanges()
 
         # Examine all triggers and extract known message types
         for trigger in indigo.triggers.iter("com.flyingdiver.indigoplugin.mqtt"):
             if self.isMQTTConnectorTopicMatchTrigger(trigger) and trigger.enabled:
-                messageType = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
-                if len(messageType) > 0:
-                    self.discoveredMessageTypes.append(messageType)
+                message_type = trigger.globalProps["com.flyingdiver.indigoplugin.mqtt"].get("message_type", "")
+                if len(message_type) > 0:
+                    self.discoveredMessageTypes.append(message_type)
 
     def shutdown(self):
         """
-        Called by Indigo to shutdown the plugin
+        Called by Indigo to shut down the plugin
 
         :return: None
         """
@@ -350,22 +352,22 @@ class Plugin(indigo.PluginBase):
         :return: True or false to indicate if the device was started.
         """
 
-        instanceVers = int(device.pluginProps.get('devVersCount', 0))
-        if instanceVers < kCurDevVersion or kCurDevVersion == 0:
+        instance_vers = int(device.pluginProps.get('devVersCount', 0))
+        if instance_vers < kCurDevVersion or kCurDevVersion == 0:
             device = indigo.device.changeDeviceTypeId(device, device.deviceTypeId)
             device.replaceOnServer()
-            newProps = device.pluginProps
-            newProps["devVersCount"] = kCurDevVersion
-            device.replacePluginPropsOnServer(newProps)
+            new_props = device.pluginProps
+            new_props["devVersCount"] = kCurDevVersion
+            device.replacePluginPropsOnServer(new_props)
             device.stateListOrDisplayStateIdChanged()
             self.logger.debug(u"%s: Updated to version %s", device.name, kCurDevVersion)
-        elif instanceVers >= kCurDevVersion:
+        elif instance_vers >= kCurDevVersion:
             self.logger.debug(u"{}: Device Version is up to date".format(device.name))
         else:
-            self.logger.error(u"%s: Unknown device version: %s", device.name, instanceVers)
+            self.logger.error(u"%s: Unknown device version: %s", device.name, instance_vers)
 
         #
-        # Get or generate a shelly device
+        # Get or generate a Shelly device
         #
         shelly = self.createDeviceObject(device)
         if not shelly:
@@ -422,9 +424,9 @@ class Plugin(indigo.PluginBase):
         #
         # Attempt to start any addon devices that this device hosts
         #
-        for dependentId in self.dependents.keys():
-            addon = self.dependents[dependentId]
-            if addon.isAddon() and addon.getHostDevice() and addon.getHostDevice().device.id == shelly.device.id:
+        for dependentId in list(self.dependents.keys()):
+            addon = self.dependents.get(dependentId)
+            if addon and addon.isAddon() and addon.getHostDevice() and addon.getHostDevice().device.id == shelly.device.id:
                 # This addon is hosted by the device that has just been started, so it must have failed startup before
                 del self.dependents[dependentId]
                 self.deviceStartComm(indigo.devices[dependentId])
@@ -452,9 +454,9 @@ class Plugin(indigo.PluginBase):
         #
         # See if any add-ons are connected
         #
-        for addonDev in self.shellyDevices.keys():
-            addon_shelly = self.shellyDevices[addonDev]
-            if addon_shelly.isAddon() and addon_shelly.getHostDevice().device.id == shelly.device.id:
+        for addonDev in list(self.shellyDevices.keys()):
+            addon_shelly = self.shellyDevices.get(addonDev)
+            if addon_shelly and addon_shelly.isAddon() and addon_shelly.getHostDevice().device.id == shelly.device.id:
                 # Save and stop dependents because these should be started when this device starts again
                 self.dependents[addon_shelly.device.id] = addon_shelly
                 self.deviceStopComm(addon_shelly.device)
@@ -857,9 +859,8 @@ class Plugin(indigo.PluginBase):
         :param valuesDict:
         :return: Tuple of the form (valid, valuesDict, errors)
         """
-
         errors = indigo.Dict()
-        isValid = True
+        is_valid = True
 
         # Validate the low battery threshold
         threshold = valuesDict.get('low-battery-threshold', None)
@@ -869,10 +870,10 @@ class Plugin(indigo.PluginBase):
             try:
                 int(threshold)
             except ValueError:
-                isValid = False
+                is_valid = False
                 errors['low-battery-threshold'] = u"You must enter an integer value."
 
-        return isValid, valuesDict, errors
+        return is_valid, valuesDict, errors
 
     def validateDeviceConfigUi(self, valuesDict, typeId, devId):
         """
@@ -1050,7 +1051,7 @@ class Plugin(indigo.PluginBase):
             self.indigo_log_handler.setLevel(logging.WARNING)
             self.logger.warning(u"Log level set to warning")
 
-    def createDeviceObject(self, device):
+    def createDeviceObject(self, device) -> Shelly:
         """
         Helper function to generate a Shelly object from an indigo device
 

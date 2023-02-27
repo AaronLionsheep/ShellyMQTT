@@ -1,6 +1,6 @@
 # coding=utf-8
 import indigo
-from Shelly_1PM import Shelly_1PM
+from .Shelly_1PM import Shelly_1PM
 
 
 class Shelly_4_Pro(Shelly_1PM):

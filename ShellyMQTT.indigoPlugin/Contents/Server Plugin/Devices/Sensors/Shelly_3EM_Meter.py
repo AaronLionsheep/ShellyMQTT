@@ -1,6 +1,6 @@
 # coding=utf-8
 import indigo
-from Shelly_EM_Meter import Shelly_EM_Meter
+from .Shelly_EM_Meter import Shelly_EM_Meter
 
 
 class Shelly_3EM_Meter(Shelly_EM_Meter):

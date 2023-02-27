@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from ShellyLogger import ShellyLogger
+from Devices.ShellyLogger import ShellyLogger
 
 
 class Shelly:
@@ -641,7 +641,7 @@ class Shelly:
         self.device.updateStateOnServer(key="batteryLevel", value=batteryLevel, uiValue='{}%'.format(batteryLevel))
 
         try:
-            if indigo.activePlugin.lowBatteryThreshold >= int(batteryLevel) and int(oldBatteryLevel) != int(batteryLevel):
+            if int(indigo.activePlugin.lowBatteryThreshold) >= int(batteryLevel) and int(oldBatteryLevel) != int(batteryLevel):
                 # Battery level has changed
                 # Fire all triggers watching for a low battery event
                 for trigger in indigo.activePlugin.triggers.values():

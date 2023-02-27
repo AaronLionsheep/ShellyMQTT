@@ -1,7 +1,7 @@
 # coding=utf-8
 import indigo
 import json
-from Shelly import Shelly
+from .Shelly import Shelly
 
 
 class Shelly_TRV(Shelly):
@@ -224,7 +224,8 @@ class Shelly_TRV(Shelly):
         :return:
         """
         if self.device.pluginProps['temp-units'] == "F":
-            value = (value - 32) * 5 / 9
+            converted = (value - 32) * 5 / 9
+            value = round(converted)
 
         self.publish("{}/thermostat/{}/command/target_t".format(self.getAddress(), self.getChannel()), str(value))
 
