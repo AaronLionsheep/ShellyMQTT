@@ -241,6 +241,22 @@ class Test_Shelly_Bulb_Duo(unittest.TestCase):
         self.assertEqual(6500, self.shelly.device.states['whiteTemperature'])
         publish.assert_called_with("shellies/shelly-bulb-duo-test/light/0/set", '{"turn": "on", "temp": 6500, "brightness": 100}')
 
+    @patch('Devices.Shelly.Shelly.publish')
+    def test_handleAction_setColorLevelsFloats(self, publish):
+        self.shelly.turnOn()
+        self.shelly.device.updateStateOnServer('brightnessLevel', 100)
+        self.shelly.device.updateStateOnServer('whiteLevel', 10)
+        self.shelly.device.updateStateOnServer('whiteTemperature', 10)
+        setColorLevels = IndigoAction(indigo.kDeviceAction.SetColorLevels,
+                                      actionValue={'whiteLevel': '50.00', 'whiteTemperature': '6500.00'})
+
+        self.shelly.handleAction(setColorLevels)
+        self.assertTrue(self.shelly.isOn())
+        self.assertEqual(50, self.shelly.device.states['whiteLevel'])
+        self.assertEqual(6500, self.shelly.device.states['whiteTemperature'])
+        publish.assert_called_with("shellies/shelly-bulb-duo-test/light/0/set",
+                                   '{"turn": "on", "temp": 6500, "brightness": 100}')
+
     def test_apply_brightness_off(self):
         self.shelly.turnOn()
         self.assertTrue(self.shelly.isOn())
