@@ -91,13 +91,20 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
             if 'whiteLevel' in action.actionValue:
                 self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
             if 'redLevel' in action.actionValue:
-                self.device.updateStateOnServer("redLevel", int(action.actionValue['redLevel']))
+                self.device.updateStateOnServer("redLevel", int(float(action.actionValue['redLevel'])))
             if 'greenLevel' in action.actionValue:
-                self.device.updateStateOnServer("greenLevel", int(action.actionValue['greenLevel']))
+                self.device.updateStateOnServer("greenLevel", int(float(action.actionValue['greenLevel'])))
             if 'blueLevel' in action.actionValue:
-                self.device.updateStateOnServer("blueLevel", int(action.actionValue['blueLevel']))
+                self.device.updateStateOnServer("blueLevel", int(float(action.actionValue['blueLevel'])))
             self.set()
-            self.logCommandSent(u"color values RGBW to {}, {}, {}, {}".format(self.device.states['redLevel'], self.device.states['greenLevel'], self.device.states['blueLevel'], self.device.states['whiteLevel']))
+            self.logCommandSent(
+                u"color values RGBW to {}, {}, {}, {}".format(
+                    self.device.states['redLevel'],
+                    self.device.states['greenLevel'],
+                    self.device.states['blueLevel'],
+                    self.device.states['whiteLevel']
+                )
+            )
         else:
             Shelly_Bulb_Vintage.handleAction(self, action)
 
@@ -116,7 +123,10 @@ class Shelly_Bulb(Shelly_Bulb_Vintage):
         turn = "on" if brightness >= 1 else "off"
 
         # Ensure all values are in the 8-bit range
-        red, green, blue, white, brightness = (min(255, max(0, c)) for c in (red, green, blue, white, brightness))
+        red, green, blue, white, brightness = (
+            min(255, max(0, c))
+            for c in (red, green, blue, white, brightness)
+        )
 
         payload = {
             "turn": turn,

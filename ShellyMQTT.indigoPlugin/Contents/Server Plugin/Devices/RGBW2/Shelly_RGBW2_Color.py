@@ -127,15 +127,22 @@ class Shelly_RGBW2_Color(Shelly_1PM):
 
         if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
             if 'whiteLevel' in action.actionValue:
-                self.device.updateStateOnServer("whiteLevel", int(action.actionValue['whiteLevel']))
+                self.device.updateStateOnServer("whiteLevel", int(float(action.actionValue['whiteLevel'])))
             if 'redLevel' in action.actionValue:
-                self.device.updateStateOnServer("redLevel", int(action.actionValue['redLevel']))
+                self.device.updateStateOnServer("redLevel", int(float(action.actionValue['redLevel'])))
             if 'greenLevel' in action.actionValue:
-                self.device.updateStateOnServer("greenLevel", int(action.actionValue['greenLevel']))
+                self.device.updateStateOnServer("greenLevel", int(float(action.actionValue['greenLevel'])))
             if 'blueLevel' in action.actionValue:
-                self.device.updateStateOnServer("blueLevel", int(action.actionValue['blueLevel']))
+                self.device.updateStateOnServer("blueLevel", int(float(action.actionValue['blueLevel'])))
             self.set()
-            self.logCommandSent(u"color values RGBW to {}, {}, {}, {}".format(self.device.states['redLevel'], self.device.states['greenLevel'], self.device.states['blueLevel'], self.device.states['whiteLevel']))
+            self.logCommandSent(
+                u"color values RGBW to {}, {}, {}, {}".format(
+                    self.device.states['redLevel'],
+                    self.device.states['greenLevel'],
+                    self.device.states['blueLevel'],
+                    self.device.states['whiteLevel']
+                )
+            )
         elif action.deviceAction == indigo.kDeviceAction.TurnOn:
             on()
         elif action.deviceAction == indigo.kDeviceAction.TurnOff:

@@ -79,10 +79,10 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
 
         if action.deviceAction == indigo.kDeviceAction.SetColorLevels:
             if 'whiteLevel' in action.actionValue:
-                self.device.updateStateOnServer("whiteLevel", action.actionValue['whiteLevel'])
+                self.device.updateStateOnServer("whiteLevel", int(float(action.actionValue['whiteLevel'])))
                 self.logCommandSent(u"white level to {}%".format(action.actionValue['whiteLevel']))
             if 'whiteTemperature' in action.actionValue:
-                self.device.updateStateOnServer("whiteTemperature", action.actionValue['whiteTemperature'])
+                self.device.updateStateOnServer("whiteTemperature", int(float(action.actionValue['whiteTemperature'])))
                 self.logCommandSent(u"white temperature to {}°K".format(action.actionValue['whiteTemperature']))
             self.set()
         else:
@@ -101,7 +101,10 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         turn = "on" if self.isOn() else "off"
 
         # Ensure values are within their operating range
-        white, brightness = (min(255, max(0, c)) for c in (white, brightness))
+        white, brightness = (
+            min(255, max(0, c))
+            for c in (white, brightness)
+        )
         temp = min(6500, max(2700, temp))
 
         payload = {
@@ -111,7 +114,13 @@ class Shelly_Bulb_Duo(Shelly_Bulb_Vintage):
         }
 
         try:
-            self.publish("{}/light/{}/set".format(self.getAddress(), self.getChannel()), json.dumps(payload))
+            self.publish(
+                "{}/light/{}/set".format(
+                    self.getAddress(),
+                    self.getChannel()
+                ),
+                json.dumps(payload)
+            )
         except ValueError:
             self.logger.error(u"Problem building JSON: {}".format(payload))
 
