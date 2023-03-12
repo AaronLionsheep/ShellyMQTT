@@ -60,6 +60,7 @@ class StateImages:
         self.EnergyMeterOn = "EnergyMeterOn"
         self.EnergyMeterOff = "EnergyMeterOff"
         self.HvacHeating = "HvacHeating"
+        self.HvacHeatMode = "HvacHeatMode"
 
 
 class HVACMode:
