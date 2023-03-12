@@ -2388,6 +2388,30 @@
                     <Option value="C">Celsius</Option>
                 </List>
             </Field>
+
+            <Field type="menu" id="heating-status" defaultValue="valve">
+                <Label>Heating Status:</Label>
+                <List>
+                    <Option value="valve">Valve Position</Option>
+                    <Option value="temperature">Temperature</Option>
+                </List>
+            </Field>
+
+            <Field id="heating-status-valve-threshold" type="textfield" defaultValue="5" visibleBindingId="heating-status" visibleBindingValue="valve">
+                <Label>Minimum Valve Position:</Label>
+            </Field>
+
+            <Field id="heating-status-valve-help" type="label" fontSize="small" fontColor="darkGrey" visibleBindingId="heating-status" visibleBindingValue="valve">
+                <Label>The TRV will be considered to be "heating" when the valve position is greater than the threshold position.</Label>
+            </Field>
+
+            <Field id="heating-status-temperature-threshold" type="textfield" defaultValue="0.5" visibleBindingId="heating-status" visibleBindingValue="temperature">
+                <Label>Temperature Threshold:</Label>
+            </Field>
+
+            <Field id="heating-status-temperature-help" type="label" fontSize="small" fontColor="darkGrey" visibleBindingId="heating-status" visibleBindingValue="temperature">
+                <Label>The TRV will be considered to be "heating" when the temperature is less than the threshold from the setpoint.</Label>
+            </Field>
         </ConfigUI>
         <States>
             <State id="online">
