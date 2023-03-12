@@ -196,7 +196,7 @@ class Test_Shelly_TRV(unittest.TestCase):
         self.assertEqual(expected, self.shelly.get_schedule_profiles())
 
     @patch('Devices.Shelly.Shelly.publish')
-    def test_handlePluginAction_set_schedule_profile_and_enable(self, publish):
+    def test_handlePluginAction_set_schedule_profile_and_disable(self, publish):
         set_schedule_profile = PluginAction("trv-set-schedule-profile")
         set_schedule_profile.props = {"schedule-profile": "1", "enable-schedule": False}
         self.shelly.handlePluginAction(set_schedule_profile)
@@ -220,3 +220,42 @@ class Test_Shelly_TRV(unittest.TestCase):
         disable_schedule = PluginAction("trv-disable-schedule")
         self.shelly.handlePluginAction(disable_schedule)
         publish.assert_called_with("shellies/trv/thermostat/0/command/schedule", "0")
+
+    def test_update_state_image_idle_below_valve_threshold(self):
+        """Test the icon shows idle when the valve position is below the threshold"""
+        self.device.pluginProps['heating-status'] = "valve"
+        self.device.pluginProps['heating-status-valve-threshold'] = "5"
+        self.device.states['valve-position'] = 2
+        self.shelly.updateStateImage()
+        assert self.device.image == indigo.kStateImageSel.HvacHeatMode
+
+    def test_update_state_image_heating_above_valve_threshold(self):
+        """Test the icon shows heating when the valve position is below the threshold"""
+        self.device.pluginProps['heating-status'] = "valve"
+        self.device.pluginProps['heating-status-valve-threshold'] = "5"
+        self.device.states['valve-position'] = 33
+        self.shelly.updateStateImage()
+        assert self.device.image == indigo.kStateImageSel.HvacHeating
+
+    def test_update_state_image_idle_below_temperature_threshold(self):
+        """Test the icon shows idle when the valve position is below the threshold"""
+        self.device.pluginProps['heating-status'] = "temperature"
+        self.device.pluginProps['heating-status-temperature-threshold'] = "0.5"
+        self.device.states["setpointHeat"] = 23
+        self.device.states['temperatureInput1'] = 22.8
+        self.shelly.updateStateImage()
+        assert self.device.image == indigo.kStateImageSel.HvacHeatMode
+
+    def test_update_state_image_heating_above_temperature_threshold(self):
+        """Test the icon shows heating when the valve position is below the threshold"""
+        self.device.pluginProps['heating-status'] = "temperature"
+        self.device.pluginProps['heating-status-temperature-threshold'] = "0.5"
+        self.device.states["setpointHeat"] = 23
+        self.device.states['temperatureInput1'] = 22.2
+        self.shelly.updateStateImage()
+        assert self.device.image == indigo.kStateImageSel.HvacHeating
+
+    @patch('Devices.Shelly_TRV.Shelly_TRV.updateStateImage')
+    def test_info_message_updates_icon(self, updateStateImage):
+        self.shelly.handleMessage("shellies/trv/info", '{}')
+        updateStateImage.assert_called_once()

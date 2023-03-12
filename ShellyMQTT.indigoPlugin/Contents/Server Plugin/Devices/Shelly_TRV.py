@@ -7,7 +7,7 @@ from .Shelly import Shelly
 class Shelly_TRV(Shelly):
     def __init__(self, device):
         Shelly.__init__(self, device)
-        self.device.updateStateImageOnServer(indigo.kStateImageSel.HvacHeating)
+        self.updateStateImage()
         self.device.updateStateOnServer("hvacOperationMode", value=indigo.kHvacMode.Heat)
         self.device.updateStateOnServer("hvacHeaterIsOn", value=True)
 
@@ -51,6 +51,8 @@ class Shelly_TRV(Shelly):
             self.updateCharger(charger)
             self.updateCalibrated(calibrated)
             self.processThermostat(thermostat)
+
+            self.updateStateImage()
         elif topic == "{}/settings".format(self.getAddress()):
             payload = json.loads(payload)
             thermostats = payload.get("thermostats", [])
@@ -289,3 +291,45 @@ class Shelly_TRV(Shelly):
             names[index + 1] = name
 
         return names
+
+    def updateStateImage(self):
+        """
+        Updates the state image for the device.
+
+        The state image is selected based on the state of the device as well as
+        the state image mode.
+
+        The two modes are: `Valve Position` and `Temperature`
+
+        In the `Valve Position` mode, the device is considered to be heating
+        when the valve position is greater than a specified position threshold.
+        This lets the user set a minimum position that should indicate if the
+        valve is heating.
+
+        In the `Temperature` mode, the device is considered to be heating when
+        the observed temperature is below a specified threshold of the setpoint.
+
+        Since the TRV will only ever heat an area, the icons `HvacHeatMode` and
+        `HvacHeating` are used to represent an idle state and a heating state
+        respectively. The idle state icon is an unfilled grey flame, and the
+        heating icon is a colored flame.
+        """
+        heating_status = self.device.pluginProps.get('heating-status')
+        if heating_status == "valve":
+            threshold = self.device.pluginProps.get('heating-status-valve-threshold')
+            if threshold is None:
+                return
+
+            if self.device.states['valve-position'] > int(threshold):
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.HvacHeating)
+            else:
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.HvacHeatMode)
+        elif heating_status == "temperature":
+            threshold = self.device.pluginProps.get('heating-status-temperature-threshold')
+            if threshold is None:
+                return
+
+            if self.device.states['temperatureInput1'] < (self.device.states["setpointHeat"] - float(threshold)):
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.HvacHeating)
+            else:
+                self.device.updateStateImageOnServer(indigo.kStateImageSel.HvacHeatMode)
