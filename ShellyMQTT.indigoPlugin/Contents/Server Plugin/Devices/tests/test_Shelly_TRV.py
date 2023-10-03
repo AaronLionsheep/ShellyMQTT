@@ -185,6 +185,11 @@ class Test_Shelly_TRV(unittest.TestCase):
         }
         self.assertEqual(expected, self.shelly.get_schedule_profiles())
 
+    def test_trv_does_not_clear_missing_schedule_profiles(self):
+        self.shelly.schedule_profile_names = ["A", "B", "C", "D", "E"]
+        self.shelly.handleMessage("shellies/trv/settings", '{"thermostats": [{}]}')
+        self.assertEqual(["A", "B", "C", "D", "E"], self.shelly.schedule_profile_names)
+
     def test_trv_default_schedule_profile_names(self):
         expected = {
             1: None,
