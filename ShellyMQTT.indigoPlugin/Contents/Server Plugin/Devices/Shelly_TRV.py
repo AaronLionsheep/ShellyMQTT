@@ -117,7 +117,10 @@ class Shelly_TRV(Shelly):
         valve_position = thermostat.get("pos", None)
         schedule = thermostat.get("schedule", False)
         schedule_profile = thermostat.get("schedule_profile")
-        self.schedule_profile_names = thermostat.get("schedule_profile_names", [])
+        schedule_profile_names = thermostat.get("schedule_profile_names", None)
+
+        if schedule_profile_names is not None:
+            self.schedule_profile_names = schedule_profile_names
 
         if target_temperature is not None:
             if self.device.pluginProps.get("temp-units", "C") == "F":
