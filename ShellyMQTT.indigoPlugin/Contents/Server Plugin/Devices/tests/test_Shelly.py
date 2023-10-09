@@ -3,7 +3,6 @@ import unittest
 import sys
 import logging
 import pytest
-import json
 from unittest.mock import patch
 
 from Devices.tests.mocking.IndigoDevice import IndigoDevice
