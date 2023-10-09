@@ -805,6 +805,23 @@ class Plugin(indigo.PluginBase):
         This method will check against a list of known devices and will keep track
         of announcement messages that don't belong to a known device.
 
+        Gen 2 devices will send an announcement that looks like:
+        {
+            "name":null,
+            "id":"shellyplugus-c049ef88c33c",
+            "mac":"C049EF88C33C",
+            "slot":0,
+            "model":"SNPL-00116US",
+            "gen":2,
+            "fw_id":"20230912-081939/1.0.3-g6176478",
+            "ver":"1.0.3",
+            "app":"PlugUS",
+            "auth_en":false,
+            "auth_domain":null
+        }
+
+        Gen 2 messages should be ignored.
+
         :param brokerId The device id of the broker that the message was published to.
         :param payload The payload of the message.
         :return: None
@@ -815,6 +832,10 @@ class Plugin(indigo.PluginBase):
             announcement = json.loads(payload)
         except ValueError:
             self.logger.error(u"Unable to convert '{}' into python object!".format(payload))
+            return
+
+        if announcement.get("gen", 1) == 2:
+            self.logger.debug(f"Ignoring gen 2 device announcement from {announcement.get('id', 'Unknown')}")
             return
 
         # Ensure we at least have the id key present
