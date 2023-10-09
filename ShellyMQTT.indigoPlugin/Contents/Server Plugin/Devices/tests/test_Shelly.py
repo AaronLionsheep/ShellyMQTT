@@ -288,6 +288,15 @@ class Test_Shelly(unittest.TestCase):
         self.assertEqual("3", self.device.states['firmware-version'])
         self.assertFalse(self.device.states['has-firmware-update'])
 
+    def test_parseAnnouncement_formats_version_for_display(self):
+        self.device.pluginProps['address'] = "shellies/test-shelly"
+        self.shelly.parseAnnouncement('{"id": "test-shelly", "fw_ver": "20221027-100516/1.12.1-ga9117d3"}')
+        self.assertEqual(self.device.pluginProps["version"], "1.12.1-ga9117d3")
+        self.shelly.parseAnnouncement('{"id": "test-shelly", "fw_ver": "20221027-100516/v1.12.1-ga9117d3"}')
+        self.assertEqual(self.device.pluginProps["version"], "1.12.1-ga9117d3")
+        self.shelly.parseAnnouncement('{"id": "test-shelly", "fw_ver": "20220620-083944/v2.1.6@166b8318+"}')
+        self.assertEqual(self.device.pluginProps["version"], "2.1.6-166b8318+")
+
     def test_updateEnergy_4_decimals(self):
         self.shelly.updateEnergy(50)
         self.assertAlmostEqual(0.0008, self.shelly.device.states['accumEnergyTotal'], 4)

@@ -351,6 +351,22 @@ class Shelly:
             self.device.updateStateOnServer('firmware-version', firmware_version)
             self.device.updateStateOnServer('has-firmware-update', has_firmware_update)
 
+            if firmware_version:
+                # Populate the firmware UI column
+                cleaned_firmware_version: str = firmware_version
+                if "/" in cleaned_firmware_version:
+                    # Remove the date part of the version string
+                    cleaned_firmware_version = cleaned_firmware_version.split("/")[-1]
+                if cleaned_firmware_version[0] == "v":
+                    # Remove the leading "v"
+                    cleaned_firmware_version = cleaned_firmware_version[1:]
+                # Replace "@" with "-" for consistency
+                cleaned_firmware_version = cleaned_firmware_version.replace("@", "-")
+
+                pluginProps = self.device.pluginProps
+                pluginProps.update({"version": cleaned_firmware_version})
+                self.device.replacePluginPropsOnServer(pluginProps)
+
     def processInputEvent(self, eventMessage):
         """
         Parses an input event message and fires triggers if this is a new input event.
