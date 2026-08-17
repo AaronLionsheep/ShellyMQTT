@@ -32,4 +32,4 @@ jobs:
     - name: Test
       run: |
         cd ShellyMQTT.indigoPlugin/Contents/Server\ Plugin
-        pytest -v --cov --cov-repo=term-missing
+        pytest -v --cov --cov-report=term-missing
