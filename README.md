@@ -1,5 +1,5 @@
 # ShellyMQTT
-[![Test](https://github.com/AaronLionsheep/ShellyMQTT/actions/workflows/test.yml/badge.svg)](https://github.com/AaronLionsheep/ShellyMQTT/actions/workflows/test.yml)
+[![Tests](https://github.com/AaronLionsheep/ShellyMQTT/actions/workflows/test.yml/badge.svg)](https://github.com/AaronLionsheep/ShellyMQTT/actions/workflows/test.yml)
 
 An IndigoDomo plugin that uses the [MQTTConnector Plugin](https://github.com/FlyingDiver/Indigo-MQTT) to interface with Shelly devices in Indigo. Each Shelly device is represented in Indigo using a single device.
 
